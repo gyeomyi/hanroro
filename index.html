@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>한로로 | HANRORO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Gaegu','Malgun Gothic',sans-serif; background:#fdf6ec; color:#5c4536; -webkit-text-stroke:0.7px currentColor; }
+  h1, h2, h3 { font-family:'Noto Serif KR',serif; }
+  img { display:block; max-width:100%; }
+
+  header {
+    position:sticky; top:0; z-index:10;
+    display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px;
+    padding:18px 8%; background:rgba(253,246,236,0.92); backdrop-filter:blur(6px);
+    border-bottom:2px solid #f4c9a8;
+  }
+  header .logo { font-size:1.4rem; font-weight:bold; letter-spacing:2px; color:#e2593f; }
+  header nav { display:flex; }
+  header nav a { color:#8a6a52; text-decoration:none; margin:0 15px; font-size:0.95rem; }
+  header nav a:hover { color:#e2593f; }
+
+  .hero {
+    position:relative; display:flex; align-items:center; justify-content:center;
+    min-height:82vh; text-align:center; padding:120px 8%; overflow:hidden;
+  }
+  .hero::before {
+    content:""; position:absolute; inset:0;
+    background:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEGNa03HTTQp4Wcn5ld-9dXWfwZtnipq1qgO2bn64vRQ&s=10') center 25%/cover no-repeat;
+    filter:saturate(0.85);
+  }
+  .hero::after {
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(93,60,40,0.35) 0%, rgba(93,60,40,0.55) 55%, rgba(46,26,16,0.85) 100%);
+  }
+  .hero-content { position:relative; z-index:1; color:#fff; }
+  .hero h1 { font-size:4rem; font-weight:700; margin-bottom:16px; letter-spacing:10px; text-shadow:0 2px 12px rgba(0,0,0,0.35); }
+  .hero p { font-size:1.15rem; color:#fce8d8; margin-bottom:32px; text-shadow:0 1px 6px rgba(0,0,0,0.35); }
+  .hero .btn {
+    display:inline-block; padding:14px 36px; font-size:1rem; border:none; border-radius:30px;
+    background:#e2593f; color:#fff; font-weight:bold; cursor:pointer; text-decoration:none;
+    box-shadow:0 8px 20px rgba(226,89,63,0.4);
+  }
+  .hero .btn:hover { background:#c94429; }
+
+  section { padding:90px 8%; }
+  .section-title { text-align:center; font-size:2.1rem; color:#e2593f; margin-bottom:8px; }
+  .section-sub { text-align:center; color:#a4826c; font-size:1rem; margin-bottom:50px; }
+
+  .about {
+    display:flex; align-items:center; gap:60px; background:#fdf6ec;
+  }
+  .about-photo {
+    position:relative; flex:0 0 320px; border-radius:16px; overflow:hidden;
+    box-shadow:0 16px 40px rgba(93,60,40,0.25); border:6px solid #fffaf3;
+  }
+  .about-photo img { aspect-ratio:3/4; object-fit:cover; }
+  .about-text { flex:1; }
+  .about-text h2 { color:#e2593f; font-size:2rem; margin-bottom:20px; }
+  .about-text p { font-size:1.05rem; line-height:1.9; color:#6b5140; margin-bottom:14px; }
+  .about-text .name-en { color:#c98a5e; font-size:1rem; letter-spacing:2px; }
+
+  .cards {
+    display:flex; gap:24px; justify-content:center; align-items:stretch; flex-wrap:nowrap;
+    background:#fff2e2;
+  }
+  .cards-stack { flex:1; display:grid; grid-template-columns:repeat(3, minmax(220px, 1fr)); gap:24px; }
+  .card {
+    background:#fffaf3; border:1px solid #f4c9a8; border-radius:14px; padding:32px; width:auto;
+    box-shadow:0 6px 16px rgba(93,60,40,0.12); text-align:center; transition:transform .2s ease, box-shadow .2s ease;
+    transform:rotate(var(--tilt,0deg)); margin-top:var(--offset,0px);
+  }
+  .card:hover { transform:rotate(var(--tilt,0deg)) translateY(-6px); box-shadow:0 18px 34px rgba(93,60,40,0.28); }
+  .card-highlight {
+    border:2px solid #e2593f; background:#fff2e2;
+    box-shadow:0 10px 24px rgba(93,60,40,0.18); transform:rotate(var(--tilt,0deg)) scale(1.05);
+  }
+  .card-highlight:hover { transform:rotate(var(--tilt,0deg)) scale(1.05) translateY(-6px); box-shadow:0 22px 42px rgba(93,60,40,0.32); }
+  .card-wide { padding:32px 48px; }
+  a.card { display:block; text-decoration:none; color:inherit; cursor:pointer; }
+  .card-link { display:inline-block; margin-top:14px; color:#e2593f; font-weight:bold; font-size:0.9rem; }
+  .card-photo {
+    position:relative; width:360px; padding:0; overflow:hidden; border-radius:16px; border:6px solid #fffaf3;
+    box-shadow:0 16px 40px rgba(93,60,40,0.25);
+  }
+  .card-photo img { width:100%; height:100%; object-fit:cover; }
+  .badge {
+    position:absolute; top:21px; right:16px; padding:6px 14px; border-radius:20px;
+    background:#e2593f; color:#fff; font-size:0.85rem; font-weight:bold; letter-spacing:1px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    animation:badge-bounce 1.5s ease-in-out infinite;
+  }
+  @keyframes badge-bounce { 0%,100% { top:21px; } 50% { top:13px; } }
+  .about-photo .badge { right:auto; left:16px; background:#fffaf3; color:#c98a52; transform:rotate(-8deg); }
+  .card .icon { font-size:2.5rem; margin-bottom:16px; }
+  .card h3 { margin-bottom:12px; color:#e2593f; }
+  .card p { font-size:0.95rem; color:#7a5c48; line-height:1.7; }
+
+  footer {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    text-align:center; padding:30px; background:#f7a685; color:#5c4536; font-size:0.85rem;
+  }
+  footer .footer-links { display:flex; justify-content:center; gap:28px; }
+  footer .footer-links a { color:#5c4536; text-decoration:none; font-weight:bold; }
+  footer .footer-links a:hover { color:#e2593f; }
+  footer .footer-info { color:#7a5c48; }
+
+  @media (max-width:760px) {
+    .hero h1 { font-size:2.6rem; letter-spacing:6px; }
+    .about { flex-direction:column; }
+    .about-photo { flex:none; width:240px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">한로로 HANRORO</div>
+  <nav>
+    <a href="#about">소개</a>
+    <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">음악</a>
+    <a href="#news">소식</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>한 로 로</h1>
+    <p>본명 한지수, 2000.11.11생. 국문학도의 서정으로 노래하는 싱어송라이터</p>
+    <a class="btn" href="https://www.youtube.com/watch?v=niazCi1AqqA" target="_blank" rel="noopener">대표곡 '입춘' 듣기</a>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-photo">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFL6KLmSPcICYQtBff9Jjt2JGxUzMooI1X9-G6fW7iQg&s=10" alt="한로로 프로필 사진">
+    <span class="badge">Profile</span>
+  </div>
+  <div class="about-text">
+    <div class="name-en">HANRORO</div>
+    <h2>프로필</h2>
+    <p>경남 창원 출신, 건국대 국어국문학과 재학 중 소속사 어센틱과 계약해 2022년 싱글 '입춘'으로 데뷔했습니다.</p>
+    <p>'한로로'라는 이름은 로그(log)를 배우던 시절 친구들이 붙여준 별명 '한로그'에서, 길 로(路) 자를 더해 '자신만의 길을 찾는다'는 뜻으로 다듬은 것입니다.</p>
+  </div>
+</section>
+
+<section class="cards" id="news">
+ <div class="cards-stack">
+    <a class="card" style="--tilt:-3deg" href="https://youtu.be/4EEFZetD3dM?si=vx982N1g5dFWtBRL" target="_blank" rel="noopener">
+      <div class="icon">💿</div>
+      <h3>디스코그래피</h3>
+      <p>EP 1집 &lt;이상비행&gt;(2023), EP 2집 &lt;집&gt;(2024), EP 3집 &lt;자몽살구클럽&gt;(2025)을 발매했습니다.</p>
+      <span class="card-link">전곡 뮤비 보기 →</span>
+    </a>
+    <a class="card" style="--offset:20px" href="https://www.youtube.com/watch?v=I1ahhiP-M-g&t=1s" target="_blank" rel="noopener">
+      <div class="icon">🏆</div>
+      <h3>수상 이력</h3>
+      <p>2026년 서울가요대상 록/발라드상, 멜론뮤직어워즈 트랙제로 초이스상을 수상했으며 한국대중음악상에도 여러 차례 노미네이트되었습니다.</p>
+      <span class="card-link">MMA2025 수상소감 보기 →</span>
+    </a>
+    <a class="card card-highlight" style="--tilt:2deg" href="https://koreanmusicawards.com/project/%ED%95%9C%EB%A1%9C%EB%A1%9C-%EC%9E%90%EB%AA%BD%EC%82%B4%EA%B5%AC%ED%81%B4%EB%9F%BD-2/" target="_blank" rel="noopener">
+      <div class="icon">🎤</div>
+      <h3>2026 한국대중음악상</h3>
+      <p>제23회 한국대중음악상 '올해의 음악인' 부문을 수상했습니다. 수상작은 EP &lt;자몽살구클럽&gt;(2025.08.04).</p>
+      <span class="card-link">수상 소개 보기 →</span>
+    </a>
+    <a class="card" style="--offset:-16px" href="https://youtu.be/E1rqAcMr-ps?si=dzNN1QifTSWca-rw" target="_blank" rel="noopener">
+      <div class="icon">🎧</div>
+      <h3>추천 트랙</h3>
+      <p>대표곡 '입춘', '사랑하게 될 거야', '0+0'을 시작으로 EP 전곡에서 담담한 가사와 서정적인 사운드를 느껴보세요.</p>
+      <span class="card-link">대표곡 플리 듣기 →</span>
+    </a>
+    <a class="card card-wide" href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">
+      <div class="icon">🔗</div>
+      <h3>음악 감상</h3>
+      <p>벅스뮤직 아티스트 페이지에서 한로로의 전체 디스코그래피를 스트리밍으로 만나볼 수 있습니다.</p>
+      <span class="card-link">벅스뮤직에서 듣기 →</span>
+    </a>
+    <a class="card" style="--tilt:3deg" href="https://www.youtube.com/watch?v=f1sr0D13wEY" target="_blank" rel="noopener">
+      <div class="icon">📺</div>
+      <h3>라이브 영상</h3>
+      <p>유튜브에서 다양한 라이브 세션과 뮤직비디오로 한로로의 무대를 만나볼 수 있습니다.</p>
+      <span class="card-link">'사랑하게 될 거야' 라이브 듣기 →</span>
+    </a>
+ </div>
+ <div class="card card-photo">
+   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUodD5datgP8vbGS_9kVzQf1tSrv50oORi5qnpFLNz7Q&s=10" alt="한로로">
+   <span class="badge">NEW</span>
+ </div>
+</section>
+
+<footer>
+  <nav class="footer-links">
+    <a href="#about">소개</a>
+    <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">음악</a>
+    <a href="#news">소식</a>
+  </nav>
+  <p class="footer-info">비공식 팬사이트</p>
+  <p>&copy; 2026 HANRORO Fan Page. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
