@@ -190,6 +190,12 @@ footer .footer-info { color:#7a5c48; }
   resize:vertical; min-height:60px; margin-bottom:8px;
 }
 .gb-edit-textarea:focus { outline:none; border-color:#c97b3f; }
+.gb-edit-password {
+  width:100%; font-family:inherit; font-size:0.9rem; color:#5c4536; -webkit-text-stroke:0.7px currentColor;
+  padding:8px 12px; border:1px solid #f4c9a8; border-radius:8px; background:#fff;
+  margin-bottom:8px;
+}
+.gb-edit-password:focus { outline:none; border-color:#c97b3f; }
 .gb-edit-actions { display:flex; gap:8px; justify-content:flex-end; }
 .gb-edit-actions button {
   font-family:'Gaegu','Malgun Gothic',sans-serif; font-size:0.8rem; font-weight:400;

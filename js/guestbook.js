@@ -10,6 +10,7 @@ const gbList = document.getElementById('gbList');
 const gbForm = document.getElementById('gbForm');
 const gbNameInput = document.getElementById('gbName');
 const gbMessageInput = document.getElementById('gbMessage');
+const gbPasswordInput = document.getElementById('gbPassword');
 
 function formatTime(iso) {
   const d = dayjs(iso);
@@ -60,21 +61,30 @@ async function loadGuestbook() {
     </div>`).join('');
 }
 
-async function insertEntry(name, message) {
-  const { error } = await supabaseClient.from('guestbook').insert({ name: name.trim(), message: message.trim() });
+async function insertEntry(name, message, password) {
+  const { data, error } = await supabaseClient.rpc('sign_guestbook', {
+    p_name: name.trim(), p_message: message.trim(), p_password: password
+  });
   if (error) { console.error('방명록 저장 실패:', error); alertError('저장 실패', '다시 시도해주세요.'); return false; }
+  if (data && !data.success) { alertError('저장 실패', data.error || '다시 시도해주세요.'); return false; }
   return true;
 }
 
-async function updateEntry(id, message) {
-  const { error } = await supabaseClient.from('guestbook').update({ message: message.trim() }).eq('id', id);
+async function updateEntry(id, password, message) {
+  const { data, error } = await supabaseClient.rpc('edit_guestbook', {
+    p_id: id, p_password: password, p_message: message.trim()
+  });
   if (error) { console.error('방명록 수정 실패:', error); alertError('수정 실패', '다시 시도해주세요.'); return false; }
+  if (data && !data.success) { alertError('수정 실패', data.error || '비밀번호를 확인해주세요.'); return false; }
   return true;
 }
 
-async function deleteEntry(id) {
-  const { error } = await supabaseClient.from('guestbook').delete().eq('id', id);
+async function deleteEntry(id, password) {
+  const { data, error } = await supabaseClient.rpc('remove_guestbook', {
+    p_id: id, p_password: password
+  });
   if (error) { console.error('방명록 삭제 실패:', error); alertError('삭제 실패', '다시 시도해주세요.'); return false; }
+  if (data && !data.success) { alertError('삭제 실패', data.error || '비밀번호를 확인해주세요.'); return false; }
   return true;
 }
 
@@ -82,11 +92,13 @@ gbForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = gbNameInput.value.trim();
   const message = gbMessageInput.value.trim();
-  if (!name || !message) return;
-  const ok = await insertEntry(name, message);
+  const password = gbPasswordInput.value;
+  if (!name || !message || !password) return;
+  const ok = await insertEntry(name, message, password);
   if (ok) {
     gbNameInput.value = '';
     gbMessageInput.value = '';
+    gbPasswordInput.value = '';
     toastSuccess('남겼어요!');
     await loadGuestbook();
   }
@@ -102,15 +114,17 @@ gbList.addEventListener('click', async (e) => {
     const result = await Swal.fire({
       icon:'warning',
       title:'삭제할까요?',
-      text:'되돌릴 수 없어요.',
+      input:'password',
+      inputPlaceholder:'비밀번호를 입력하세요',
       showCancelButton:true,
       confirmButtonText:'삭제',
       cancelButtonText:'취소',
       confirmButtonColor:'#c97b3f',
-      cancelButtonColor:'#a4826c'
+      cancelButtonColor:'#a4826c',
+      inputValidator:(value) => { if (!value) return '비밀번호를 입력하세요'; }
     });
     if (!result.isConfirmed) return;
-    const ok = await deleteEntry(id);
+    const ok = await deleteEntry(id, result.value);
     if (ok) { toastSuccess('삭제됐어요!'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-edit')) {
     const msgDiv = entry.querySelector('.gb-entry-msg');
@@ -118,6 +132,7 @@ gbList.addEventListener('click', async (e) => {
     entry.querySelector('.gb-entry-actions').style.display = 'none';
     msgDiv.innerHTML = `
       <textarea class="gb-edit-textarea" maxlength="500" spellcheck="false">${escapeHtml(original)}</textarea>
+      <input type="password" class="gb-edit-password" placeholder="비밀번호" maxlength="30" spellcheck="false">
       <div class="gb-edit-actions">
         <button type="button" class="gb-btn-cancel">취소</button>
         <button type="button" class="gb-btn-save">저장</button>
@@ -125,9 +140,12 @@ gbList.addEventListener('click', async (e) => {
     msgDiv.querySelector('.gb-edit-textarea').focus();
   } else if (target.classList.contains('gb-btn-save')) {
     const textarea = entry.querySelector('.gb-edit-textarea');
+    const passwordInput = entry.querySelector('.gb-edit-password');
     const message = textarea.value.trim();
+    const password = passwordInput.value;
     if (!message) { textarea.focus(); return; }
-    const ok = await updateEntry(id, message);
+    if (!password) { passwordInput.focus(); return; }
+    const ok = await updateEntry(id, password, message);
     if (ok) { toastSuccess('수정됐어요!'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-cancel')) {
     await loadGuestbook();
