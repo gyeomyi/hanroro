@@ -107,10 +107,46 @@ footer .footer-info { color:#7a5c48; }
 }
 
 @media (max-width:760px) {
+  header { padding:14px 5%; }
+  header nav a { margin:0 10px; font-size:0.85rem; }
+
+  .hero { min-height:70vh; padding:80px 6%; }
   .hero h1 { font-size:2.6rem; letter-spacing:6px; }
-  .about { flex-direction:column; }
-  .about-photo { flex:none; width:240px; }
+  .hero p { font-size:1rem; margin-bottom:24px; }
+  .hero .btn { padding:12px 28px; font-size:0.9rem; }
+  .hero-social { gap:20px; margin-top:24px; }
+
+  section { padding:60px 6%; }
+
+  .about { flex-direction:column; gap:32px; }
+  .about-photo { flex:none; width:220px; }
+  .about-text h2 { font-size:1.6rem; }
+
   .cards-stack { grid-template-columns:1fr; max-width:400px; margin:0 auto; }
+  .card { padding:24px; }
+  .card-wide { padding:24px; }
+
+  .quote-text { font-size:1.3rem; letter-spacing:1px; }
+  .quote-section { padding:50px 6%; }
+
+  footer { padding:24px 6%; }
+  footer .footer-links { gap:16px; flex-wrap:wrap; }
+  .footer-social { gap:8px; }
+
+  .gb-entry { padding:14px 16px; }
+  .gb-entry-head { flex-wrap:wrap; gap:4px; }
+  .gb-entry-time { font-size:0.72rem; }
+}
+
+@media (max-width:480px) {
+  header .logo { font-size:1.1rem; }
+  header nav a { margin:0 8px; font-size:0.8rem; }
+  .hero h1 { font-size:2rem; letter-spacing:4px; }
+  .hero p { font-size:0.9rem; }
+  .section-title { font-size:1.7rem; }
+  .quote-text { font-size:1.1rem; }
+  footer .footer-links { gap:12px; font-size:0.8rem; }
+  .footer-social a { padding:5px 14px; font-size:0.75rem; }
 }
 
 .guestbook { background:#fff2e2; }
