@@ -2,9 +2,18 @@ const SUPABASE_URL = 'https://avsnujrdogkxvhtelrzx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2c251anJkb2dreHZodGVscnp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMDExNzAsImV4cCI6MjEwMDc3NzE3MH0.effnEFNSApyy1qJ5Z8ykHgLiXz-N36xjRsGuZxL6UUE';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-AOS.init({ once:true, duration:800 });
+AOS.init({
+  once: true,
+  duration: 700,
+  easing: 'ease-out-cubic',
+  offset: 60,
+  disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+});
 dayjs.extend(dayjs_plugin_relativeTime);
 dayjs.locale('ko');
+
+const ACCENT = '#e05a7a';       /* 자몽 */
+const ACCENT_MUTED = '#3a3b47'; /* 먹밤 표면 */
 
 const gbList = document.getElementById('gbList');
 const gbForm = document.getElementById('gbForm');
@@ -33,7 +42,7 @@ function toastSuccess(title) {
 }
 
 function alertError(title, text) {
-  Swal.fire({ icon:'error', title, text, confirmButtonColor:'#c97b3f', confirmButtonText:'확인' });
+  Swal.fire({ icon:'error', title, text, confirmButtonColor:ACCENT, confirmButtonText:'확인' });
 }
 
 async function loadGuestbook() {
@@ -44,7 +53,7 @@ async function loadGuestbook() {
     .limit(50);
   if (error) { console.error('방명록 불러오기 실패:', error); return; }
   if (!data || data.length === 0) {
-    gbList.innerHTML = '<div class="gb-empty">아직 남겨진 흔적이 없어요. 첫 주인공이 되어주세요!</div>';
+    gbList.innerHTML = '<div class="gb-empty">아직 아무도 쓰지 않았습니다.<br>첫 줄을 남겨주세요.</div>';
     return;
   }
   gbList.innerHTML = data.map(e => `
@@ -119,8 +128,8 @@ gbList.addEventListener('click', async (e) => {
       showCancelButton:true,
       confirmButtonText:'삭제',
       cancelButtonText:'취소',
-      confirmButtonColor:'#c97b3f',
-      cancelButtonColor:'#a4826c',
+      confirmButtonColor:ACCENT,
+      cancelButtonColor:ACCENT_MUTED,
       inputValidator:(value) => { if (!value) return '비밀번호를 입력하세요'; }
     });
     if (!result.isConfirmed) return;
