@@ -9,19 +9,32 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/album.css">
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="js/theme.js"></script>
 </head>
 <body id="top">
 
 <header>
   <a class="logo" href="index.html">한로로 <em>HANRORO</em></a>
-  <nav>
-    <a href="#about">프로필</a>
-    <a href="#club">자몽살구클럽</a>
-    <a href="#records">음반</a>
-    <a href="#activity">행보</a>
-    <a href="guestbook.html">방명록</a>
-  </nav>
+  <div class="head-right">
+    <nav>
+      <a href="#about">프로필</a>
+      <a href="#club">자몽살구클럽</a>
+      <a href="#records">음반</a>
+      <a href="#activity">행보</a>
+      <a href="guestbook.html">방명록</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="밝은 화면으로 전환">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+      </svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/>
+      </svg>
+    </button>
+  </div>
 </header>
 
 <!-- 히어로 — 이 사람이 누구인지 한 문장으로 -->
@@ -46,6 +59,7 @@
     </div>
   </div>
 
+  <span class="badge badge-ghost hero-badge" aria-hidden="true">2026 한국대중음악상 · 올해의 음악인</span>
   <span class="hero-scroll" aria-hidden="true">Scroll</span>
 </section>
 
@@ -61,7 +75,9 @@
 
     <div class="about-grid">
       <figure class="about-photo" data-aos="fade-up">
-        <img src="profile.jpg" alt="한로로 프로필 사진">
+        <img src="img/profile.jpg" alt="한로로 프로필 사진">
+        <span class="badge badge-ghost badge-tl" aria-hidden="true">SINCE 2022</span>
+        <span class="badge badge-solid badge-br badge-float-2" aria-hidden="true">0 + 0 = ∞</span>
         <figcaption>HANRORO — 자몽살구클럽</figcaption>
       </figure>
 
@@ -138,32 +154,53 @@
     <span class="eyebrow" data-aos="fade-up">Discography</span>
     <h2 class="band-title" data-aos="fade-up">음반</h2>
     <p class="band-sub" data-aos="fade-up">
-      데뷔 싱글 한 장과 EP 세 장. 앨범을 누르면 음원 페이지로 이동합니다.
+      싱글 두 장과 EP 세 장. 표지를 누르면 앨범 소개와 수록곡 전체를 볼 수 있습니다.
     </p>
 
-    <a class="record" href="https://music.bugs.co.kr/album/20744778" target="_blank" rel="noopener" data-aos="fade-up">
-      <span class="record-no">EP 3</span>
+    <a class="record" href="album-youandi.html" data-aos="fade-up">
+      <span class="cover cover-youandi cover-sm" aria-hidden="true">
+        <img src="img/cover-youandi.jpg" alt="" loading="lazy">
+      </span>
       <div>
+        <span class="record-no">Single</span>
+        <h3 class="record-title">너와 나</h3>
+        <p class="record-desc">자몽살구클럽의 연장선. 영원을 약속하지 않고도 지금 함께라는 사실만으로 내일을 꿈꾸는 노래. 폼폼푸린과의 컬래버.</p>
+        <ul class="record-tracks">
+          <li class="is-title">너와 나 · 3:38</li>
+        </ul>
+      </div>
+      <span class="record-date">2026.07.09</span>
+    </a>
+
+    <a class="record" href="album-ep3.html" data-aos="fade-up">
+      <span class="cover cover-ep3 cover-sm" aria-hidden="true">
+        <img src="img/cover-ep3.jpg" alt="" loading="lazy">
+      </span>
+      <div>
+        <span class="record-no">EP 3</span>
         <h3 class="record-title">자몽살구클럽</h3>
         <p class="record-desc">동명 소설과 세계관을 공유하는 일곱 곡. 한국대중음악상 '올해의 음악인' 수상작.</p>
         <ul class="record-tracks">
-          <li class="is-title">시간을 달리네 · 타이틀</li>
-          <li>도망 · 선공개</li>
           <li>내일에서 온 티켓</li>
           <li>용의자</li>
           <li>갈림길</li>
           <li>0+0</li>
           <li>_에게</li>
+          <li class="is-title">시간을 달리네 · 타이틀</li>
+          <li>도망 · 선공개</li>
         </ul>
       </div>
       <span class="record-date">2025.08.04</span>
     </a>
 
-    <a class="record" href="https://music.bugs.co.kr/album/20644751" target="_blank" rel="noopener" data-aos="fade-up">
-      <span class="record-no">EP 2</span>
+    <a class="record" href="album-ep2.html" data-aos="fade-up">
+      <span class="cover cover-ep2 cover-sm" aria-hidden="true">
+        <img src="img/cover-ep2.jpg" alt="" loading="lazy">
+      </span>
       <div>
+        <span class="record-no">EP 2</span>
         <h3 class="record-title">집</h3>
-        <p class="record-desc">돌아갈 곳과 머무는 일에 관한 일곱 곡. 더블 타이틀로 발매되었습니다.</p>
+        <p class="record-desc">무너진 집을 자모를 떼어 'ㅈㅣㅂ'이라 적었습니다. 그럼에도 보수공사를 하며 산다는 일곱 곡.</p>
         <ul class="record-tracks">
           <li>귀가</li>
           <li class="is-title">ㅈㅣㅂ · 타이틀</li>
@@ -177,11 +214,14 @@
       <span class="record-date">2024.05.28</span>
     </a>
 
-    <a class="record" href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener" data-aos="fade-up">
-      <span class="record-no">EP 1</span>
+    <a class="record" href="album-ep1.html" data-aos="fade-up">
+      <span class="cover cover-ep1 cover-sm" aria-hidden="true">
+        <img src="img/cover-ep1.jpg" alt="" loading="lazy">
+      </span>
       <div>
+        <span class="record-no">EP 1</span>
         <h3 class="record-title">이상비행</h3>
-        <p class="record-desc">'금붕어' 하나만 타이틀로 두려 했지만 반응이 좋아 '사랑하게 될 거야'와 더블 타이틀이 되었습니다.</p>
+        <p class="record-desc">이상(理想)을 좇는 이를 이상(異常)하게 보는 시선에도, 비행하겠다는 여섯 곡.</p>
         <ul class="record-tracks">
           <li>이상비행</li>
           <li>해초</li>
@@ -194,9 +234,12 @@
       <span class="record-date">2023.08.29</span>
     </a>
 
-    <a class="record" href="https://www.youtube.com/watch?v=niazCi1AqqA" target="_blank" rel="noopener" data-aos="fade-up">
-      <span class="record-no">Single</span>
+    <a class="record" href="album-single.html" data-aos="fade-up">
+      <span class="cover cover-single cover-sm" aria-hidden="true">
+        <img src="img/cover-single.jpg" alt="" loading="lazy">
+      </span>
       <div>
+        <span class="record-no">Single</span>
         <h3 class="record-title">입춘</h3>
         <p class="record-desc">겨울이 끝나고 봄이 시작되는 절기. 얼어붙은 마음이 녹기를 기다리는, 시작에 관한 데뷔곡.</p>
       </div>
@@ -210,7 +253,7 @@
   <div class="wrap">
     <span class="eyebrow" data-aos="fade-up">Timeline</span>
     <h2 class="band-title" data-aos="fade-up">행보</h2>
-    <p class="band-sub" data-aos="fade-up">걸어온 길과, 곧 걸어갈 길.</p>
+    <p class="band-sub" data-aos="fade-up">받은 상과, 큰 무대 위주로.</p>
 
     <ol class="timeline">
       <li class="tl-item is-next" data-aos="fade-up">
@@ -224,9 +267,14 @@
         <p>음악으로 남겨온 발자취를 관객과 함께 따라가는 이틀간의 공연.</p>
       </li>
       <li class="tl-item" data-aos="fade-up">
-        <p class="tl-date">2026.04.03</p>
-        <h3>EBS 스페이스 공감</h3>
-        <p>장기하, 실리카겔과 함께한 무대.</p>
+        <p class="tl-date">2026.07.09</p>
+        <h3>싱글 '너와 나' 발매 · 폼폼푸린 컬래버</h3>
+        <p>단독 콘서트에서만 부르던 미발매곡. 서울재즈페스티벌 무대를 계기로 산리오와 컬래버해 정식 발매했습니다.</p>
+      </li>
+      <li class="tl-item" data-aos="fade-up">
+        <p class="tl-date">2026.06.20</p>
+        <h3>제35회 서울가요대상 · 록·발라드상</h3>
+        <p>'0+0'으로 받았습니다. 인천 인스파이어 아레나.</p>
       </li>
       <li class="tl-item" data-aos="fade-up">
         <p class="tl-date">2026 상반기</p>
@@ -234,14 +282,19 @@
         <p>디지털 · 스트리밍 부문을 동시 석권했습니다.</p>
       </li>
       <li class="tl-item" data-aos="fade-up">
+        <p class="tl-date">2026.04.19</p>
+        <h3>그린캠프페스티벌 2026 · 첫 헤드라이너</h3>
+        <p>지산리조트. 자작곡 중심의 19곡으로 생애 첫 헤드라이너 무대를 채웠습니다.</p>
+      </li>
+      <li class="tl-item" data-aos="fade-up">
         <p class="tl-date">2026.02.26</p>
         <h3>제23회 한국대중음악상 · 올해의 음악인</h3>
-        <p>EP 〈자몽살구클럽〉으로 수상했습니다.</p>
+        <p>세 부문 후보에 올라 종합 부문 '올해의 음악인'을 받았습니다. 선정 이유는 “청춘의 불안을 공감하면서도 희망의 메시지를 놓치지 않는 태도”.</p>
       </li>
       <li class="tl-item" data-aos="fade-up">
         <p class="tl-date">2025.12.20</p>
         <h3>제17회 멜론뮤직어워드 · 트랙제로 초이스</h3>
-        <p>인기상 부문을 수상했습니다.</p>
+        <p>데뷔 후 첫 음악 시상식 수상이었습니다.</p>
       </li>
       <li class="tl-item" data-aos="fade-up">
         <p class="tl-date">2022.03.14</p>
@@ -297,7 +350,8 @@
         <span class="go">수상 소개 →</span>
       </a>
       <figure class="link-photo">
-        <img src="card.jpg" alt="한로로">
+        <img src="img/card.jpg" alt="한로로">
+        <span class="badge badge-solid badge-tr badge-float-3" aria-hidden="true">3rd EP</span>
         <figcaption>HANRORO</figcaption>
       </figure>
     </div>
@@ -327,6 +381,14 @@
       <a href="#records">음반</a>
       <a href="#activity">행보</a>
       <a href="guestbook.html">방명록</a>
+    </div>
+    <div class="foot-col">
+      <h4>Albums</h4>
+      <a href="album-youandi.html">너와 나</a>
+      <a href="album-single.html">입춘</a>
+      <a href="album-ep1.html">이상비행</a>
+      <a href="album-ep2.html">집</a>
+      <a href="album-ep3.html">자몽살구클럽</a>
     </div>
     <div class="foot-col">
       <h4>Listen</h4>

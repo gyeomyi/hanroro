@@ -1,0 +1,332 @@
+/* ============================================================
+   앨범 페이지 — style.css 다음에 로드된다.
+   메인 사이트의 밤/낮 테마를 따라가지 않는다. 앨범 페이지는
+   그 표지의 세계 하나만 입는다 (data-theme 없음, 토글 없음).
+   style.css에서 가져다 쓰는 것: 폰트 변수 · 리셋 · .btn 뿐.
+   레이아웃 클래스는 전부 여기서 새로 정의한다.
+   ============================================================ */
+
+/* ── 앨범별 세계 ─────────────────────────────────────────────
+   색은 전부 실제 표지(img/cover-*.jpg)에서 뽑았다.
+   --brand-*  채움(버튼·칩) · --btn-ink 그 위 글자
+   --grapefruit/--apricot  글자용 강조 (해당 바탕에서 4.5:1 이상 확인)
+   --stage-*  히어로에 깔리는 표지의 세기
+   ─────────────────────────────────────────────────────────── */
+:root[data-album] {
+  --stage-scale: 1.08;
+  --stage-sat: 1.1;
+  /* 아래로 갈수록 바탕색이 되는 장막. 글자는 전부 불투명 구간에 앉는다 */
+  --stage-scrim:
+    linear-gradient(176deg,
+      color-mix(in srgb, var(--bg) 30%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 74%, transparent) 40%,
+      var(--bg) 78%);
+}
+
+/* ep1 이상비행 — 검정 위 전기 파랑, 원형 광선 속 잠수부 */
+:root[data-album="ep1"] {
+  --brand-1:#2f27e8; --brand-2:#6a5cff; --btn-ink:#f2f1ff;
+  --grapefruit:#8b93ff; --apricot:#a9b6ff;
+  --cover:url('../img/cover-ep1.jpg');
+  --bg:#06060f; --surface:#0c0d1c; --surface-2:#151633;
+  --text:#eceaff; --text-dim:#b4b1dd; --text-far:#8c8ab0;
+  --line:rgba(236,234,255,0.14); --line-soft:rgba(236,234,255,0.07);
+  --stage-blur:0px; --stage-opacity:0.62;
+}
+
+/* ep2 집 — 검정 위 붉은 화염, 불타는 집 */
+:root[data-album="ep2"] {
+  --brand-1:#d8271d; --brand-2:#9c130e; --btn-ink:#fff;
+  --grapefruit:#ff6a5e; --apricot:#ffa07a;
+  --cover:url('../img/cover-ep2.jpg');
+  --bg:#0a0607; --surface:#150c0d; --surface-2:#22100f;
+  --text:#f7ebe9; --text-dim:#d2b3ae; --text-far:#a58a86;
+  --line:rgba(247,235,233,0.14); --line-soft:rgba(247,235,233,0.07);
+  --stage-blur:0px; --stage-opacity:0.66;
+}
+
+/* ep3 자몽살구클럽 — 흰 종이에 색연필. 유일하게 밝은 세계 */
+:root[data-album="ep3"] {
+  --brand-1:#e05a7a; --brand-2:#f0a45c; --btn-ink:#16121a;
+  --grapefruit:#c33a60; --apricot:#94540b;
+  --cover:url('../img/cover-ep3.jpg');
+  --bg:#fbf6f0; --surface:#f5ece2; --surface-2:#efe0d2;
+  --text:#2a2022; --text-dim:#574548; --text-far:#6f5b5d;
+  --line:rgba(42,32,34,0.16); --line-soft:rgba(42,32,34,0.07);
+  --stage-blur:0px; --stage-opacity:0.9;
+  /* 종이 표지는 원본이 이미 흰 바탕이라 장막을 옅게 잡는다 */
+  --stage-scrim:
+    linear-gradient(176deg,
+      color-mix(in srgb, var(--bg) 10%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 62%, transparent) 38%,
+      var(--bg) 76%);
+}
+
+/* single 입춘 — 역광 바다 사진. 푸른 새벽과 금빛 물비늘 */
+:root[data-album="single"] {
+  --brand-1:#7d8fa8; --brand-2:#c9a86b; --btn-ink:#16121a;
+  --grapefruit:#94a6bd; --apricot:#c9a86b;
+  --cover:url('../img/cover-single.jpg');
+  --bg:#0d141d; --surface:#141d28; --surface-2:#1d2836;
+  --text:#eef2f6; --text-dim:#b3c0cd; --text-far:#8d9bab;
+  --line:rgba(238,242,246,0.14); --line-soft:rgba(238,242,246,0.07);
+  --stage-blur:2px; --stage-opacity:0.72;
+}
+
+/* youandi 너와 나 — 폼폼푸린 컬래버. 하늘색 바탕에 비눗방울,
+   전부 짙은 남색 선으로 그린 산리오 일러스트. 노랑은 푸딩, 갈색은 베레모 */
+:root[data-album="youandi"] {
+  --brand-1:#f9e158; --brand-2:#f0c33e; --btn-ink:#22306b;
+  --grapefruit:#8a5a2b; --apricot:#2f4bb0;
+  --cover:url('../img/cover-youandi.jpg');
+  --bg:#f0f9fb; --surface:#e3f2f7; --surface-2:#cfe8f1;
+  --text:#22306b; --text-dim:#45549a; --text-far:#56629c;
+  --line:rgba(34,48,107,0.18); --line-soft:rgba(34,48,107,0.08);
+  --stage-blur:0px; --stage-opacity:0.85;
+  /* 밝은 표지라 ep3처럼 장막을 옅게 */
+  --stage-scrim:
+    linear-gradient(176deg,
+      color-mix(in srgb, var(--bg) 10%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 62%, transparent) 38%,
+      var(--bg) 76%);
+}
+
+/* 메인의 음반 목록에 쓰이는 작은 표지 칩도 같은 2색을 쓴다 */
+.cover-youandi { --brand-1:#f9e158; --brand-2:#f0c33e; }
+.cover-ep1    { --brand-1:#2f27e8; --brand-2:#6a5cff; }
+.cover-ep2    { --brand-1:#d8271d; --brand-2:#9c130e; }
+.cover-ep3    { --brand-1:#e05a7a; --brand-2:#f0a45c; }
+.cover-single { --brand-1:#7d8fa8; --brand-2:#c9a86b; }
+
+/* ── 얇은 헤더 — 메인 내비를 통째로 들고 오지 않는다.
+      앨범 한 장을 보는 동안 필요한 건 돌아갈 길뿐이다 ────────── */
+.ah {
+  position:sticky; top:0; z-index:50;
+  /* flex-direction 명시 — style.css의 760px 미디어쿼리가 header를 세로로 세운다 */
+  display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:18px;
+  padding:13px clamp(20px, 5vw, 64px);
+  background:color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter:blur(14px) saturate(1.3);
+  border-bottom:1px solid var(--line);
+}
+.ah a { text-decoration:none; }
+.ah-back {
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--text-dim);
+  transition:color .22s ease;
+}
+.ah-back:hover { color:var(--apricot); }
+.ah-mid { font-family:var(--serif); font-weight:700; font-size:0.98rem; }
+.ah-logo {
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--text-far);
+  transition:color .22s ease;
+}
+.ah-logo:hover { color:var(--text); }
+
+/* ── 스테이지 — 표지가 배경이고, 제목이 그 위에 앉는다 ────────── */
+.stage {
+  position:relative; isolation:isolate; overflow:hidden;
+  min-height:min(94vh, 880px);
+  display:grid; align-content:end;
+  padding:clamp(120px, 20vh, 240px) clamp(20px, 5vw, 64px) clamp(52px, 7vw, 96px);
+}
+.stage-art {
+  position:absolute; inset:0; z-index:-2;
+  background:var(--cover) center/cover no-repeat;
+  filter:blur(var(--stage-blur)) saturate(var(--stage-sat));
+  transform:scale(var(--stage-scale));
+  opacity:var(--stage-opacity);
+}
+/* 글자는 장막이 완전히 바탕색이 된 아래쪽에만 앉힌다 — 대비 유지 */
+.stage::after {
+  content:''; position:absolute; inset:0; z-index:-1;
+  background:var(--stage-scrim);
+}
+.stage-inner { position:relative; max-width:1040px; margin:0 auto; width:100%; }
+
+.stage-kicker {
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.24em;
+  text-transform:uppercase; color:var(--apricot);
+  display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;
+}
+.stage-title {
+  font-family:var(--serif); font-weight:700;
+  font-size:clamp(3rem, 11vw, 7.2rem); line-height:0.94;
+  letter-spacing:-0.03em; margin-bottom:16px;
+}
+.stage-en {
+  font-family:var(--mono); font-size:0.74rem; letter-spacing:0.3em;
+  text-transform:uppercase; color:var(--text-far); margin-bottom:30px;
+}
+.stage-lede {
+  font-family:var(--serif); font-size:clamp(1.05rem, 2vw, 1.34rem);
+  line-height:1.95; color:var(--text); max-width:42ch; margin-bottom:34px;
+}
+.stage-actions { display:flex; flex-wrap:wrap; gap:12px 16px; }
+
+/* 실물 표지 — 스테이지 위에 떠 있는 한 장 */
+.stage-cover {
+  position:absolute; z-index:1;
+  right:clamp(20px, 5vw, 64px); top:clamp(104px, 17vh, 200px);
+  width:clamp(160px, 23vw, 320px); aspect-ratio:1;
+  border-radius:3px; overflow:hidden;
+  box-shadow:0 34px 80px -24px rgba(0,0,0,0.75), 0 0 0 1px var(--line);
+}
+.stage-cover img { width:100%; height:100%; object-fit:cover; }
+
+/* ── 해설 — 책의 속지처럼. 제목이 왼쪽에 붙어 따라온다 ────────── */
+.note {
+  padding:clamp(72px, 10vw, 132px) clamp(20px, 5vw, 64px);
+  background:var(--surface); border-top:1px solid var(--line);
+}
+.note-inner {
+  max-width:1040px; margin:0 auto;
+  display:grid; grid-template-columns:minmax(0,230px) minmax(0,1fr);
+  gap:clamp(28px, 5vw, 68px);
+}
+.note-head { position:sticky; top:84px; align-self:start; }
+.note-eyebrow {
+  display:block; font-family:var(--mono); font-size:0.68rem;
+  letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--grapefruit); margin-bottom:12px;
+}
+.note-title {
+  font-family:var(--serif); font-weight:700;
+  font-size:clamp(1.55rem, 3vw, 2.15rem); line-height:1.35;
+}
+.note-body p {
+  font-size:1.02rem; line-height:2.05; color:var(--text-dim);
+  max-width:62ch; margin-bottom:22px;
+}
+.note-body p:last-child { margin-bottom:0; }
+.note-body strong { color:var(--text); font-weight:500; }
+/* 첫 글자만 크게 — 이 페이지가 노래 소개가 아니라 글이라는 표시 */
+.note-body p:first-child::first-letter {
+  float:left; font-family:var(--serif); font-weight:700;
+  font-size:3.4em; line-height:0.82;
+  margin:6px 0.09em 0 0; color:var(--grapefruit);
+}
+
+/* ── 앨범 소개글 — 음반에 실린 글을 그대로 옮기는 자리.
+      이 사이트 컨셉("쓰는 사람")의 핵심이라 인용이 아니라 한 섹션을 준다 ────── */
+.liner {
+  padding:clamp(64px, 9vw, 116px) clamp(20px, 5vw, 64px);
+  border-top:1px solid var(--line);
+}
+.liner-inner {
+  max-width:720px; margin:0 auto;
+  border-left:2px solid var(--brand-1); padding-left:clamp(20px, 4vw, 40px);
+}
+.liner-label {
+  display:block; font-family:var(--mono); font-size:0.68rem;
+  letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--grapefruit); margin-bottom:20px;
+}
+.liner blockquote p {
+  font-family:var(--serif); font-size:clamp(1.02rem, 1.9vw, 1.22rem);
+  line-height:2.1; color:var(--text); margin-bottom:22px;
+}
+.liner blockquote p:last-child { margin-bottom:0; }
+.liner cite {
+  display:block; margin-top:26px; font-style:normal;
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.12em;
+  color:var(--text-far);
+}
+
+/* ── 수록곡 ───────────────────────────────────────────────── */
+.list { padding:clamp(72px, 10vw, 132px) clamp(20px, 5vw, 64px); }
+.list-inner { max-width:900px; margin:0 auto; }
+.list-head {
+  display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;
+  padding-bottom:18px; border-bottom:1px solid var(--line);
+  margin-bottom:clamp(24px, 4vw, 42px);
+}
+.list-head h2 { font-family:var(--serif); font-weight:700; font-size:clamp(1.5rem, 3vw, 2rem); }
+.list-meta { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.18em; color:var(--text-far); }
+
+.tl { display:grid; }
+.tl li {
+  display:grid; grid-template-columns:auto minmax(0,1fr);
+  gap:2px 24px; align-items:baseline;
+  padding:20px 4px; border-bottom:1px solid var(--line-soft);
+  transition:background .24s ease, padding-left .24s ease;
+}
+.tl li:hover { background:var(--surface); padding-left:12px; }
+.tl-n {
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:0.02em;
+  color:var(--grapefruit); opacity:0.75;
+}
+.tl h3 {
+  font-family:var(--serif); font-weight:700;
+  font-size:clamp(1.1rem, 2vw, 1.34rem);
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+}
+.tl-note {
+  grid-column:2; margin-top:8px;
+  color:var(--text-dim); font-size:0.94rem; line-height:1.85; max-width:58ch;
+}
+/* 한글이 들어가므로 mono가 아니라 sans로 — mono는 한글 폴백에서 자간이 무너진다 */
+.trk-flag {
+  font-family:var(--sans); font-size:0.68rem; font-weight:500;
+  letter-spacing:0.02em; line-height:1.6;
+  color:var(--btn-ink); background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  padding:3px 11px; border-radius:999px; white-space:nowrap;
+}
+.trk-flag-soft { background:none; color:var(--text-far); border:1px solid var(--line); }
+
+/* ── 다른 음반 ────────────────────────────────────────────── */
+.sibs {
+  padding:clamp(64px, 9vw, 116px) clamp(20px, 5vw, 64px);
+  background:var(--surface); border-top:1px solid var(--line);
+}
+.sibs-head { max-width:1040px; margin:0 auto clamp(24px, 4vw, 40px); }
+.sibs-head h2 { font-family:var(--serif); font-weight:700; font-size:clamp(1.4rem, 2.6vw, 1.9rem); }
+.sibs-head p { color:var(--text-dim); font-size:0.96rem; margin-top:8px; }
+.sib-grid {
+  max-width:1040px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:14px;
+}
+.sib {
+  display:block; text-decoration:none; padding:14px;
+  border:1px solid var(--line); border-radius:3px;
+  transition:background .24s ease, transform .24s ease, border-color .24s ease;
+}
+.sib:hover { background:var(--surface-2); border-color:var(--grapefruit); transform:translateY(-3px); }
+.sib img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:2px; margin-bottom:13px; }
+.sib .k {
+  display:block; font-family:var(--mono); font-size:0.62rem;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--text-far); margin-bottom:5px;
+}
+.sib h3 { font-family:var(--serif); font-weight:700; font-size:1.1rem; }
+
+/* ── 푸터 — 한 줄로 끝낸다 ────────────────────────────────── */
+.af {
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px 24px;
+  padding:30px clamp(20px, 5vw, 64px);
+  border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em;
+  color:var(--text-far);
+}
+.af a { color:var(--text-dim); text-decoration:none; transition:color .22s ease; }
+.af a:hover { color:var(--apricot); }
+.af-links { display:flex; flex-wrap:wrap; gap:18px; }
+
+/* ── 반응형 ───────────────────────────────────────────────── */
+@media (max-width:860px) {
+  /* 표지를 글 위로 올린다 — 겹쳐 두면 제목과 부딪힌다 */
+  .stage { align-content:center; padding-top:clamp(40px, 8vh, 80px); }
+  .stage-cover {
+    position:static; width:min(240px, 56vw); margin-bottom:30px;
+    box-shadow:0 20px 50px -18px rgba(0,0,0,0.7), 0 0 0 1px var(--line);
+  }
+  .note-inner { grid-template-columns:1fr; gap:26px; }
+  .note-head { position:static; }
+}
+@media (max-width:560px) {
+  .ah-mid { display:none; }
+  .stage { min-height:0; }
+  .note-body p:first-child::first-letter { font-size:2.8em; }
+  .tl li { padding:16px 2px; }
+  .tl-note { grid-column:1 / -1; }
+}

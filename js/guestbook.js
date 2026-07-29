@@ -12,8 +12,24 @@ AOS.init({
 dayjs.extend(dayjs_plugin_relativeTime);
 dayjs.locale('ko');
 
-const ACCENT = '#e05a7a';       /* 자몽 */
-const ACCENT_MUTED = '#3a3b47'; /* 먹밤 표면 */
+/* 모달 공통 설정.
+   buttonsStyling:false — SweetAlert의 인라인 색상을 끄고 CSS로만 그린다.
+   인라인 색을 쓰면 테마를 바꿔도 모달만 옛날 색으로 남는다. */
+const SWAL = {
+  buttonsStyling: false,
+  showClass: { popup: 'hr-swal-in', backdrop: '', icon: '' },
+  hideClass: { popup: 'hr-swal-out', backdrop: '' },
+  customClass: {
+    popup: 'hr-swal',
+    title: 'hr-swal-title',
+    htmlContainer: 'hr-swal-text',
+    input: 'hr-swal-input',
+    actions: 'hr-swal-actions',
+    confirmButton: 'hr-swal-confirm',
+    cancelButton: 'hr-swal-cancel',
+    validationMessage: 'hr-swal-invalid'
+  }
+};
 
 const gbList = document.getElementById('gbList');
 const gbForm = document.getElementById('gbForm');
@@ -38,11 +54,17 @@ function escapeHtml(str) {
 }
 
 function toastSuccess(title) {
-  Swal.fire({ icon:'success', title, timer:1200, showConfirmButton:false });
+  Swal.fire({
+    ...SWAL,
+    toast:true, position:'top-end',
+    icon:'success', title,
+    timer:1800, timerProgressBar:true, showConfirmButton:false,
+    customClass:{ ...SWAL.customClass, popup:'hr-swal hr-swal-toast' }
+  });
 }
 
 function alertError(title, text) {
-  Swal.fire({ icon:'error', title, text, confirmButtonColor:ACCENT, confirmButtonText:'확인' });
+  Swal.fire({ ...SWAL, icon:'error', title, text, confirmButtonText:'확인' });
 }
 
 async function loadGuestbook() {
@@ -108,7 +130,7 @@ gbForm.addEventListener('submit', async (e) => {
     gbNameInput.value = '';
     gbMessageInput.value = '';
     gbPasswordInput.value = '';
-    toastSuccess('남겼어요!');
+    toastSuccess('남겼습니다');
     await loadGuestbook();
   }
 });
@@ -120,21 +142,25 @@ gbList.addEventListener('click', async (e) => {
   const id = entry.dataset.id;
 
   if (target.classList.contains('gb-btn-delete')) {
+    const name = entry.querySelector('.gb-entry-name')?.textContent ?? '';
     const result = await Swal.fire({
+      ...SWAL,
       icon:'warning',
-      title:'삭제할까요?',
+      title:'이 글을 지울까요?',
+      html:`<strong>${escapeHtml(name)}</strong> 님이 남긴 글입니다.<br>지우면 되돌릴 수 없습니다.`,
       input:'password',
-      inputPlaceholder:'비밀번호를 입력하세요',
+      inputPlaceholder:'글을 쓸 때 정한 비밀번호',
+      inputAttributes:{ maxlength:30, autocomplete:'off', spellcheck:'false' },
       showCancelButton:true,
-      confirmButtonText:'삭제',
-      cancelButtonText:'취소',
-      confirmButtonColor:ACCENT,
-      cancelButtonColor:ACCENT_MUTED,
-      inputValidator:(value) => { if (!value) return '비밀번호를 입력하세요'; }
+      reverseButtons:true,
+      focusCancel:true,
+      confirmButtonText:'지우기',
+      cancelButtonText:'그대로 두기',
+      inputValidator:(value) => { if (!value) return '비밀번호를 입력해주세요'; }
     });
     if (!result.isConfirmed) return;
     const ok = await deleteEntry(id, result.value);
-    if (ok) { toastSuccess('삭제됐어요!'); await loadGuestbook(); }
+    if (ok) { toastSuccess('지웠습니다'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-edit')) {
     const msgDiv = entry.querySelector('.gb-entry-msg');
     const original = msgDiv.textContent;
@@ -155,7 +181,7 @@ gbList.addEventListener('click', async (e) => {
     if (!message) { textarea.focus(); return; }
     if (!password) { passwordInput.focus(); return; }
     const ok = await updateEntry(id, password, message);
-    if (ok) { toastSuccess('수정됐어요!'); await loadGuestbook(); }
+    if (ok) { toastSuccess('저장했습니다'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-cancel')) {
     await loadGuestbook();
   }
