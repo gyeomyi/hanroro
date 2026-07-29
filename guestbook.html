@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>방명록 | 한로로 HANRORO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+</head>
+<body id="top">
+
+<header>
+  <a class="logo" href="index.html">한로로 HANRORO</a>
+  <nav>
+    <a href="index.html#about">소개</a>
+    <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">음악</a>
+    <a href="index.html#news">소식</a>
+    <a href="guestbook.html">방명록</a>
+  </nav>
+</header>
+
+<section class="guestbook" id="guestbook" data-aos="fade-up">
+  <h2 class="section-title">방명록</h2>
+  <p class="section-sub">한로로에게 한 줄 흔적을 남겨주세요</p>
+  <form class="gb-form" id="gbForm" autocomplete="off" spellcheck="false">
+    <input type="text" id="gbName" placeholder="이름" maxlength="30" required spellcheck="false">
+    <textarea id="gbMessage" placeholder="메시지를 남겨주세요" maxlength="500" required spellcheck="false"></textarea>
+    <button type="submit">방명록 남기기</button>
+  </form>
+  <div class="gb-list" id="gbList"></div>
+</section>
+
+<footer>
+  <div class="footer-social">
+    <a href="https://www.youtube.com/channel/UCrDa_5OU-rhvXqWlPx5hgKQ" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <nav class="footer-links">
+    <a href="index.html#about">소개</a>
+    <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">음악</a>
+    <a href="index.html#news">소식</a>
+    <a href="guestbook.html">방명록</a>
+  </nav>
+  <p class="footer-info">비공식 팬사이트</p>
+  <p>&copy; 2026 HANRORO Fan Page. All rights reserved.</p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="js/guestbook.js"></script>
+
+</body>
+</html>
