@@ -20,6 +20,7 @@ hanroro/
 │                       index.html도 표지 칩 색 때문에 함께 읽는다
 ├── js/theme.js         테마 전환 (밤/낮, localStorage) — <head>에서 동기 로드
 ├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정)
+├── js/likes.js         앨범 좋아요 — 앨범 페이지 전용. supabase-js 없이 fetch로 REST 직접 호출
 ├── img/                모든 이미지는 여기에만 둔다
 │   ├── background.jpg  히어로 배경
 │   ├── profile.jpg     프로필 사진
@@ -42,6 +43,15 @@ hanroro/
 - **Region**: ap-northeast-1
 - **API URL**: `https://avsnujrdogkxvhtelrzx.supabase.co`
 - **Anon Key**: `js/guestbook.js` 상단에 하드코딩 (공개용, RLS로 보호)
+
+## DB 스키마 (`public.album_like`)
+| 컬럼 | 타입 | 제약 |
+|------|------|------|
+| album | text | PK. `<html data-album>` 값과 같아야 한다 |
+| likes | integer | NOT NULL, default 0, `check (likes >= 0)` |
+
+행은 앨범당 하나씩 미리 넣어두고 늘 존재한다(ep1·ep2·ep3·single·youandi).
+**앨범 페이지를 새로 만들면 이 표에 행을 먼저 넣을 것** — 없는 키로 RPC를 부르면 22023으로 거부된다.
 
 ## DB 스키마 (`public.guestbook`)
 | 컬럼 | 타입 | 제약 |
@@ -67,6 +77,8 @@ hanroro/
   - `sign_guestbook(p_name, p_message, p_password)` — 작성 (bcrypt 해싱)
   - `edit_guestbook(p_id, p_password, p_message)` — 수정 (비밀번호 검증)
   - `remove_guestbook(p_id, p_password)` — 삭제 (비밀번호 검증)
+  - `like_album(p_album, p_on)` — 좋아요 증감. 새 값을 정수로 돌려준다.
+    `album_like`도 guestbook과 같은 방식(테이블 권한 회수 + 컬럼 SELECT만)이라 직접 UPDATE는 42501
 - **비밀번호**: pgcrypto `crypt()` + `gen_salt('bf', 10)`. **cost를 10 미만으로 낮추지 말 것**
   (기본값 6은 오프라인 크래킹에 너무 약하다). pgcrypto는 `extensions` 스키마에 있다
 - ⚠️ **2026-07-29 이전 작성 6건은 cost-6 해시**이고, 그 시기에 `password_hash`가 REST로
@@ -151,6 +163,15 @@ hanroro/
 - **`.note-body p:first-child::first-letter`** — 첫 글자 드롭캡. 이 페이지가 노래 소개가 아니라
   글이라는 표시. 첫 문단이 `<strong>`으로 시작해도 적용된다
 - 860px 이하에서 `.stage-cover`가 `position:static`이 되어 글 위로 올라간다
+
+### 좋아요 버튼
+`.stage-actions` 안의 `.like` 하나. `js/likes.js`가 `<html data-album>`을 읽어 동작한다.
+- **supabase-js를 싣지 않는다.** 버튼 하나에 라이브러리 40KB는 과해서 `fetch`로 REST를 직접 부른다
+  (anon 키는 `likes.js` 안에 따로 박혀 있다 — `guestbook.js`와 중복이지만 공개 키라 문제없다)
+- 낙관적 UI: 누르는 즉시 반영하고 실패하면 되돌리며 `.is-failed`로 한 번 흔든다
+- 중복 방지는 `localStorage`(`hanroro-like-<album>`)뿐이다. **서버는 호출자를 구분하지 않는다** —
+  작정하면 올릴 수 있고, 알고 둔 한계다. 어뷰징이 보이면 IP 기준 rate limit을 붙일 것
+- 메인 음반 목록에는 붙이지 않았다. `.record` 카드 전체가 `<a>`라 안에 버튼을 넣으면 중첩된다
 
 ### 메인 CSS와 부딪히는 지점 (중요)
 `album.css`는 `style.css` **다음에** 로드되고, `index.html`은 두 파일을 다 읽는다.

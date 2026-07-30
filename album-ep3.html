@@ -36,6 +36,13 @@
     <div class="stage-actions">
       <a class="btn" href="https://www.youtube.com/watch?v=1GUFm9FrPZI" target="_blank" rel="noopener">앨범 라이브 영상</a>
       <a class="btn btn-ghost" href="https://product.kyobobook.co.kr/detail/S000217089705" target="_blank" rel="noopener">소설 보러 가기</a>
+      <button class="like" type="button" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8A4.6 4.6 0 0 1 19.3 13z"/>
+        </svg>
+        <span>좋아요</span>
+        <span class="like-count" aria-live="polite">–</span>
+      </button>
     </div>
   </div>
 </section>
@@ -156,6 +163,7 @@
   </span>
 </footer>
 
+<script src="js/likes.js" defer></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({

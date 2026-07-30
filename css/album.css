@@ -163,7 +163,32 @@
   font-family:var(--serif); font-size:clamp(1.05rem, 2vw, 1.34rem);
   line-height:1.95; color:var(--text); max-width:42ch; margin-bottom:34px;
 }
-.stage-actions { display:flex; flex-wrap:wrap; gap:12px 16px; }
+.stage-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; }
+
+/* 좋아요 — .btn 옆에 서지만 채우지 않는다. 누르면 하트만 브랜드색으로 찬다 */
+.like {
+  display:inline-flex; align-items:center; gap:9px;
+  padding:13px 22px; border:1px solid var(--line); border-radius:2px;
+  background:none; color:var(--text); cursor:pointer;
+  font-family:var(--sans); font-size:0.92rem; font-weight:500;
+  transition:border-color .22s ease, color .22s ease, transform .22s ease;
+}
+.like:hover { border-color:var(--grapefruit); }
+.like svg { width:18px; height:18px; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.8; }
+.like.is-liked { border-color:var(--brand-1); }
+.like.is-liked svg { fill:var(--brand-1); stroke:var(--brand-1); }
+.like.is-liked .like-count { color:var(--grapefruit); }
+.like-count { font-family:var(--mono); font-size:0.86rem; letter-spacing:0.04em; color:var(--text-dim); }
+/* 저장 실패를 한 번 흔들어서 알린다 (토스트 라이브러리를 부르지 않는다) */
+.like.is-failed { animation:like-shake .4s ease; border-color:var(--text-far); }
+@keyframes like-shake {
+  0%,100% { transform:translateX(0); }
+  25% { transform:translateX(-4px); }
+  75% { transform:translateX(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .like.is-failed { animation:none; }
+}
 
 /* 실물 표지 — 스테이지 위에 떠 있는 한 장 */
 .stage-cover {

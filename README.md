@@ -37,6 +37,7 @@ css/style.css    메인·방명록 (밤/낮 2테마)
 css/album.css    앨범 페이지 전용 — 앨범마다 다른 세계
 js/theme.js      테마 전환 (localStorage)
 js/guestbook.js  방명록 로직 (Supabase)
+js/likes.js      앨범 좋아요 버튼
 img/             모든 이미지. 표지는 cover-<앨범키>.jpg
 ```
 
@@ -78,6 +79,14 @@ Supabase(PostgreSQL + REST). 로그인 없이 이름·내용·비밀번호로 �
 - `js/guestbook.js`의 anon 키는 **공개용**입니다. 노출을 전제로 설계된 키이고
   실제 방어는 RLS와 컬럼 권한이 합니다
 - 모든 사용자 입력은 `escapeHtml()`로 이스케이프합니다
+
+## 앨범 좋아요
+
+앨범 페이지마다 하트 버튼이 하나 있습니다. 로그인 없이 누를 수 있고, 다시 누르면 취소됩니다.
+수는 Supabase에 앨범별로 하나씩 쌓입니다(`album_like` 테이블 + `like_album` RPC).
+
+중복 방지는 브라우저 `localStorage`로만 합니다. 서버는 누가 눌렀는지 구분하지 않으니
+정확한 집계가 아니라 **분위기용 숫자**로 봐주세요.
 
 ## 라이선스 · 고지
 
