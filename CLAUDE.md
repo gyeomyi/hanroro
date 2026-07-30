@@ -21,6 +21,7 @@ hanroro/
 ├── js/theme.js         테마 전환 (밤/낮, localStorage) — <head>에서 동기 로드
 ├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정)
 ├── js/likes.js         앨범 좋아요 — 앨범 페이지 전용. supabase-js 없이 fetch로 REST 직접 호출
+├── favicon.svg         탭 아이콘 — 0+0=∞ 를 겹친 두 고리로 줄인 것. 7개 페이지 전부 링크됨
 ├── img/                모든 이미지는 여기에만 둔다
 │   ├── background.jpg  히어로 배경
 │   ├── profile.jpg     프로필 사진
