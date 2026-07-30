@@ -45,6 +45,9 @@
     linear-gradient(180deg, rgba(19,20,27,0.72) 0%, rgba(19,20,27,0.58) 38%, rgba(19,20,27,0.95) 88%, #13141b 100%);
   --scrim:      rgba(10,10,14,0.55);
   --shadow-lift: 0 12px 30px rgba(224,90,122,0.30);
+  /* 히어로 제목 — 사진 위에 얹히므로 본문색과 따로 잡는다 */
+  --hero-ink:   #f3ede3;
+  --hero-rr:    linear-gradient(100deg, #e05a7a 0%, #f0a45c 100%);
 }
 
 /* ── 낮 — 자몽살구클럽 표지의 과육색. 밝고 부드럽게 ──────────── */
@@ -70,6 +73,8 @@
     linear-gradient(180deg, rgba(255,247,243,0.82) 0%, rgba(255,247,243,0.74) 38%, rgba(255,247,243,0.95) 88%, #fff7f3 100%);
   --scrim:      rgba(90,60,62,0.35);
   --shadow-lift: 0 12px 30px rgba(195,58,96,0.24);
+  --hero-ink:   #6a4a4f;
+  --hero-rr:    linear-gradient(100deg, #e0527a 0%, #cf7517 100%);
 }
 
 /* 테마 전환 시 색이 툭 끊기지 않게 */
@@ -271,6 +276,7 @@ header nav a.is-current { color:var(--apricot); }
   background:var(--apricot); opacity:0.7;
 }
 .hero h1 {
+  color:var(--hero-ink);
   font-size:clamp(3.4rem, 14vw, 9rem);
   line-height:0.94;
   letter-spacing:-0.02em;
@@ -278,7 +284,7 @@ header nav a.is-current { color:var(--apricot); }
 }
 .hero h1 .rr {
   /* 이름의 '로로' = 길 로(路). 여명색으로 물든다. */
-  background:linear-gradient(100deg, var(--grapefruit) 0%, var(--apricot) 100%);
+  background:var(--hero-rr);
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent;
 }

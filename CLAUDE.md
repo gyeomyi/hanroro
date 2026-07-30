@@ -110,6 +110,8 @@ hanroro/
 | `--grapefruit` | `#e05a7a` | `#c33a60` | 자몽 — **글자용** eyebrow·강조 |
 | `--apricot` | `#f0a45c` | `#94540b` | 살구 — **글자용** 호버·활성 |
 | `--line` / `--line-soft` | 13% / 7% | 15% / 7% | 보더 / 원고지 칸 |
+| `--hero-ink` | `#f3ede3` | `#6a4a4f` | 히어로 제목 '한' — 본문색과 따로 잡는다 |
+| `--hero-rr` | 자몽→살구 원색 | `#e0527a`→`#cf7517` | 히어로 '로로' 그라디언트 |
 | `--header-bg` `--hero-veil` `--hero-filter` `--photo-scrim` `--scrim` `--shadow-lift` | 테마별 | | 합성 값 |
 
 **`--brand-1` `#e05a7a` / `--brand-2` `#f0a45c` / `--btn-ink` `#16121a`** — 테마 무관 고정
@@ -118,6 +120,8 @@ hanroro/
 (글자에는 `--grapefruit`/`--apricot`을 쓴다. 이 둘은 테마별로 대비를 맞춰둔 값이다).
 
 - **폰트**: `--serif` Gowun Batang(제목·인용) / `--sans` IBM Plex Sans KR(본문, 300) / `--mono` IBM Plex Mono(날짜·라벨·eyebrow)
+- **히어로 제목**: 사진 위에 얹히므로 본문색을 쓰지 않는다. 낮 모드는 옅은 사진 위에서 먹색이
+  너무 무거워 한 단계 밝은 값을 따로 뒀다. 큰 글자라 AA 기준은 3:1이고 현재 7.3:1 / 4.2:1 / 3.2:1
 - **시그니처**: `.manuscript` — 46px 원고지 칸 그리드. 순수 CSS, 이미지 없음. 히어로와 자몽살구클럽에만
 - **배지**: `.badge` + `.badge-solid|ghost` + 위치 `.badge-tl|br|tr|hero-badge`, 지연 `.badge-float-2|3`.
   `transform`이 아니라 **`translate` 프로퍼티**로 떠오르게 했다 — `transform:rotate()`로 준 기울기와 겹치지 않게 하려는 것
