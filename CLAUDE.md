@@ -212,6 +212,12 @@ hanroro/
 - **`confirmButtonColor` 같은 인라인 색을 넣지 말 것** — 인라인 색은 테마를 따라가지 못해 모달만 옛 색으로 남는다
 - 성공 알림은 `toastSuccess()` (우상단 토스트), 오류는 `alertError()`
 - 삭제 확인은 작성자 이름을 보여주고 `focusCancel` + `reverseButtons`로 안전 쪽에 포커스
+- **글자 크기 계단**: 제목 1.24rem(serif 700) · 본문/입력 0.95rem · 버튼 0.9rem · 검증 0.85rem.
+  전부 `--sans`이고 검증 메시지만 예외였던 mono는 제거함(그 한 줄만 폰트가 튀었다)
+- 아이콘은 `.swal2-icon`에 **font-size**로 줄인다(내부가 전부 em). 기본 80px는 모달 폭에 비해 크다
+- ⚠️ **토스트는 `.swal2-toast.hr-swal`(클래스 2개)로 잡을 것.** swal2의 `.swal2-popup.swal2-toast`가
+  특정도 (0,2,0)이라 `.hr-swal` 한 클래스로는 배경·글자색을 못 이긴다 (흰 배경에 회색 글씨로 남았던 버그)
+- 토스트 폭은 `width:fit-content` — `auto`로 두면 swal2 그리드가 가운데 열을 늘린다
 
 ## 주요 기능
 1. **히어로**: 배경사진 + 먹밤 베일 + 원고지 그리드. 이름 '로로'만 여명 그라디언트(길 로 路 의미)
