@@ -98,6 +98,13 @@ body {
   line-height:1.75;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+
+  /* 한글 줄바꿈 — 브라우저 기본값은 음절 단위라 '됩니다'가 '됩니 / 다'로 쪼개진다.
+     keep-all로 어절(띄어쓰기) 단위로만 끊고, 띄어쓰기 없는 긴 문자열(URL·ㅋㅋㅋ 도배)만
+     break-word로 풀어준다. pretty는 지원 브라우저에서 마지막 줄 외톨이 글자를 줄여준다. */
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  text-wrap:pretty;
 }
 
 h1, h2, h3, h4 { font-family:var(--serif); font-weight:700; line-height:1.35; }
@@ -146,7 +153,7 @@ textarea:focus-visible {
 .band-sub {
   color:var(--text-dim);
   font-size:1rem;
-  max-width:56ch;
+  max-width:74ch;
   margin-bottom:clamp(38px, 6vw, 64px);
 }
 
@@ -293,7 +300,7 @@ header nav a.is-current { color:var(--apricot); }
   font-size:clamp(1.05rem, 2.3vw, 1.45rem);
   line-height:1.9;
   color:var(--text);
-  max-width:34ch;
+  max-width:52ch;
   margin-bottom:14px;
 }
 .hero-meta {
@@ -351,7 +358,7 @@ header nav a.is-current { color:var(--apricot); }
 }
 .about-body p {
   font-size:1.02rem; line-height:2; color:var(--text-dim);
-  margin-bottom:18px; max-width:62ch;
+  margin-bottom:18px; max-width:78ch;
 }
 .about-body p strong { color:var(--text); font-weight:500; }
 
@@ -418,11 +425,11 @@ header nav a.is-current { color:var(--apricot); }
   font-family:var(--serif);
   font-size:clamp(1.1rem, 2.6vw, 1.6rem);
   line-height:1.95; color:var(--text);
-  max-width:30ch; margin:0 auto 22px;
+  max-width:40ch; margin:0 auto 22px;
 }
 .club-note {
   color:var(--text-dim); font-size:0.98rem; line-height:2;
-  max-width:56ch; margin:0 auto 30px;
+  max-width:74ch; margin:0 auto 30px;
 }
 .club-tags { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
 .tag {
@@ -457,7 +464,7 @@ header nav a.is-current { color:var(--apricot); }
   transition:color .24s ease;
 }
 .record:hover .record-title { color:var(--apricot); }
-.record-desc { color:var(--text-dim); font-size:0.96rem; max-width:54ch; }
+.record-desc { color:var(--text-dim); font-size:0.96rem; max-width:76ch; }
 .record-tracks { display:flex; flex-wrap:wrap; gap:6px; margin-top:16px; }
 .record-tracks li {
   font-family:var(--mono); font-size:0.72rem;
@@ -515,7 +522,7 @@ header nav a.is-current { color:var(--apricot); }
 }
 .tl-item h3 { font-size:clamp(1.1rem, 2.2vw, 1.3rem); margin:8px 0 6px; }
 /* :not(.tl-date) — 날짜도 <p>라서, 특정도 높은 이 규칙이 .tl-date를 덮어쓴다 */
-.tl-item p:not(.tl-date) { color:var(--text-dim); font-size:0.94rem; max-width:56ch; }
+.tl-item p:not(.tl-date) { color:var(--text-dim); font-size:0.94rem; max-width:74ch; }
 
 /* ── 링크 그리드 ──────────────────────────────────────────── */
 .links { background:var(--bg); }
@@ -569,7 +576,7 @@ header nav a.is-current { color:var(--apricot); }
   text-align:center;
 }
 .cta h2 { font-size:clamp(1.7rem, 4vw, 2.5rem); margin-bottom:14px; }
-.cta p { color:var(--text-dim); max-width:46ch; margin:0 auto 30px; }
+.cta p { color:var(--text-dim); max-width:60ch; margin:0 auto 30px; }
 
 /* ── 푸터 ─────────────────────────────────────────────────── */
 footer {

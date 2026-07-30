@@ -161,7 +161,7 @@
 }
 .stage-lede {
   font-family:var(--serif); font-size:clamp(1.05rem, 2vw, 1.34rem);
-  line-height:1.95; color:var(--text); max-width:42ch; margin-bottom:34px;
+  line-height:1.95; color:var(--text); max-width:58ch; margin-bottom:34px;
 }
 .stage-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; }
 
@@ -222,7 +222,7 @@
 }
 .note-body p {
   font-size:1.02rem; line-height:2.05; color:var(--text-dim);
-  max-width:62ch; margin-bottom:22px;
+  max-width:78ch; margin-bottom:22px;
 }
 .note-body p:last-child { margin-bottom:0; }
 .note-body strong { color:var(--text); font-weight:500; }
@@ -289,7 +289,7 @@
 }
 .tl-note {
   grid-column:2; margin-top:8px;
-  color:var(--text-dim); font-size:0.94rem; line-height:1.85; max-width:58ch;
+  color:var(--text-dim); font-size:0.94rem; line-height:1.85; max-width:76ch;
 }
 /* 한글이 들어가므로 mono가 아니라 sans로 — mono는 한글 폴백에서 자간이 무너진다 */
 .trk-flag {
