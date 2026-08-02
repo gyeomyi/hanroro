@@ -766,6 +766,81 @@ header nav a.is-current { color:var(--apricot); }
 }
 .words-note a { color:var(--apricot); text-underline-offset:3px; }
 
+/* ── 무대 (다가오는 공연) ──────────────────────────────────── */
+.live { background:var(--bg); border-top:1px solid var(--line); }
+.live .band-sub a { color:var(--apricot); text-underline-offset:3px; }
+
+.gig-list { display:flex; flex-direction:column; }
+.gig {
+  display:grid;
+  grid-template-columns:auto auto minmax(0,1fr) auto;
+  gap:clamp(16px, 3vw, 30px); align-items:center;
+  padding:clamp(22px, 3.4vw, 32px) 0;
+  border-top:1px solid var(--line);
+  transition:background .28s ease;
+}
+.gig:last-child { border-bottom:1px solid var(--line); }
+.gig:hover { background:var(--surface); }
+.gig.is-past { opacity:0.5; }
+
+/* 날짜 블록 — 표를 뜯어낸 조각처럼 */
+.gig-when {
+  display:grid; place-items:center; gap:1px;
+  min-width:74px; padding:12px 10px;
+  border:1px solid var(--line); border-radius:3px;
+  font-family:var(--mono); line-height:1.1;
+}
+.gig-mm { font-size:0.68rem; letter-spacing:0.14em; color:var(--text-far); }
+.gig-dd { font-size:1.6rem; font-weight:500; color:var(--text); }
+.gig-yy { font-size:0.6rem; letter-spacing:0.14em; color:var(--text-far); }
+
+/* 남은 날 — js/live.js가 넣는다. 없으면 자리도 안 생긴다 */
+.gig-dday {
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em;
+  padding:5px 12px; border-radius:999px; white-space:nowrap;
+  background:var(--surface-2); color:var(--text-dim);
+  border:1px solid var(--line);
+}
+.gig-dday.is-today {
+  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  color:var(--btn-ink); border-color:transparent;
+}
+.gig-title { font-size:clamp(1.15rem, 2.4vw, 1.5rem); margin-bottom:5px; }
+.gig-place { font-family:var(--mono); font-size:0.74rem; letter-spacing:0.06em; color:var(--apricot); }
+.gig-note { color:var(--text-dim); font-size:0.92rem; margin-top:7px; max-width:70ch; }
+.gig-tag {
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.13em;
+  padding:5px 12px; border-radius:999px;
+  border:1px solid var(--line); color:var(--text-far); white-space:nowrap;
+}
+
+/* 셋리스트 — <details>가 여닫기를 다 해준다. JS도, aria 속성도 필요 없다 */
+.setlist {
+  margin-top:clamp(30px, 4vw, 44px);
+  border:1px solid var(--line); border-radius:4px;
+  background:var(--surface);
+}
+.setlist summary {
+  cursor:pointer; list-style:none;
+  padding:16px clamp(18px, 2.4vw, 26px);
+  font-family:var(--mono); font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--text-dim);
+  display:flex; align-items:center; gap:10px;
+}
+.setlist summary::-webkit-details-marker { display:none; }
+.setlist summary::before {
+  content:'+'; font-size:1rem; line-height:1; color:var(--grapefruit);
+  transition:rotate .24s ease;
+}
+.setlist[open] summary::before { content:'+'; rotate:45deg; }
+.setlist summary:hover { color:var(--apricot); }
+.setlist-body {
+  padding:0 clamp(18px, 2.4vw, 26px) 22px;
+  color:var(--text-dim); font-size:0.92rem; max-width:74ch;
+}
+.setlist-hint { margin-top:10px; color:var(--text-far); font-size:0.86rem; }
+.setlist-hint a { color:var(--apricot); text-underline-offset:3px; }
+
 /* ── 행보 (타임라인) ───────────────────────────────────────── */
 .activity { background:var(--surface); border-top:1px solid var(--line); }
 .timeline { position:relative; max-width:760px; margin:0 auto; }

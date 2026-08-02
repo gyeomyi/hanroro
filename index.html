@@ -40,6 +40,7 @@
       <a href="#records">음반</a>
       <a href="#listen">듣기</a>
       <a href="#words">문장</a>
+      <a href="#live">무대</a>
       <a href="#activity">행보</a>
       <a href="guestbook.html">방명록</a>
     </nav>
@@ -620,6 +621,60 @@
   </div>
 </section>
 
+<!-- 무대 — 다가오는 공연. 날짜는 HTML에 그대로 적고 js/live.js가 남은 날만 덧붙인다 -->
+<section class="live band" id="live">
+  <div class="wrap">
+    <span class="eyebrow" data-aos="fade-up">Live</span>
+    <h2 class="band-title" data-aos="fade-up">무대</h2>
+    <p class="band-sub" data-aos="fade-up">
+      다가오는 공연입니다. 팬이 정리한 목록이라 티켓·시간은
+      <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">공식 인스타그램</a>을 최종 기준으로 삼아 주세요.
+    </p>
+
+    <ol class="gig-list">
+      <li class="gig" data-aos="fade-up">
+        <!-- data-date: 남은 날 계산용. 화면에 보이는 날짜와 반드시 같은 날로 맞출 것 -->
+        <time class="gig-when" datetime="2026-08-06" data-date="2026-08-06">
+          <span class="gig-mm">08</span><span class="gig-dd">06</span><span class="gig-yy">2026</span>
+        </time>
+        <div class="gig-body">
+          <h3 class="gig-title">단독 공연 ‘시리즈L’</h3>
+          <p class="gig-place">롯데콘서트홀 · 서울</p>
+          <p class="gig-note">음악으로 남겨온 발자취를 관객과 함께 따라가는 이틀간의 공연. 8월 6–7일 이틀.</p>
+        </div>
+        <span class="gig-tag">단독</span>
+      </li>
+
+      <li class="gig" data-aos="fade-up">
+        <time class="gig-when" datetime="2026-08-14" data-date="2026-08-14">
+          <span class="gig-mm">08</span><span class="gig-dd">14</span><span class="gig-yy">2026</span>
+        </time>
+        <div class="gig-body">
+          <h3 class="gig-title">SUMMER SONIC 2026</h3>
+          <p class="gig-place">도쿄 · 오사카</p>
+          <p class="gig-note">일본 최대 음악 페스티벌에 처음 오릅니다. 8월 14–16일.</p>
+        </div>
+        <span class="gig-tag">페스티벌</span>
+      </li>
+    </ol>
+
+    <!-- TODO(에셋): 셋리스트는 공연이 끝난 뒤 공식 채널에서 확인해 채운다.
+         확인 안 된 곡 목록을 미리 적어두지 않는다 — 팬 페이지가 틀린 정보를 퍼뜨리게 된다. -->
+    <details class="setlist">
+      <summary>셋리스트</summary>
+      <div class="setlist-body">
+        <p>
+          아직 비어 있습니다. 공연이 끝나고 공식 채널에 곡 목록이 올라오면 이 자리에 옮겨 적습니다.
+          확인되지 않은 목록을 미리 적어두면 팬 페이지가 틀린 정보를 퍼뜨리는 쪽이 되어서요.
+        </p>
+        <p class="setlist-hint">
+          지난 무대의 분위기는 <a href="#listen">듣기</a>의 앨범 라이브 영상으로 대신 볼 수 있습니다.
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
 <!-- 행보 -->
 <section class="activity band" id="activity">
   <div class="wrap">
@@ -785,6 +840,7 @@
       <a href="#records">음반</a>
       <a href="#listen">듣기</a>
       <a href="#words">문장</a>
+      <a href="#live">무대</a>
       <a href="#activity">행보</a>
       <a href="guestbook.html">방명록</a>
     </div>
@@ -815,6 +871,8 @@
 <script src="js/disco.js" defer></script>
 <!-- 유튜브 파사드 — 누르기 전에는 iframe을 만들지 않는다 -->
 <script src="js/player.js" defer></script>
+<!-- 공연까지 남은 날 배지 -->
+<script src="js/live.js" defer></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" integrity="sha384-wziAfh6b/qT+3LrqebF9WeK4+J5sehS6FA10J1t3a866kJ/fvU5UwofWnQyzLtwu" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   AOS.init({
