@@ -27,23 +27,53 @@ hanroro/
 │   ├── profile.jpg     프로필 사진
 │   ├── card.jpg        링크 그리드 사진
 │   └── cover-{ep1,ep2,ep3,single,youandi}.jpg  실제 앨범 표지 (파일명 = data-album 값)
+├── README.md           사람용 문서 (이 파일은 에이전트용). 기능을 바꾸면 둘 다 고칠 것
+├── .mcp.json           Supabase MCP 설정 — **`.gitignore`됨**. 새 환경에선 다시 만들어야 한다
 └── .claude/skills/frontend-design/
 ```
+`.gitignore`: `.agents/` `.claude/` `skills-lock.json` `.mcp.json`
 
 ## 기술 스택
 - **프론트**: 순수 HTML/CSS/JS (빌드 도구 없음)
 - **백엔드**: Supabase (PostgreSQL + REST API)
-- **라이브러리** (CDN):
-  - `@supabase/supabase-js@2` — DB 클라이언트
-  - `sweetalert2@11` — alert/confirm 모달
-  - `dayjs@1` + relativeTime + ko 로케일 — 시간 포맷팅
+- **라이브러리** (CDN, 전부 **버전 고정 + SRI**):
+  - `@supabase/supabase-js@2.111.0` — DB 클라이언트 (방명록만)
+  - `sweetalert2@11.26.25` — alert/confirm 모달
+  - `dayjs@1.11.21` + relativeTime + ko 로케일 — 시간 포맷팅
   - `aos@2.3.1` — 스크롤 애니메이션 (reduced-motion 시 `disable` 콜백으로 끔)
+
+  버전을 올리면 `integrity` 해시를 반드시 다시 계산할 것:
+  `curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A`
 
 ## Supabase 설정
 - **Project ID**: `avsnujrdogkxvhtelrzx`
 - **Region**: ap-northeast-1
 - **API URL**: `https://avsnujrdogkxvhtelrzx.supabase.co`
 - **Anon Key**: `js/guestbook.js` 상단에 하드코딩 (공개용, RLS로 보호)
+
+## 작업 환경 (다른 세션에서 이어받을 때)
+- **Supabase MCP가 붙어 있다.** `.mcp.json`(프로젝트 루트, `.gitignore`됨)에
+  `https://mcp.supabase.com/mcp?project_ref=avsnujrdogkxvhtelrzx&features=docs,database,debugging,development,functions`.
+  세션마다 `/mcp`에서 OAuth 인증이 필요할 수 있다. 안 붙어 있으면 `claude mcp list`로 확인
+- **DB 변경은 `apply_migration`으로.** `execute_sql`은 조회·정리용. 적용 뒤에는
+  **anon 키로 curl을 날려 바깥에서 실제로 막히는지 확인**할 것 (권한은 대시보드에서 보는 것과 다르게 동작한다)
+- 적용된 마이그레이션 (`supabase_migrations.schema_migrations`):
+  `create_guestbook_table` → `grant_guestbook_privileges` → `guestbook_update_delete_policies` →
+  `guestbook_password_feature` → `harden_guestbook_password_hash` →
+  `guestbook_column_level_select_only` → `album_like_counter` → `guestbook_input_validation_and_throttle`
+
+### 화면 확인 방법
+빌드가 없으므로 **헤드리스 크롬으로 렌더해서 눈으로 확인**하는 게 가장 빠르다.
+```bash
+python -m http.server 8000 --directory <프로젝트 경로> &
+chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 --virtual-time-budget=6000   --screenshot=out.png "http://localhost:8000/album-ep3.html"
+```
+- ⚠️ **`file://`이나 페이지 조각으로 열면 안 된다.** AOS가 `[data-aos]`를 `opacity:0`으로
+  깔아두기 때문에 `aos.js`가 실행되지 않으면 **화면이 통째로 비어 보인다**. 조각을 테스트하려면
+  AOS 스크립트도 같이 넣을 것
+- 테마·앨범을 강제로 보려면 `<html>`에 `data-theme="light"` / `data-album="ep2"`를 박은
+  임시 복사본을 만들어 열면 된다 (앨범 페이지는 `theme.js`를 안 싣는다)
+- 넘침 검사는 `document.title`에 결과를 쓰고 `--dump-dom | grep '<title>'`로 받는 게 편하다
 
 ## DB 스키마 (`public.album_like`)
 | 컬럼 | 타입 | 제약 |
@@ -244,3 +274,19 @@ hanroro/
 - DB 조작은 직접 SQL이 아닌 RPC 함수 사용 필수
 - 세 앨범 모두 실제 발매 수록 순서로 번호를 매겨뒀다. 순서를 바꾸려면 출처를 확인할 것
 - `.record`의 커버 열은 **폭을 고정**해야 한다. `auto`로 두면 `aspect-ratio:1` 정사각형 크기가 튄다
+
+## 알고 둔 한계 (고치라는 뜻이 아니라, 이미 판단한 것들)
+- **좋아요 조작 가능** — 서버가 호출자를 구분하지 않는다. 중복 방지는 `localStorage`뿐.
+  어뷰징이 보이면 IP 기준 rate limit(Edge Function이나 프록시)이 필요
+- **잠금 악용** — 남의 글에 일부러 10번 틀리면 5분간 그 글의 수정·삭제가 막힌다. 자동 해제라 감수
+- **2026-07-29 이전 방명록 6건** — cost-6 해시 + 그 시기 `password_hash`가 공개돼 있었다.
+  원문 비밀번호를 몰라 재해싱 불가. **그대로 두기로 결정함**
+- **앨범 좋아요 수는 메인 목록에 없다** — `.record` 카드 전체가 `<a>`라 버튼을 넣으면 중첩된다.
+  숫자만 읽기 전용으로 얹는 방식이면 가능
+- **iOS 홈화면 아이콘 없음** — `favicon.svg`만 있다. 필요하면 180×180 PNG 추가
+
+## 남은 후보 작업
+- 메인 히어로·CTA의 '입춘' 링크가 아직 옛 영상(`niazCi1AqqA`)이다.
+  앨범 페이지는 뮤직비디오(`kIiW3XRP7bU`)로 교체됨 — 통일할지 정할 것
+- 〈너와 나〉 작사·작곡 크레딧 미확인 (나무위키가 403이라 못 읽음)
+- 방명록 목록이 50건에서 잘린다 (`limit(50)`). 더 쌓이면 페이지네이션 필요
