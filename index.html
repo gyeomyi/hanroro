@@ -653,15 +653,21 @@
   });
 </script>
 
-<!-- 읽기 진행 막대. AOS와 한 블록에 두면 CDN이 막혔을 때 같이 죽는다 → 따로 둔다 -->
+<!-- 읽기 진행 막대 + 히어로 패럴랙스. AOS와 한 블록에 두면 CDN이 막혔을 때 같이 죽는다 → 따로 둔다 -->
 <script>
   // CSS animation-timeline:scroll()이 더 깔끔하지만 사파리·파이어폭스가 아직 못 받는다
   (() => {
     const bar = document.querySelector('.progress');
     const d = document.documentElement;
+    const hero = document.querySelector('.hero');
+    // 모션을 줄여달라고 한 사람에겐 --sy를 아예 갱신하지 않는다 (CSS 기본값 0으로 남는다)
+    const parallax = hero && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const draw = () => {
       const max = d.scrollHeight - d.clientHeight;
       bar.style.scale = (max > 0 ? d.scrollTop / max : 0) + ' 1';
+      // 히어로를 지나면 더 계산할 이유가 없다. 값을 고정해 두면 레이어도 그대로 멈춘다
+      if (parallax) d.style.setProperty('--sy', Math.min(d.scrollTop, hero.offsetHeight));
     };
     addEventListener('scroll', draw, { passive: true });
     addEventListener('resize', draw);
