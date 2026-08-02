@@ -38,6 +38,7 @@
       <a href="#about">프로필</a>
       <a href="#club">자몽살구클럽</a>
       <a href="#records">음반</a>
+      <a href="#listen">듣기</a>
       <a href="#activity">행보</a>
       <a href="guestbook.html">방명록</a>
     </nav>
@@ -489,6 +490,83 @@
   </div>
 </section>
 
+<!-- 듣기 — 공식 채널 영상만. 파사드(표지+재생버튼)를 깔고 누를 때만 iframe을 만든다 -->
+<section class="listen band" id="listen">
+  <div class="wrap">
+    <span class="eyebrow" data-aos="fade-up">Listen</span>
+    <h2 class="band-title" data-aos="fade-up">듣기</h2>
+    <p class="band-sub" data-aos="fade-up">
+      한로로 공식 유튜브 채널의 영상만 불러옵니다.
+      재생을 누르기 전에는 표지 그림만 놓아둔 자리이고, 유튜브로는 아무 요청도 가지 않습니다.
+    </p>
+
+    <div class="player" data-aos="fade-up">
+      <div class="pl-stage">
+        <!-- data-id가 바뀌면 js/player.js가 표지와 설명을 갈아 끼운다 -->
+        <button class="pl-facade" type="button" data-id="1GUFm9FrPZI"
+                aria-label="'자몽살구클럽' 앨범 라이브 재생 — 유튜브가 여기서 열립니다">
+          <img class="pl-thumb" src="https://i.ytimg.com/vi/1GUFm9FrPZI/maxresdefault.jpg"
+               alt="" width="1280" height="720" loading="lazy"
+               onerror="this.src=this.src.replace('maxresdefault','hqdefault')">
+          <span class="pl-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </span>
+        </button>
+        <p class="pl-caption">
+          <b>자몽살구클럽</b><span>3rd EP 앨범 라이브 · 2025</span>
+        </p>
+      </div>
+
+      <ol class="pl-list">
+        <li><button type="button" class="pl-item is-on" data-id="1GUFm9FrPZI"
+              data-title="자몽살구클럽" data-sub="3rd EP 앨범 라이브 · 2025">
+          <span class="pl-no">01</span>
+          <span class="pl-txt"><b>자몽살구클럽</b><span>3rd EP 앨범 라이브 · 2025</span></span>
+        </button></li>
+        <li><button type="button" class="pl-item" data-id="Tos8R9Tcem8"
+              data-title="너와 나" data-sub="뮤직비디오 · 2026">
+          <span class="pl-no">02</span>
+          <span class="pl-txt"><b>너와 나</b><span>뮤직비디오 · 2026</span></span>
+        </button></li>
+        <li><button type="button" class="pl-item" data-id="f1sr0D13wEY"
+              data-title="사랑하게 될 거야" data-sub="라이브">
+          <span class="pl-no">03</span>
+          <span class="pl-txt"><b>사랑하게 될 거야</b><span>라이브</span></span>
+        </button></li>
+        <li><button type="button" class="pl-item" data-id="3RMJ4qnvMWc"
+              data-title="집" data-sub="2nd EP 앨범 라이브 · 2024">
+          <span class="pl-no">04</span>
+          <span class="pl-txt"><b>집</b><span>2nd EP 앨범 라이브 · 2024</span></span>
+        </button></li>
+        <li><button type="button" class="pl-item" data-id="db3vhwQcQPM"
+              data-title="이상비행" data-sub="1st EP 앨범 라이브 · 2023">
+          <span class="pl-no">05</span>
+          <span class="pl-txt"><b>이상비행</b><span>1st EP 앨범 라이브 · 2023</span></span>
+        </button></li>
+        <li><button type="button" class="pl-item" data-id="kIiW3XRP7bU"
+              data-title="입춘" data-sub="데뷔곡 뮤직비디오 · 2022">
+          <span class="pl-no">06</span>
+          <span class="pl-txt"><b>입춘</b><span>데뷔곡 뮤직비디오 · 2022</span></span>
+        </button></li>
+      </ol>
+    </div>
+
+    <!-- 음원은 스포티파이 공식 임베드. loading=lazy라 이 자리까지 내려와야 불러온다 -->
+    <div class="spot" data-aos="fade-up">
+      <h3 class="spot-head">음원으로</h3>
+      <iframe class="spot-frame" title="한로로 Spotify 아티스트 플레이어"
+              src="https://open.spotify.com/embed/artist/5wVJpXzuKV6Xj7Yhsf2uYx?utm_source=generator&amp;theme=0"
+              width="100%" height="352" frameborder="0" loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      <p class="spot-note">
+        미리듣기는 30초입니다. 전곡은
+        <a href="https://open.spotify.com/artist/5wVJpXzuKV6Xj7Yhsf2uYx" target="_blank" rel="noopener">스포티파이</a> ·
+        <a href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener">벅스</a>에서.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- 행보 -->
 <section class="activity band" id="activity">
   <div class="wrap">
@@ -652,6 +730,7 @@
       <a href="#about">프로필</a>
       <a href="#club">자몽살구클럽</a>
       <a href="#records">음반</a>
+      <a href="#listen">듣기</a>
       <a href="#activity">행보</a>
       <a href="guestbook.html">방명록</a>
     </div>
@@ -680,6 +759,8 @@
 <script src="js/likes.js" defer></script>
 <!-- 음반 거르기. AOS보다 먼저 실행돼도 되게 window.AOS를 확인하고 refresh한다 -->
 <script src="js/disco.js" defer></script>
+<!-- 유튜브 파사드 — 누르기 전에는 iframe을 만들지 않는다 -->
+<script src="js/player.js" defer></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" integrity="sha384-wziAfh6b/qT+3LrqebF9WeK4+J5sehS6FA10J1t3a866kJ/fvU5UwofWnQyzLtwu" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   AOS.init({

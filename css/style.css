@@ -655,6 +655,72 @@ header nav a.is-current { color:var(--apricot); }
   color:var(--text-far); white-space:nowrap; align-self:start; padding-top:3px;
 }
 
+/* ── 듣기 (유튜브 파사드 + 스포티파이) ─────────────────────────
+      임베드를 처음부터 박으면 한 개당 800KB에 쿠키까지 따라온다.
+      표지 그림만 깔아두고 누를 때 js/player.js가 iframe으로 바꾼다. ── */
+.listen { background:var(--surface); border-top:1px solid var(--line); }
+.player {
+  display:grid;
+  grid-template-columns:minmax(0, 1.7fr) minmax(240px, 0.85fr);
+  gap:clamp(20px, 3vw, 34px);
+  align-items:start;
+}
+.pl-stage { min-width:0; }
+/* 파사드와 진짜 iframe이 같은 자리를 쓴다 — 바뀔 때 화면이 튀지 않게 비율을 고정 */
+.pl-facade, .pl-frame {
+  display:block; width:100%; aspect-ratio:16/9;
+  border:1px solid var(--line); border-radius:4px;
+  background:var(--bg); overflow:hidden;
+}
+.pl-facade { position:relative; padding:0; cursor:pointer; }
+.pl-thumb {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .5s cubic-bezier(.2,.8,.3,1), filter .3s ease;
+  filter:saturate(0.92) brightness(0.86);
+}
+.pl-facade:hover .pl-thumb { transform:scale(1.035); filter:none; }
+.pl-play {
+  position:absolute; inset:50% auto auto 50%; translate:-50% -50%;
+  width:clamp(56px, 7vw, 74px); aspect-ratio:1; border-radius:50%;
+  display:grid; place-items:center;
+  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  color:var(--btn-ink);
+  box-shadow:0 12px 34px rgba(224,90,122,0.42);
+  transition:transform .24s ease;
+}
+.pl-facade:hover .pl-play { transform:scale(1.08); }
+.pl-play svg { width:46%; margin-left:8%; }   /* 삼각형 무게중심 보정 */
+.pl-caption { margin-top:14px; display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px; }
+.pl-caption b { font-family:var(--serif); font-size:1.15rem; font-weight:700; }
+.pl-caption span { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em; color:var(--text-far); }
+
+.pl-list { display:flex; flex-direction:column; border-top:1px solid var(--line); }
+.pl-item {
+  width:100%; display:flex; align-items:baseline; gap:14px; text-align:left;
+  padding:14px 12px; cursor:pointer;
+  background:none; border:none; border-bottom:1px solid var(--line-soft);
+  color:inherit; font:inherit;
+  transition:background .22s ease, padding-left .22s ease;
+}
+.pl-item:hover { background:var(--surface-2); padding-left:18px; }
+.pl-no { font-family:var(--mono); font-size:0.68rem; color:var(--text-far); flex:0 0 auto; }
+.pl-txt { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.pl-txt b { font-weight:500; font-size:0.95rem; }
+.pl-txt span { font-family:var(--mono); font-size:0.66rem; letter-spacing:0.06em; color:var(--text-far); }
+/* 고른 곡 — 왼쪽에 여명 한 줄 */
+.pl-item.is-on { background:var(--surface-2); box-shadow:inset 3px 0 0 var(--grapefruit); }
+.pl-item.is-on .pl-no { color:var(--grapefruit); }
+
+.spot { margin-top:clamp(38px, 5vw, 60px); }
+.spot-head {
+  font-family:var(--mono); font-size:0.7rem; font-weight:500;
+  letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--text-far); margin-bottom:14px;
+}
+.spot-frame { border:0; border-radius:12px; display:block; width:100%; }
+.spot-note { font-size:0.84rem; color:var(--text-far); margin-top:12px; }
+.spot-note a { color:var(--apricot); text-underline-offset:3px; }
+
 /* ── 행보 (타임라인) ───────────────────────────────────────── */
 .activity { background:var(--surface); border-top:1px solid var(--line); }
 .timeline { position:relative; max-width:760px; margin:0 auto; }
@@ -1009,6 +1075,8 @@ footer {
 
   .about-grid { grid-template-columns:1fr; gap:32px; }
   .about-photo { max-width:300px; }
+  /* 곡 목록을 옆에 두면 화면이 반씩 쪼개져 둘 다 못 읽는다 → 영상 아래로 */
+  .player { grid-template-columns:1fr; }
   /* 커버는 폭을 고정한다. auto로 두면 aspect-ratio 정사각형 크기가 튄다 */
   .record { grid-template-columns:80px minmax(0,1fr); }
   .record-date { grid-column:2; padding-top:0; margin-top:8px; }
