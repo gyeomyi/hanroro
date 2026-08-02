@@ -721,6 +721,51 @@ header nav a.is-current { color:var(--apricot); }
 .spot-note { font-size:0.84rem; color:var(--text-far); margin-top:12px; }
 .spot-note a { color:var(--apricot); text-underline-offset:3px; }
 
+/* ── 문장 — 인터뷰에서 실제로 한 말만. 한 장의 원고지 위에 얹는다 ──── */
+.words { position:relative; background:var(--bg); border-top:1px solid var(--line); overflow:hidden; }
+.words-grid { position:absolute; inset:0; opacity:0.5; }
+.words .wrap { position:relative; z-index:1; }
+
+/* 어긋난 두 열 — 인용 길이가 제각각이라 딱 맞춘 격자는 오히려 어색하다 */
+.quote-grid {
+  columns:2; column-gap:clamp(22px, 3.5vw, 44px);
+  margin-bottom:clamp(34px, 5vw, 54px);
+}
+.quote {
+  break-inside:avoid;                 /* 인용문이 열 경계에서 두 동강 나는 걸 막는다 */
+  margin:0 0 clamp(22px, 3.5vw, 40px);
+  padding:clamp(24px, 3vw, 34px) clamp(22px, 2.6vw, 32px);
+  background:var(--surface);
+  border:1px solid var(--line); border-radius:4px;
+  transition:border-color .28s ease, transform .28s ease;
+}
+.quote:hover { border-color:var(--grapefruit); transform:translateY(-3px); }
+/* 여는 따옴표 — 글자로 넣으면 줄 맞춤이 흔들려서 장식으로만 둔다 */
+.quote blockquote::before {
+  content:'“';
+  display:block; font-family:var(--serif); font-size:2.6rem; line-height:0.6;
+  color:var(--grapefruit); opacity:0.55; margin-bottom:14px;
+}
+.quote blockquote p {
+  font-family:var(--serif);
+  font-size:clamp(1.02rem, 1.7vw, 1.24rem);
+  line-height:1.95; color:var(--text);
+}
+.quote figcaption { margin-top:16px; }
+.quote figcaption a {
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.12em;
+  color:var(--text-far); text-decoration:none;
+  border-bottom:1px solid var(--line); padding-bottom:2px;
+  transition:color .2s ease, border-color .2s ease;
+}
+.quote figcaption a:hover { color:var(--apricot); border-color:var(--apricot); }
+
+.words-note {
+  max-width:74ch; font-size:0.9rem; color:var(--text-dim);
+  padding-top:clamp(22px, 3vw, 30px); border-top:1px solid var(--line);
+}
+.words-note a { color:var(--apricot); text-underline-offset:3px; }
+
 /* ── 행보 (타임라인) ───────────────────────────────────────── */
 .activity { background:var(--surface); border-top:1px solid var(--line); }
 .timeline { position:relative; max-width:760px; margin:0 auto; }
@@ -1077,6 +1122,8 @@ footer {
   .about-photo { max-width:300px; }
   /* 곡 목록을 옆에 두면 화면이 반씩 쪼개져 둘 다 못 읽는다 → 영상 아래로 */
   .player { grid-template-columns:1fr; }
+  /* 두 열이면 한 줄에 한글 열 몇 자밖에 안 들어간다 */
+  .quote-grid { columns:1; }
   /* 커버는 폭을 고정한다. auto로 두면 aspect-ratio 정사각형 크기가 튄다 */
   .record { grid-template-columns:80px minmax(0,1fr); }
   .record-date { grid-column:2; padding-top:0; margin-top:8px; }
