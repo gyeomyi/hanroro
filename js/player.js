@@ -19,20 +19,6 @@
     stage.querySelector('.pl-facade, .pl-frame').replaceWith(f);
   };
 
-  const facade = (id, title) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'pl-facade';
-    b.dataset.id = id;
-    b.setAttribute('aria-label', `'${title}' 재생 — 유튜브가 여기서 열립니다`);
-    b.innerHTML = `<img class="pl-thumb" src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg"
-        alt="" width="1280" height="720" loading="lazy"
-        onerror="this.src=this.src.replace('maxresdefault','hqdefault')">
-      <span class="pl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>`;
-    stage.querySelector('.pl-facade, .pl-frame').replaceWith(b);
-    return b;
-  };
-
   stage.addEventListener('click', (e) => {
     const b = e.target.closest('.pl-facade');
     if (b) embed(b.dataset.id, caption.querySelector('b').textContent);
@@ -41,8 +27,6 @@
   for (const item of items) {
     item.addEventListener('click', () => {
       const { id, title, sub } = item.dataset;
-      // 이미 재생 중이었다면 고른 곡도 바로 튼다 — 두 번 누르게 하지 않는다
-      const playing = !!stage.querySelector('.pl-frame');
 
       caption.innerHTML = '';
       caption.append(
@@ -50,8 +34,11 @@
         Object.assign(document.createElement('span'), { textContent: sub })
       );
 
-      if (playing) embed(id, title);
-      else facade(id, title);
+      // 곡 이름을 누른 건 듣겠다는 뜻이다. 파사드를 다시 깔면 한 번 더 눌러야 하고,
+      // 휴대폰은 무대가 화면 밖이라 아무 일도 안 일어난 것처럼 보인다.
+      // 첫 화면에 임베드를 박지 않는다는 원래 목적은 그대로다 — 누르기 전엔 여전히 표지뿐이다
+      embed(id, title);
+      stage.scrollIntoView({ block: 'nearest' });
 
       for (const other of items) {
         const isOn = other === item;

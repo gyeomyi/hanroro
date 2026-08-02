@@ -77,18 +77,15 @@ document.getElementById('f').onload = () => setTimeout(() => {
 
   ok('듣기: 누르기 전엔 iframe 없음', !stage.querySelector('.pl-frame') && !!stage.querySelector('.pl-facade'));
   items[1].click();
-  ok('듣기: 안 틀고 곡만 바꾸면 파사드 유지', !!stage.querySelector('.pl-facade'));
-  ok('듣기: 표지 교체', stage.querySelector('.pl-thumb').src.includes('Tos8R9Tcem8'));
+  const fr = stage.querySelector('.pl-frame');
+  ok('듣기: 목록에서 고르면 바로 재생', !!fr);
+  ok('듣기: nocookie + autoplay', !!fr && fr.src.startsWith('https://www.youtube-nocookie.com/embed/Tos8R9Tcem8?autoplay=1'));
   ok('듣기: 설명 교체', stage.querySelector('.pl-caption b').textContent === '너와 나');
+  ok('듣기: iframe에 title', !!fr && fr.title.includes('너와 나'));
   ok('듣기: aria-current 이동', items[1].getAttribute('aria-current') === 'true'
                              && items[0].getAttribute('aria-current') === 'false');
-  stage.querySelector('.pl-facade').click();
-  const fr = stage.querySelector('.pl-frame');
-  ok('듣기: 누르면 iframe 생성', !!fr);
-  ok('듣기: nocookie + autoplay', !!fr && fr.src.startsWith('https://www.youtube-nocookie.com/embed/Tos8R9Tcem8?autoplay=1'));
-  ok('듣기: iframe에 title', !!fr && fr.title.includes('너와 나'));
   items[4].click();
-  ok('듣기: 재생 중 곡 바꾸면 바로 이어 재생', stage.querySelector('.pl-frame').src.includes('db3vhwQcQPM'));
+  ok('듣기: 다른 곡으로 갈아타기', stage.querySelector('.pl-frame').src.includes('db3vhwQcQPM'));
   ok('듣기: iframe은 늘 하나', stage.querySelectorAll('iframe').length === 1);
 
   /* ── 무대 D-day (js/live.js) ── */

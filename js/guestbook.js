@@ -63,6 +63,15 @@ function toastSuccess(title) {
   });
 }
 
+/* 빈 칸을 조용히 무시하면 "눌러도 아무 일도 안 난다"로 보인다.
+   브라우저 기본 말풍선으로 어느 칸이 문제인지 그 자리에서 알려준다.
+   maxlength와 달리 이건 안내일 뿐이고, 진짜 검증은 서버(RPC)가 한다 */
+function complain(el, msg) {
+  el.setCustomValidity(msg);
+  el.reportValidity();
+  el.addEventListener('input', () => el.setCustomValidity(''), { once: true });
+}
+
 function alertError(title, text) {
   Swal.fire({ ...SWAL, icon:'error', title, text, confirmButtonText:'확인' });
 }
@@ -124,7 +133,9 @@ gbForm.addEventListener('submit', async (e) => {
   const name = gbNameInput.value.trim();
   const message = gbMessageInput.value.trim();
   const password = gbPasswordInput.value;
-  if (!name || !message || !password) return;
+  if (!name) return complain(gbNameInput, '이름을 적어주세요.');
+  if (!message) return complain(gbMessageInput, '내용을 적어주세요.');
+  if (!password) return complain(gbPasswordInput, '비밀번호를 정해주세요.');
   const ok = await insertEntry(name, message, password);
   if (ok) {
     gbNameInput.value = '';
@@ -162,9 +173,14 @@ gbList.addEventListener('click', async (e) => {
     const ok = await deleteEntry(id, result.value);
     if (ok) { toastSuccess('지웠습니다'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-edit')) {
-    const msgDiv = entry.querySelector('.gb-entry-msg');
+    // 편집은 한 번에 하나만. 저장·취소가 목록을 통째로 다시 그리므로,
+    // 두 개를 열어두면 한쪽을 저장하는 순간 다른 쪽에 쓰던 글이 날아간다
+    if (gbList.querySelector('.gb-edit-textarea')) await loadGuestbook();
+    const row = gbList.querySelector(`.gb-entry[data-id="${id}"]`);
+    if (!row) return;
+    const msgDiv = row.querySelector('.gb-entry-msg');
     const original = msgDiv.textContent;
-    entry.querySelector('.gb-entry-actions').style.display = 'none';
+    row.querySelector('.gb-entry-actions').style.display = 'none';
     msgDiv.innerHTML = `
       <textarea class="gb-edit-textarea" maxlength="500" spellcheck="false">${escapeHtml(original)}</textarea>
       <input type="password" class="gb-edit-password" placeholder="비밀번호" maxlength="30" spellcheck="false">
@@ -178,13 +194,20 @@ gbList.addEventListener('click', async (e) => {
     const passwordInput = entry.querySelector('.gb-edit-password');
     const message = textarea.value.trim();
     const password = passwordInput.value;
-    if (!message) { textarea.focus(); return; }
-    if (!password) { passwordInput.focus(); return; }
+    if (!message) return complain(textarea, '내용을 적어주세요.');
+    if (!password) return complain(passwordInput, '비밀번호를 입력해주세요.');
     const ok = await updateEntry(id, password, message);
     if (ok) { toastSuccess('저장했습니다'); await loadGuestbook(); }
   } else if (target.classList.contains('gb-btn-cancel')) {
     await loadGuestbook();
   }
+});
+
+/* 비밀번호 칸에서 Enter — 폼이 아니라서 기본 제출이 없다. 손으로 이어준다 */
+gbList.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || !e.target.classList.contains('gb-edit-password')) return;
+  e.preventDefault();
+  e.target.closest('.gb-entry').querySelector('.gb-btn-save').click();
 });
 
 loadGuestbook();
