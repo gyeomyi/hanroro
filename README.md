@@ -28,9 +28,13 @@
 
 ### 듣기
 
-공식 유튜브 영상 여섯 개와 스포티파이 아티스트 플레이어. **유튜브 임베드는 처음부터
-싣지 않습니다** — 표지 그림만 깔아두고 재생을 누를 때 `youtube-nocookie` iframe을
-만듭니다. 누르기 전에는 유튜브로 아무 요청도 가지 않습니다.
+공식 유튜브 영상 여섯 개와 스포티파이 미리듣기. **유튜브 임베드는 처음부터
+싣지 않습니다** — 표지 그림만 깔아두고, 곡을 고르거나 재생을 누를 때 `youtube-nocookie`
+iframe을 만듭니다. 누르기 전에는 유튜브로 아무 요청도 가지 않습니다.
+
+주력 스트리밍은 **유튜브 뮤직**입니다. 2026년 6월 와이즈앱 기준 국내 음악 앱 이용자가
+유튜브 뮤직 949만 · 스포티파이 622만 · 멜론 593만이라, 실제로 가장 많이 쓰는 곳을
+앞에 뒀습니다(근거는 [DECISIONS.md](DECISIONS.md)). 나머지는 보조 링크로 남겼습니다.
 
 ### 문장 · 무대 · 표지
 
@@ -74,7 +78,7 @@ js/theme.js      테마 전환 (localStorage)
 js/guestbook.js  방명록 로직 (Supabase)
 js/likes.js      앨범 좋아요 버튼
 js/disco.js      음반 거르기 (종류 × 연도)
-js/player.js     유튜브 파사드 — 누를 때만 iframe을 만든다
+js/player.js     유튜브 파사드 — 곡을 고르거나 누를 때만 iframe을 만든다
 js/live.js       공연까지 남은 날 배지
 js/egg.js        숨은 문장 (1111)
 img/             모든 이미지. 전용 페이지가 있는 표지는 cover-<앨범키>.jpg,
@@ -146,7 +150,7 @@ Supabase(PostgreSQL + REST). 로그인 없이 이름·내용·비밀번호로 �
 
 ```bash
 python -m http.server 8000
-# http://localhost:8000/selfcheck.html  →  PASS 29/29
+# http://localhost:8000/selfcheck.html  →  PASS 27/27
 ```
 
 `selfcheck.html`이 `index.html`을 iframe으로 띄워 거르기·재생·숨은 문장을 실제로

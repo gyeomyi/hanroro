@@ -20,13 +20,13 @@ hanroro/
 ├── css/album.css       앨범 페이지 전용 — 앨범별 세계(색·바탕)와 레이아웃 전부.
 │                       index.html도 표지 칩 색 때문에 함께 읽는다
 ├── js/theme.js         테마 전환 (밤/낮, localStorage) — <head>에서 동기 로드
-├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정)
+├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정, 빈칸 안내)
 ├── js/likes.js         앨범 좋아요 — 앨범 페이지 전용. supabase-js 없이 fetch로 REST 직접 호출
 ├── js/disco.js         음반 거르기 (종류 × 연도). DOM에 hidden만 토글 — index 전용
-├── js/player.js        듣기 — 유튜브 파사드. 누를 때만 iframe 생성 — index 전용
+├── js/player.js        듣기 — 유튜브 파사드. 곡을 고르거나 누를 때 iframe 생성 — index 전용
 ├── js/live.js          공연까지 남은 날(D-4) 배지 — index 전용
 ├── js/egg.js           숨은 문장(1111) — index 전용
-├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (29항목)
+├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (27항목)
 ├── shot.sh             헤드리스 크롬 렌더 헬퍼 (테마 고정 포함)
 ├── PROGRESS.md         spec.md 실행 진행표 — 새 세션은 이 파일부터
 ├── DECISIONS.md        그때그때의 판단과 이유
@@ -87,7 +87,7 @@ hanroro/
 ```bash
 python -m http.server 8000 --directory <프로젝트 경로> &
 chrome --headless=new --disable-gpu --no-sandbox --virtual-time-budget=12000   --dump-dom "http://localhost:8000/selfcheck.html" | grep -o '<title>[^<]*</title>'
-# → PASS 29/29
+# → PASS 27/27
 ```
 `selfcheck.html`이 `index.html`을 iframe으로 띄워 거르기·재생·숨은 문장을 실제로 눌러본다.
 **손으로 만지는 JS를 고쳤으면 여기부터 돌릴 것.** `file://`로는 안 된다(같은 출처가 아니라 iframe 안을 못 읽는다).
@@ -208,6 +208,8 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
 - **배지**: `.badge` + `.badge-solid|ghost` + 위치 `.badge-tl|br|tr|hero-badge`, 지연 `.badge-float-2|3`.
   `transform`이 아니라 **`translate` 프로퍼티**로 떠오르게 했다 — `transform:rotate()`로 준 기울기와 겹치지 않게 하려는 것
 - **레이아웃 유틸**: `.band` `.wrap`(1120) `.wrap-narrow`(720) `.eyebrow` `.band-title` `.band-sub`
+- **`auto-fill`/`auto-fit` 격자에는 `minmax(min(Npx, 100%), 1fr)`을 쓸 것.** `minmax(430px, 1fr)`로
+  두면 화면이 430px보다 좁을 때 칸이 줄지 않아 가로로 넘친다 (`.disc-list`가 390px에서 63px 넘쳤다)
 - **반응형**: 1100px(링크 그리드 2열+사진 배너), 900px(about 1단·히어로 배지 숨김), 760px(헤더 세로), 480px(버튼 full-width)
 - **접근성**: 두 테마 모두 **WCAG AA 통과 확인됨**(본문/서브/캡션/강조 전부 ≥4.5:1). `:focus-visible` 아웃라인, `prefers-reduced-motion` 시 애니메이션·AOS·배지 부유 전부 정지
 
@@ -266,6 +268,17 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
   덮어버렸다 → `.trk-flag`로 개명. 새 클래스를 추가할 땐 `style.css`에 같은 이름이 있는지 먼저 볼 것
 - `<header class="ah">`는 요소 셀렉터 `header{}`와 760px 미디어쿼리(`flex-direction:column`)를
   맞는다. `.ah`가 `flex-direction:row`를 **명시**해 되돌려 놓았다
+
+## 방명록 인라인 편집 (`js/guestbook.js`)
+- **빈 칸을 `focus()`만 하고 끝내지 말 것.** 그러면 저장을 눌러도 아무 일도 안 나서
+  "수정 기능이 죽었다"로 읽힌다. `complain(el, msg)`가 `setCustomValidity` +
+  `reportValidity()`로 브라우저 기본 말풍선을 띄우고, 다음 입력 때 스스로 지운다.
+  작성 폼(이름·내용·비밀번호)과 인라인 편집(내용·비밀번호) 다섯 자리 전부 이걸 쓴다.
+  **진짜 검증은 여전히 서버(RPC)가 한다** — 이건 안내일 뿐이다
+- **편집은 한 번에 하나만.** 저장·취소가 `loadGuestbook()`으로 목록을 통째로 다시 그리므로,
+  두 글을 동시에 열어두면 한쪽을 저장하는 순간 다른 쪽에 쓰던 글이 날아간다.
+  수정 버튼은 다른 편집창이 열려 있으면 먼저 목록을 새로 그린 뒤 `data-id`로 그 행을 다시 찾는다
+- 비밀번호 칸의 Enter는 `gbList`의 `keydown`이 저장 버튼으로 넘긴다 (폼이 아니라 기본 제출이 없다)
 
 ## 모달 (SweetAlert2)
 `js/guestbook.js`의 **`SWAL` 상수**를 스프레드해서 쓴다 — `Swal.fire({ ...SWAL, ... })`.
@@ -328,25 +341,38 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
    - 아래: `.disc-list` 두 벌 — '그 밖의 싱글' 13장, 'OST · 참여' 4편.
      페이지 없이 목록만 두고 벅스 앨범 페이지(`music.bugs.co.kr/album/<id>`)로 내보낸다.
      새 발매작은 여기에 한 줄 추가하는 게 기본이다. 전용 페이지는 서사가 있을 때만 만든다
-5. **듣기**: 유튜브 파사드 6곡 + 스포티파이 임베드 (아래 '듣기' 절)
+5. **듣기**: 유튜브 파사드 6곡 + `.plat`(주력 유튜브 뮤직 + 보조 링크) + 스포티파이 미리듣기
 6. **문장**: 인터뷰 인용 4개. **가사는 절대 싣지 않는다** (아래 '문장' 절)
 7. **무대**: 다가오는 공연 + D-day. 셋리스트는 `<details>` 구조만 (TODO)
 8. **행보**: 그라디언트 타임라인. `.is-next`로 미래 일정 구분 + `.tl-flag` 예정 배지
 9. **표지**: 보유 아트워크 22장 아트월. 첫 칸(최신작)만 2×2
 10. **더 보기**: 링크 그리드 5칸 + 사진 1칸
-11. **방명록**: 작성/수정/삭제 (비밀번호 필수), 상대시간 표시
+11. **방명록**: 작성/수정/삭제 (비밀번호 필수), 상대시간 표시 (아래 '방명록 인라인 편집' 절)
 12. **숨은 문장**: `1111` 타이핑 또는 `0+0=∞` 네 번 두드리기
 13. **로고 클릭**: `index.html`로 (앨범 페이지는 헤더 왼쪽의 '← 음반'이 `#records`로 돌려보냄)
 
 ## 듣기 · 문장 · 무대 · 표지 · 숨은 문장 (2026.08.02 추가, spec.md)
 
+### 주력 스트리밍 (`.plat`)
+**유튜브 뮤직이 주력이다.** 와이즈앱 2026년 6월 국내 음악 앱 이용자 — 유튜브 뮤직 949만 ·
+스포티파이 622만 · 멜론 593만 · 지니 237만 · 플로 168만. **벅스는 순위에 없다.**
+그래서 `.plat`은 유튜브 뮤직만 `.btn`으로 세우고 나머지는 옆줄 보조 링크로 둔다.
+- 벅스 **앨범** 링크(`/album/<id>`)는 그대로 둔다 — 듣는 곳이 아니라 디스코그래피 출처다
+- 아티스트 페이지 id: 유튜브 뮤직 `music.youtube.com/channel/UCrDa_5OU-rhvXqWlPx5hgKQ` ·
+  스포티파이 `5wVJpXzuKV6Xj7Yhsf2uYx` · **멜론 `3080810`** · 애플뮤직 `1613668993` · 벅스 `20155724`
+- 순위가 바뀌면 근거(출처·시점)를 DECISIONS.md에 적고 나서 바꿀 것. 느낌으로 정하지 말 것
+
 ### 듣기 (`.listen` / `js/player.js`)
 - **유튜브 임베드를 처음부터 박지 말 것.** 하나에 ~800KB에 추적 쿠키까지 딸려온다.
   파사드(표지 + 재생 버튼)를 깔고 누를 때만 `youtube-nocookie` iframe을 만든다
 - 썸네일은 `i.ytimg.com/vi/<id>/maxresdefault.jpg`, `onerror`로 `hqdefault` 대체
-- 재생 중에 다른 곡을 고르면 바로 이어 재생한다(파사드로 되돌리지 않는다)
+- **목록에서 곡을 고르면 그 자리에서 바로 재생한다.** 파사드를 다시 깔지 않는다 —
+  두 번 눌러야 했고, 휴대폰은 무대가 화면 밖이라 아무 일도 안 일어난 것처럼 보였다.
+  재생 뒤 `stage.scrollIntoView({block:'nearest'})`로 무대가 화면에 들어오게 한다.
+  첫 화면에 임베드를 박지 않는다는 파사드의 목적은 그대로다(누르기 전엔 표지뿐)
 - **영상 id는 레포에 이미 있던 것만 쓴다.** 추측한 id는 죽어도 확인할 방법이 없다
-- 스포티파이는 파사드 없이 `loading="lazy"` iframe 하나. 아티스트 id `5wVJpXzuKV6Xj7Yhsf2uYx`
+- 스포티파이는 파사드 없이 `loading="lazy"` iframe 하나. 아티스트 id `5wVJpXzuKV6Xj7Yhsf2uYx`.
+  **역할은 미리듣기(30초)다** — 전곡 재생은 그 위 `.plat`의 유튜브 뮤직 버튼이 맡는다
   (`theme=0`이라 낮 테마에서도 어둡다 — 플레이어 패널로 읽히므로 그대로 둔다)
 
 ### 문장 (`.words`)
@@ -426,7 +452,8 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
   뮤직비디오(`kIiW3XRP7bU`)로 통일했다
 - **셋리스트가 비어 있다** (`.setlist`). 공연 뒤 공식 채널에서 확인해 채울 것
 - **공연·화보 사진이 없다** (`.gallery`). 사용 허락을 받으면 표지 아래에 사진 줄 추가
-- 멜론 아티스트 링크는 id를 확인하지 못해 넣지 않았다 (푸터엔 벅스·스포티파이·애플뮤직만)
+- ~~멜론 아티스트 링크는 id를 확인 못 했다~~ → `artistId=3080810` 확인해 넣었다
+  (`www.melon.com/artist/timeline.htm?artistId=3080810`, `og:title="한로로"`로 대조)
 - ~~〈너와 나〉 작사·작곡 크레딧 미확인~~ → 벅스 트랙 페이지(`music.bugs.co.kr/track/33992621`)에서
   확인해 `album-youandi.html` 라이너 아래에 넣었다. 다른 곡 크레딧도 같은 방법으로 얻을 수 있다
 - 방명록 목록이 50건에서 잘린다 (`limit(50)`). 더 쌓이면 페이지네이션 필요
