@@ -175,7 +175,36 @@
       <strong>EP 세 장은 곡마다 한로로가 먼저 써 둔 산문이 붙어 있습니다.</strong>
     </p>
 
-    <a class="record" href="album-youandi.html" data-aos="fade-up">
+    <!-- 거르기 — 스물두 장을 종류와 연도로 좁혀 본다.
+         목록은 HTML에 그대로 있고 js/disco.js가 hidden만 토글한다 (JS가 죽어도 전부 보인다) -->
+    <div class="disc-filter" data-aos="fade-up">
+      <div class="dfil-row">
+        <span class="dfil-label" id="dfil-kind">종류</span>
+        <div class="dfil-chips" role="group" aria-labelledby="dfil-kind">
+          <button type="button" class="chip is-on" data-axis="kind" data-value="all" aria-pressed="true">전체 <b>22</b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="ep" aria-pressed="false">EP <b>3</b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="single" aria-pressed="false">싱글 <b>15</b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="ost" aria-pressed="false">OST · 참여 <b>4</b></button>
+        </div>
+      </div>
+      <div class="dfil-row">
+        <span class="dfil-label" id="dfil-year">연도</span>
+        <div class="dfil-chips" role="group" aria-labelledby="dfil-year">
+          <button type="button" class="chip is-on" data-axis="year" data-value="all" aria-pressed="true">전체</button>
+          <button type="button" class="chip" data-axis="year" data-value="2026" aria-pressed="false">2026 <b>4</b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2025" aria-pressed="false">2025 <b>3</b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2024" aria-pressed="false">2024 <b>5</b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2023" aria-pressed="false">2023 <b>4</b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2022" aria-pressed="false">2022 <b>6</b></button>
+        </div>
+      </div>
+      <p class="dfil-count" role="status" aria-live="polite"></p>
+    </div>
+
+    <p class="disc-empty" hidden>그 해에는 그 종류의 발매가 없습니다.</p>
+
+    <div class="disc-group" data-group>
+    <a class="record" href="album-youandi.html" data-kind="single" data-year="2026" data-aos="fade-up">
       <span class="cover cover-youandi cover-sm" aria-hidden="true">
         <img src="img/cover-youandi.jpg" alt="" loading="lazy">
       </span>
@@ -190,7 +219,7 @@
       <span class="record-date">2026.07.09<span class="record-likes" data-album="youandi" hidden>♥ <b></b></span></span>
     </a>
 
-    <a class="record" href="album-ep3.html" data-aos="fade-up">
+    <a class="record" href="album-ep3.html" data-kind="ep" data-year="2025" data-aos="fade-up">
       <span class="cover cover-ep3 cover-sm" aria-hidden="true">
         <img src="img/cover-ep3.jpg" alt="" loading="lazy">
       </span>
@@ -211,7 +240,7 @@
       <span class="record-date">2025.08.04<span class="record-likes" data-album="ep3" hidden>♥ <b></b></span></span>
     </a>
 
-    <a class="record" href="album-ep2.html" data-aos="fade-up">
+    <a class="record" href="album-ep2.html" data-kind="ep" data-year="2024" data-aos="fade-up">
       <span class="cover cover-ep2 cover-sm" aria-hidden="true">
         <img src="img/cover-ep2.jpg" alt="" loading="lazy">
       </span>
@@ -232,7 +261,7 @@
       <span class="record-date">2024.05.28<span class="record-likes" data-album="ep2" hidden>♥ <b></b></span></span>
     </a>
 
-    <a class="record" href="album-ep1.html" data-aos="fade-up">
+    <a class="record" href="album-ep1.html" data-kind="ep" data-year="2023" data-aos="fade-up">
       <span class="cover cover-ep1 cover-sm" aria-hidden="true">
         <img src="img/cover-ep1.jpg" alt="" loading="lazy">
       </span>
@@ -252,7 +281,7 @@
       <span class="record-date">2023.08.29<span class="record-likes" data-album="ep1" hidden>♥ <b></b></span></span>
     </a>
 
-    <a class="record" href="album-single.html" data-aos="fade-up">
+    <a class="record" href="album-single.html" data-kind="single" data-year="2022" data-aos="fade-up">
       <span class="cover cover-single cover-sm" aria-hidden="true">
         <img src="img/cover-single.jpg" alt="" loading="lazy">
       </span>
@@ -264,14 +293,17 @@
       <span class="record-date">2022.03.14<span class="record-likes" data-album="single" hidden>♥ <b></b></span></span>
     </a>
 
+    </div>
+
     <!-- 나머지 싱글 — 페이지를 따로 두지 않고 목록으로만. 링크는 벅스 앨범 페이지 -->
+    <div class="disc-group" data-group>
     <h3 class="disc-head" data-aos="fade-up">그 밖의 싱글</h3>
     <p class="disc-lead" data-aos="fade-up">
       EP에 실리기 전 먼저 내놓은 곡들과, 어느 앨범에도 묶이지 않은 곡들.
     </p>
 
     <ul class="disc-list" data-aos="fade-up">
-      <li>
+      <li data-kind="single" data-year="2026">
         <a class="disc" href="https://music.bugs.co.kr/album/20799969" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-lovehate.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -281,7 +313,7 @@
           <span class="disc-date">2026.04.02</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2025">
         <a class="disc" href="https://music.bugs.co.kr/album/20738207" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-escape.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -291,7 +323,7 @@
           <span class="disc-date">2025.07.06</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2024">
         <a class="disc" href="https://music.bugs.co.kr/album/20679516" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-compass.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -301,7 +333,7 @@
           <span class="disc-date">2024.10.29</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2024">
         <a class="disc" href="https://music.bugs.co.kr/album/20678562" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-sonice.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -311,7 +343,7 @@
           <span class="disc-date">2024.10.22</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2024">
         <a class="disc" href="https://music.bugs.co.kr/album/20642713" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-survival.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -321,7 +353,7 @@
           <span class="disc-date">2024.05.16</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2024">
         <a class="disc" href="https://music.bugs.co.kr/album/20639287" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-foodchain.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -331,7 +363,7 @@
           <span class="disc-date">2024.04.30</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2023">
         <a class="disc" href="https://music.bugs.co.kr/album/20613044" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-mayfly.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -341,7 +373,7 @@
           <span class="disc-date">2023.12.26</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2023">
         <a class="disc" href="https://music.bugs.co.kr/album/20560620" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jacheo.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -351,7 +383,7 @@
           <span class="disc-date">2023.04.21</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2023">
         <a class="disc" href="https://music.bugs.co.kr/album/20538423" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-stop.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -361,7 +393,7 @@
           <span class="disc-date">2023.01.04</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2022">
         <a class="disc" href="https://music.bugs.co.kr/album/20501510" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-yournight.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -371,7 +403,7 @@
           <span class="disc-date">2022.10.25</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2022">
         <a class="disc" href="https://music.bugs.co.kr/album/20490847" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jjakkung.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -381,7 +413,7 @@
           <span class="disc-date">2022.09.04</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2022">
         <a class="disc" href="https://music.bugs.co.kr/album/20485543" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-likemygroove.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -391,7 +423,7 @@
           <span class="disc-date">2022.08.13</span>
         </a>
       </li>
-      <li>
+      <li data-kind="single" data-year="2022">
         <a class="disc" href="https://music.bugs.co.kr/album/20474053" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-mirror.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -403,13 +435,16 @@
       </li>
     </ul>
 
+    </div>
+
+    <div class="disc-group" data-group>
     <h3 class="disc-head" data-aos="fade-up">OST · 참여</h3>
     <p class="disc-lead" data-aos="fade-up">
       자기 이름으로 낸 앨범은 아니지만, 한 곡씩 남겨둔 자리들.
     </p>
 
     <ul class="disc-list" data-aos="fade-up">
-      <li>
+      <li data-kind="ost" data-year="2026">
         <a class="disc" href="https://music.bugs.co.kr/album/4152581" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jpop.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -419,7 +454,7 @@
           <span class="disc-date">2026.07.30</span>
         </a>
       </li>
-      <li>
+      <li data-kind="ost" data-year="2026">
         <a class="disc" href="https://music.bugs.co.kr/album/4146141" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-daegun.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -429,7 +464,7 @@
           <span class="disc-date">2026.04.24</span>
         </a>
       </li>
-      <li>
+      <li data-kind="ost" data-year="2025">
         <a class="disc" href="https://music.bugs.co.kr/album/20764008" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-maru.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -439,7 +474,7 @@
           <span class="disc-date">2025.11.01</span>
         </a>
       </li>
-      <li>
+      <li data-kind="ost" data-year="2022">
         <a class="disc" href="https://music.bugs.co.kr/album/20479597" target="_blank" rel="noopener">
           <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-dearx.jpg" alt="" loading="lazy"></span>
           <span class="disc-body">
@@ -450,6 +485,7 @@
         </a>
       </li>
     </ul>
+    </div>
   </div>
 </section>
 
@@ -642,6 +678,8 @@
 
 <!-- 음반 목록의 좋아요 숫자만 채운다 (읽기 전용). 버튼은 앨범 페이지에만 있다 -->
 <script src="js/likes.js" defer></script>
+<!-- 음반 거르기. AOS보다 먼저 실행돼도 되게 window.AOS를 확인하고 refresh한다 -->
+<script src="js/disco.js" defer></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" integrity="sha384-wziAfh6b/qT+3LrqebF9WeK4+J5sehS6FA10J1t3a866kJ/fvU5UwofWnQyzLtwu" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   AOS.init({
