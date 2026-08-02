@@ -18,9 +18,15 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
 <!-- 히어로 배경은 CSS background-image라 브라우저가 늦게 발견한다 (LCP 요소) -->
 <link rel="preload" as="image" href="img/background.jpg" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- 한글 웹폰트는 서브셋이 수십 개로 쪼개져 스타일시트만 78KB다. 렌더를 막는 자리에 두면
+     첫 페인트가 통째로 그만큼 밀린다(측정: 2.0s → 12.7s). preload로 받아 다 받은 뒤
+     스타일시트로 승격시킨다 — 그동안 글자는 CSS에 적어둔 대체 글꼴(맑은 고딕·나눔명조)로
+     먼저 보인다. display=swap이라 어차피 한 번은 바뀌던 것이고, 그 시점만 앞당긴 것이다. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/album.css">
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" integrity="sha384-/rJKQnzOkEo+daG0jMjU1IwwY9unxt1NBw3Ef2fmOJ3PW/TfAg2KXVoWwMZQZtw9" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -28,7 +34,7 @@
 </head>
 <body id="top">
 
-<a class="skip" href="#about">본문 바로가기</a>
+<a class="skip" href="#main">본문 바로가기</a>
 <div class="progress" aria-hidden="true"></div>
 
 <header>
@@ -55,6 +61,8 @@
     </button>
   </div>
 </header>
+
+<main id="main">
 
 <!-- 히어로 — 이 사람이 누구인지 한 문장으로 -->
 <section class="hero">
@@ -94,7 +102,7 @@
 
     <div class="about-grid">
       <figure class="about-photo" data-aos="fade-up">
-        <img src="img/profile.jpg" alt="한로로 프로필 사진">
+        <img src="img/profile.jpg" alt="한로로 프로필 사진" loading="lazy" decoding="async" width="736" height="976">
         <span class="badge badge-ghost badge-tl" aria-hidden="true">SINCE 2022</span>
         <span class="badge badge-solid badge-br badge-float-2" aria-hidden="true">0 + 0 = ∞</span>
         <figcaption>HANRORO — 자몽살구클럽</figcaption>
@@ -918,7 +926,7 @@
         <span class="go">수상 소개 →</span>
       </a>
       <figure class="link-photo">
-        <img src="img/card.jpg" alt="한로로">
+        <img src="img/card.jpg" alt="한로로" loading="lazy" decoding="async" width="736" height="981">
         <span class="badge badge-solid badge-tr badge-float-3" aria-hidden="true">3rd EP</span>
         <figcaption>HANRORO</figcaption>
       </figure>
@@ -936,6 +944,8 @@
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="foot-grid">
     <div class="foot-brand">
@@ -943,7 +953,7 @@
       <p>UNOFFICIAL FAN PAGE</p>
     </div>
     <div class="foot-col">
-      <h4>Pages</h4>
+      <h3>Pages</h3>
       <a href="#about">프로필</a>
       <a href="#club">자몽살구클럽</a>
       <a href="#records">음반</a>
@@ -955,7 +965,7 @@
       <a href="guestbook.html">방명록</a>
     </div>
     <div class="foot-col">
-      <h4>Albums</h4>
+      <h3>Albums</h3>
       <a href="album-youandi.html">너와 나</a>
       <a href="album-single.html">입춘</a>
       <a href="album-ep1.html">이상비행</a>
@@ -963,7 +973,7 @@
       <a href="album-ep3.html">자몽살구클럽</a>
     </div>
     <div class="foot-col">
-      <h4>Listen</h4>
+      <h3>Listen</h3>
       <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">벅스뮤직</a>
       <a href="https://www.youtube.com/channel/UCrDa_5OU-rhvXqWlPx5hgKQ" target="_blank" rel="noopener">YouTube</a>
       <a href="https://open.spotify.com/artist/5wVJpXzuKV6Xj7Yhsf2uYx" target="_blank" rel="noopener">Spotify</a>

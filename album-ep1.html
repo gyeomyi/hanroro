@@ -18,7 +18,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- 한글 웹폰트는 서브셋이 수십 개로 쪼개져 스타일시트만 78KB다. 렌더를 막는 자리에 두면
+     첫 페인트가 통째로 그만큼 밀린다(측정: 2.0s → 12.7s). preload로 받아 다 받은 뒤
+     스타일시트로 승격시킨다 — 그동안 글자는 CSS에 적어둔 대체 글꼴(맑은 고딕·나눔명조)로
+     먼저 보인다. display=swap이라 어차피 한 번은 바뀌던 것이고, 그 시점만 앞당긴 것이다. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/album.css">
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" integrity="sha384-/rJKQnzOkEo+daG0jMjU1IwwY9unxt1NBw3Ef2fmOJ3PW/TfAg2KXVoWwMZQZtw9" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -31,6 +36,7 @@
   <a class="ah-logo" href="index.html">한로로 HANRORO</a>
 </header>
 
+<main>
 <section class="stage">
   <div class="stage-art" aria-hidden="true"></div>
   <figure class="stage-cover">
@@ -204,6 +210,7 @@
     </a>
   </div>
 </section>
+</main>
 
 <footer class="af">
   <span>© 2026 HANRORO Fan Page · 팬이 만든 비공식 페이지</span>

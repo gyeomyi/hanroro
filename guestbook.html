@@ -18,7 +18,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<!-- 한글 웹폰트는 서브셋이 수십 개로 쪼개져 스타일시트만 78KB다. 렌더를 막는 자리에 두면
+     첫 페인트가 통째로 그만큼 밀린다(측정: 2.0s → 12.7s). preload로 받아 다 받은 뒤
+     스타일시트로 승격시킨다 — 그동안 글자는 CSS에 적어둔 대체 글꼴(맑은 고딕·나눔명조)로
+     먼저 보인다. display=swap이라 어차피 한 번은 바뀌던 것이고, 그 시점만 앞당긴 것이다. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0" integrity="sha384-fPWur1rx/DE6YtXP/x0MD6dd90RgnVsz5yX/DIg7CcVAnTBZsENWuIcpvVTM39ti" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25" integrity="sha384-nLoOnA/BDh8A/jxqtckg4DumuCGOBYUnNJLZdQz/zfYNp3wcjGSoWTAzgko06G/2" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.21/dayjs.min.js" integrity="sha384-1Ft4/JTNbt7S/44V0himpcjx+YfQ1a6W6SYBJMr94ba6jwZhWoWoLaZsMmtJILgq" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -54,6 +60,7 @@
   </div>
 </header>
 
+<main>
 <section class="guestbook band" id="guestbook">
   <div class="wrap">
     <span class="eyebrow" data-aos="fade-up">Guestbook</span>
@@ -73,6 +80,7 @@
     <div class="gb-list" id="gbList"></div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="foot-grid">
@@ -81,7 +89,7 @@
       <p>UNOFFICIAL FAN PAGE</p>
     </div>
     <div class="foot-col">
-      <h4>Pages</h4>
+      <h3>Pages</h3>
       <a href="index.html#about">프로필</a>
       <a href="index.html#club">자몽살구클럽</a>
       <a href="index.html#records">음반</a>
@@ -89,7 +97,7 @@
       <a href="guestbook.html">방명록</a>
     </div>
     <div class="foot-col">
-      <h4>Albums</h4>
+      <h3>Albums</h3>
       <a href="album-youandi.html">너와 나</a>
       <a href="album-single.html">입춘</a>
       <a href="album-ep1.html">이상비행</a>
@@ -97,7 +105,7 @@
       <a href="album-ep3.html">자몽살구클럽</a>
     </div>
     <div class="foot-col">
-      <h4>Listen</h4>
+      <h3>Listen</h3>
       <a href="https://music.bugs.co.kr/artist/20155724" target="_blank" rel="noopener">벅스뮤직</a>
       <a href="https://www.youtube.com/channel/UCrDa_5OU-rhvXqWlPx5hgKQ" target="_blank" rel="noopener">YouTube</a>
       <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">Instagram</a>
