@@ -975,6 +975,17 @@
   </div>
 </footer>
 
+<!-- 숨은 문장 — '1111'을 타이핑하거나 0+0=∞ 를 네 번 두드리면 열린다.
+     role=status라 스크린리더도 열리는 순간 읽어준다. 아무 데나 누르면 닫히고, 6초 뒤 알아서 닫힌다 -->
+<div class="egg" hidden role="status">
+  <div class="egg-grid manuscript" aria-hidden="true"></div>
+  <div class="egg-inner">
+    <p class="egg-formula" aria-hidden="true">0 + 0 = ∞</p>
+    <p class="egg-line">아무것도 없는 우리라도, 함께라면.</p>
+    <p class="egg-sign">1111 — 찾았습니다</p>
+  </div>
+</div>
+
 <!-- 음반 목록의 좋아요 숫자만 채운다 (읽기 전용). 버튼은 앨범 페이지에만 있다 -->
 <script src="js/likes.js" defer></script>
 <!-- 음반 거르기. AOS보다 먼저 실행돼도 되게 window.AOS를 확인하고 refresh한다 -->
@@ -983,6 +994,8 @@
 <script src="js/player.js" defer></script>
 <!-- 공연까지 남은 날 배지 -->
 <script src="js/live.js" defer></script>
+<!-- 숨은 문장 -->
+<script src="js/egg.js" defer></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" integrity="sha384-wziAfh6b/qT+3LrqebF9WeK4+J5sehS6FA10J1t3a866kJ/fvU5UwofWnQyzLtwu" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   AOS.init({

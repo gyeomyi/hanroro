@@ -486,6 +486,9 @@ header nav a.is-current { color:var(--apricot); }
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+/* 숨은 문장의 두 번째 갈래. 안내 문구는 두지 않고 커서만 바뀐다 */
+.formula { cursor:pointer; user-select:none; }
+
 .club-read {
   font-family:var(--serif);
   font-size:clamp(1.1rem, 2.6vw, 1.6rem);
@@ -1295,6 +1298,40 @@ footer {
   .badge-br { right:-8px; }
   .btn, .btn-ghost { width:100%; justify-content:center; }
 }
+
+/* ── 숨은 문장 (1111) ─────────────────────────────────────────
+      찾은 사람에게만 잠깐 열리는 판. 그레인(z-index 65) 위에 얹는다. ── */
+.egg {
+  position:fixed; inset:0; z-index:75;
+  display:grid; place-items:center;
+  padding:var(--gutter);
+  background:rgba(10,10,14,0.93);
+  cursor:pointer;
+  animation:egg-in .5s ease-out both;
+}
+.egg-grid { position:absolute; inset:0; opacity:0.5; }
+.egg-inner { position:relative; text-align:center; }
+.egg-formula {
+  font-family:var(--serif);
+  font-size:clamp(2.6rem, 11vw, 6rem); line-height:1;
+  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:26px;
+  animation:egg-glow 2.6s ease-in-out infinite;
+}
+.egg-line {
+  font-family:var(--serif);
+  font-size:clamp(1.05rem, 3vw, 1.6rem); line-height:1.9;
+  color:#f3ede3;                       /* 판이 늘 어두우므로 테마와 무관하게 밝은 색 */
+  max-width:34ch; margin:0 auto 18px;
+}
+.egg-sign {
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.24em;
+  color:#8a8697;
+}
+@keyframes egg-in { from { opacity:0; } to { opacity:1; } }
+@keyframes egg-glow { 0%,100% { opacity:0.82; } 50% { opacity:1; } }
 
 /* ── 접근성: 모션 최소화 존중 ──────────────────────────────── */
 @media (prefers-reduced-motion:reduce) {
