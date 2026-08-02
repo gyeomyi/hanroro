@@ -121,6 +121,26 @@ textarea:focus-visible {
   border-radius:2px;
 }
 
+/* ── 건너뛰기 링크 — 탭 첫 타에만 나타난다 ─────────────────── */
+.skip {
+  position:fixed; top:10px; left:10px; z-index:80;
+  transform:translateY(-160%);
+  background:var(--surface); color:var(--text);
+  border:1px solid var(--line); border-radius:3px;
+  padding:10px 18px; font-size:0.86rem; text-decoration:none;
+  transition:transform .18s ease;
+}
+.skip:focus-visible { transform:translateY(0); }
+
+/* ── 읽기 진행 — 이 사이트는 한 권의 책이니 어디까지 읽었는지 보여준다.
+      CSS `animation-timeline:scroll()`이 더 깔끔하지만 사파리·파이어폭스가 아직 못 받는다
+      (= 방문자 대부분). index.html 아래쪽 스크립트가 scale만 갈아 끼운다 ── */
+.progress {
+  position:fixed; inset:0 0 auto 0; height:2px; z-index:70;
+  background:linear-gradient(90deg, var(--brand-1), var(--brand-2));
+  transform-origin:0 50%; scale:0 1;
+}
+
 /* ── 원고지 — 이 사이트의 시그니처.
       국문학도가 쓰던 200자 원고지 칸. 순수 CSS. ────────────── */
 .manuscript {
@@ -478,6 +498,13 @@ header nav a.is-current { color:var(--apricot); }
   font-family:var(--mono); font-size:0.74rem; letter-spacing:0.08em;
   color:var(--text-far); padding-top:11px; white-space:nowrap;
 }
+/* 읽기 전용 좋아요 수. js/likes.js가 채우기 전까지 hidden이라 실패해도 빈칸이 안 남는다 */
+.record-likes {
+  display:block; margin-top:10px;
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em;
+  color:var(--grapefruit);
+}
+.record-likes b { font-weight:400; color:var(--text-far); }
 
 /* ── 앨범 커버 — 실제 표지 이미지(img/cover-*.jpg) ────────────
    브랜드 그라디언트는 이미지가 뜨기 전 자리를 잡아두는 바탕이다.
@@ -489,6 +516,56 @@ header nav a.is-current { color:var(--apricot); }
 }
 .cover img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .cover-sm { border-radius:2px; }
+
+/* ── 그 밖의 싱글 · OST — 페이지가 없는 발매작 목록 ──────────
+   .record가 '펼쳐 보여주는' 다섯 장이라면 이쪽은 '빠짐없이 적어두는' 나머지.
+   그래서 같은 리듬을 쓰되 한 단계 작고 조용하게 잡았다.
+   ─────────────────────────────────────────────────────────── */
+.disc-head {
+  font-size:clamp(1.05rem, 2vw, 1.3rem);
+  margin:clamp(44px, 6vw, 68px) 0 6px;
+}
+.disc-lead { color:var(--text-far); font-size:0.9rem; max-width:74ch; margin-bottom:20px; }
+.disc-list {
+  display:grid;
+  /* 두 열이 붙어 있으면 어느 줄이 한 항목인지 안 읽힌다 → 열 사이를 크게 벌린다 */
+  column-gap:clamp(28px, 5vw, 64px);
+  grid-template-columns:repeat(auto-fill, minmax(430px, 1fr));
+}
+.disc {
+  display:grid; grid-template-columns:52px minmax(0,1fr) auto;
+  gap:16px; align-items:center;
+  /* 그리드 아이템은 <li>다. 이게 없으면 <a>가 행 높이만큼 안 늘어나서
+     왼쪽·오른쪽 열의 밑줄 높이가 어긋난다 */
+  height:100%;
+  padding:13px 10px; border-radius:2px;
+  /* 행 밑줄이 없으면 오른쪽 끝 날짜가 어느 줄 것인지 눈이 못 따라간다 */
+  border-bottom:1px solid var(--line-soft);
+  text-decoration:none;
+  transition:background .24s ease;
+}
+.disc:hover { background:var(--surface-2); }
+.disc .cover { transition:transform .3s cubic-bezier(.2,.8,.3,1); }
+.disc:hover .cover { transform:translateY(-2px) scale(1.04); }
+.disc-body { display:block; min-width:0; }
+.disc-title {
+  display:block; font-family:var(--serif); font-size:1.02rem;
+  color:var(--text); margin-bottom:3px;
+  transition:color .24s ease;
+}
+.disc:hover .disc-title { color:var(--apricot); }
+.disc-tag {
+  font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em;
+  color:var(--grapefruit); border:1px solid var(--line);
+  border-radius:2px; padding:2px 6px; margin-left:6px;
+  vertical-align:middle; white-space:nowrap;
+}
+/* 0.84rem이라 캡션색(--text-far)으로 두면 눈이 아프다. 설명문이니 --text-dim */
+.disc-sub { display:block; color:var(--text-dim); font-size:0.84rem; }
+.disc-date {
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.06em;
+  color:var(--text-far); white-space:nowrap; align-self:start; padding-top:3px;
+}
 
 /* ── 행보 (타임라인) ───────────────────────────────────────── */
 .activity { background:var(--surface); border-top:1px solid var(--line); }
@@ -507,6 +584,22 @@ header nav a.is-current { color:var(--apricot); }
   box-shadow:0 0 0 3px var(--surface);
 }
 .tl-item.is-next::before { background:var(--grapefruit); }
+/* 연도 표지 — 2026이 일곱 개 이어져서 연도 없이는 훑기가 어렵다.
+   ::before의 원이 레일을 가려 정거장처럼 보이게 한다 */
+.tl-year {
+  position:relative; padding:0 0 18px 40px;
+  font-family:var(--mono); font-size:0.85rem; font-weight:500;
+  letter-spacing:0.22em; color:var(--text);
+}
+.tl-year + .tl-item { padding-top:2px; }
+/* padding-top으로 벌리면 안 된다 — ::before는 패딩 박스 기준이라 원만 위에 남고
+   글자만 내려가서 어긋난다. 바깥 여백(margin)으로 벌려야 원이 글자를 따라온다 */
+.tl-year:not(:first-child) { margin-top:clamp(12px, 2vw, 22px); }
+.tl-year::before {
+  content:''; position:absolute; left:0; top:1px;
+  width:15px; height:15px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--line);
+}
 .tl-date {
   font-family:var(--mono); font-size:0.73rem; letter-spacing:0.1em;
   color:var(--text-far);
@@ -639,8 +732,10 @@ footer {
   padding:14px 32px;
   font-family:var(--sans); font-size:0.92rem; font-weight:500;
   border:none; border-radius:2px; cursor:pointer;
-  background:linear-gradient(100deg, var(--grapefruit), var(--apricot));
-  color:#16121a;
+  /* 채움은 --brand-*, 글자는 --btn-ink. --grapefruit/--apricot은 '글자용'이라
+     낮 모드에서 #c33a60→#94540b(짙은 루비→고동)이 되어 버튼이 시커멓게 나왔다 */
+  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  color:var(--btn-ink);
   transition:transform .22s ease, box-shadow .22s ease;
 }
 .gb-form button:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
@@ -849,6 +944,10 @@ footer {
   .record { grid-template-columns:64px minmax(0,1fr); gap:12px 16px; padding:24px 0; }
   .record-date { grid-column:2; padding-top:0; margin-top:10px; }
 
+  /* .disc도 같은 이유로 날짜를 본문 아래로 */
+  .disc { grid-template-columns:44px minmax(0,1fr); gap:6px 14px; padding:12px 8px; }
+  .disc-date { grid-column:2; padding-top:0; }
+
 
   .tl-item { padding-left:32px; }
 
@@ -881,4 +980,5 @@ footer {
   }
   [data-aos] { opacity:1 !important; transform:none !important; }
   .link-photo img { transition:none; }
+  .progress { display:none; }
 }

@@ -253,7 +253,7 @@
   line-height:2.1; color:var(--text); margin-bottom:22px;
 }
 .liner blockquote p:last-child { margin-bottom:0; }
-.liner cite {
+.liner cite, .liner-credit {
   display:block; margin-top:26px; font-style:normal;
   font-family:var(--mono); font-size:0.7rem; letter-spacing:0.12em;
   color:var(--text-far);
@@ -269,6 +269,10 @@
 }
 .list-head h2 { font-family:var(--serif); font-weight:700; font-size:clamp(1.5rem, 3vw, 2rem); }
 .list-meta { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.18em; color:var(--text-far); }
+.list-lead {
+  color:var(--text-dim); font-size:0.95rem; line-height:1.9; max-width:74ch;
+  margin:-8px 0 clamp(20px, 3vw, 32px);
+}
 
 .tl { display:grid; }
 .tl li {
@@ -291,6 +295,39 @@
   grid-column:2; margin-top:8px;
   color:var(--text-dim); font-size:0.94rem; line-height:1.85; max-width:76ch;
 }
+/* ── 곡별 산문 — 이 사이트의 논지가 실물로 증명되는 자리 ──────
+   한로로는 가사보다 산문을 먼저 쓴다. 그 원문이 앨범 소개글에 곡마다 실려 있어서
+   트랙 아래에 그대로 붙였다. <details>라 JS가 없고 키보드로도 열린다.
+   ─────────────────────────────────────────────────────────── */
+.tl-prose { grid-column:2; margin-top:10px; }
+.tl-prose > summary {
+  display:inline-flex; align-items:center; gap:9px;
+  /* 라벨이 한글이라 mono+넓은 자간은 '먼 저 쓴 글'로 벌어진다 → sans (.trk-flag와 같은 이유) */
+  font-family:var(--sans); font-size:0.79rem; font-weight:500;
+  letter-spacing:0.01em; color:var(--grapefruit);
+  padding:4px 0; cursor:pointer;
+  list-style:none; /* Firefox 삼각형 제거 */
+  transition:opacity .2s ease;
+}
+.tl-prose > summary::-webkit-details-marker { display:none; }
+.tl-prose > summary:hover { opacity:0.72; }
+.tl-prose > summary::before {
+  content:''; width:9px; height:9px; flex:none;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:translateY(-2px) rotate(45deg);
+  transition:transform .25s cubic-bezier(.2,.8,.3,1);
+}
+.tl-prose[open] > summary::before { transform:translateY(1px) rotate(-135deg); }
+/* 쪽수는 숫자라 mono가 맞다 */
+.tl-pg { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.06em; color:var(--text-far); }
+.tl-prose blockquote {
+  margin:12px 0 6px; padding-left:clamp(14px, 2vw, 22px);
+  border-left:2px solid var(--brand-1);
+  font-family:var(--serif); font-size:clamp(0.98rem, 1.7vw, 1.08rem);
+  line-height:2.05; color:var(--text); max-width:70ch;
+}
+/* 원문의 행갈이는 <br>로 넣는다. white-space:pre-line을 쓰면 템플릿 들여쓰기가 새어나온다 */
+
 /* 한글이 들어가므로 mono가 아니라 sans로 — mono는 한글 폴백에서 자간이 무너진다 */
 .trk-flag {
   font-family:var(--sans); font-size:0.68rem; font-weight:500;

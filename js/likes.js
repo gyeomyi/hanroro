@@ -9,6 +9,25 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2c251anJkb2dreHZodGVscnp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMDExNzAsImV4cCI6MjEwMDc3NzE3MH0.effnEFNSApyy1qJ5Z8ykHgLiXz-N36xjRsGuZxL6UUE';
   const HEADERS = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
 
+  /* 메인 음반 목록의 읽기 전용 숫자. .record 카드 전체가 <a>라 버튼은 못 넣는다
+     (중첩 링크). 숫자만 얹고 누르는 건 앨범 페이지에서. 요청은 한 번으로 끝난다 */
+  const chips = document.querySelectorAll('.record-likes');
+  if (chips.length) {
+    fetch(`${SUPABASE_URL}/rest/v1/album_like?select=album,likes`, { headers: HEADERS })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(rows => {
+        const by = Object.fromEntries(rows.map(r => [r.album, r.likes]));
+        chips.forEach(el => {
+          const n = by[el.dataset.album];
+          if (n === undefined) return;
+          el.querySelector('b').textContent = n.toLocaleString('ko-KR');
+          el.setAttribute('aria-label', `좋아요 ${n} — 앨범 페이지에서 누를 수 있습니다`);
+          el.hidden = false;
+        });
+      })
+      .catch(() => {}); // 못 읽으면 그냥 숨은 채로 둔다
+  }
+
   const btn = document.querySelector('.like');
   const album = document.documentElement.dataset.album;
   if (!btn || !album) return;
