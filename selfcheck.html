@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>자체검사 — 한로로 팬사이트</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  빌드도 테스트 러너도 없는 정적 사이트라, 손으로 만지는 부분만 여기서 확인한다.
+  index.html을 iframe으로 띄워 실제로 눌러보고 결과를 <title>에 적는다.
+
+  브라우저로 열기:  http://localhost:8000/selfcheck.html
+  자동으로 받기:
+    python -m http.server 8000 --directory .
+    chrome --headless=new --disable-gpu --no-sandbox --virtual-time-budget=12000 \
+      --dump-dom "http://localhost:8000/selfcheck.html" | grep -o '<title>[^<]*</title>'
+
+  ⚠️ file://로 열면 안 된다 — 같은 출처가 아니라서 iframe 안을 못 읽는다.
+-->
+<style>
+  body { font-family:ui-monospace, monospace; background:#13141b; color:#f3ede3; padding:24px; line-height:1.7; }
+  h1 { font-size:1.1rem; margin-bottom:4px; }
+  #sum { margin:12px 0 18px; font-size:1rem; }
+  .ok { color:#7ddba0; } .no { color:#ff7a8a; }
+  li { list-style:none; }
+  iframe { width:1280px; height:900px; border:1px solid #333; margin-top:20px; opacity:0.35; }
+</style>
+</head>
+<body>
+<h1>자체검사</h1>
+<p>index.html의 거르기 · 재생 · 숨은 문장을 실제로 눌러본다.</p>
+<p id="sum">돌리는 중…</p>
+<ul id="log"></ul>
+<iframe id="f" src="index.html" title="검사 대상"></iframe>
+
+<script>
+const log = document.getElementById('log');
+const results = [];
+const ok = (name, cond) => {
+  results.push({ name, cond });
+  const li = document.createElement('li');
+  li.className = cond ? 'ok' : 'no';
+  li.textContent = (cond ? '✓ ' : '✗ ') + name;
+  log.append(li);
+};
+
+const key = (d, k) => d.defaultView.dispatchEvent(
+  new d.defaultView.KeyboardEvent('keydown', { key: k, bubbles: true }));
+
+document.getElementById('f').onload = () => setTimeout(() => {
+  const d = document.getElementById('f').contentDocument;
+
+  /* ── 음반 거르기 (js/disco.js) ── */
+  const vis = () => [...d.querySelectorAll('.records [data-kind]')].filter(e => !e.hidden).length;
+  const groups = () => [...d.querySelectorAll('[data-group]')].filter(e => !e.hidden).length;
+  const chip = (axis, val) => d.querySelector(`.chip[data-axis="${axis}"][data-value="${val}"]`);
+
+  ok('거르기: 처음엔 22장 전부', vis() === 22);
+  ok('거르기: 그룹 3개', groups() === 3);
+  chip('kind', 'ep').click();
+  ok('거르기: EP만 3장', vis() === 3);
+  ok('거르기: 빈 그룹은 머리글까지 숨김', groups() === 1);
+  ok('거르기: aria-pressed 갱신', chip('kind', 'ep').getAttribute('aria-pressed') === 'true'
+                              && chip('kind', 'all').getAttribute('aria-pressed') === 'false');
+  chip('year', '2022').click();
+  ok('거르기: EP×2022는 0장', vis() === 0);
+  ok('거르기: 빈 상태 안내 노출', !d.querySelector('.disc-empty').hidden);
+  chip('kind', 'ost').click();
+  ok('거르기: OST×2022는 1장', vis() === 1);
+  chip('kind', 'all').click(); chip('year', 'all').click();
+  ok('거르기: 되돌리면 22장', vis() === 22);
+  ok('거르기: 안내 문구 복귀', d.querySelector('.dfil-count').textContent.includes('22'));
+
+  /* ── 듣기 파사드 (js/player.js) ── */
+  const stage = d.querySelector('.pl-stage');
+  const items = [...d.querySelectorAll('.pl-item')];
+
+  ok('듣기: 누르기 전엔 iframe 없음', !stage.querySelector('.pl-frame') && !!stage.querySelector('.pl-facade'));
+  items[1].click();
+  ok('듣기: 안 틀고 곡만 바꾸면 파사드 유지', !!stage.querySelector('.pl-facade'));
+  ok('듣기: 표지 교체', stage.querySelector('.pl-thumb').src.includes('Tos8R9Tcem8'));
+  ok('듣기: 설명 교체', stage.querySelector('.pl-caption b').textContent === '너와 나');
+  ok('듣기: aria-current 이동', items[1].getAttribute('aria-current') === 'true'
+                             && items[0].getAttribute('aria-current') === 'false');
+  stage.querySelector('.pl-facade').click();
+  const fr = stage.querySelector('.pl-frame');
+  ok('듣기: 누르면 iframe 생성', !!fr);
+  ok('듣기: nocookie + autoplay', !!fr && fr.src.startsWith('https://www.youtube-nocookie.com/embed/Tos8R9Tcem8?autoplay=1'));
+  ok('듣기: iframe에 title', !!fr && fr.title.includes('너와 나'));
+  items[4].click();
+  ok('듣기: 재생 중 곡 바꾸면 바로 이어 재생', stage.querySelector('.pl-frame').src.includes('db3vhwQcQPM'));
+  ok('듣기: iframe은 늘 하나', stage.querySelectorAll('iframe').length === 1);
+
+  /* ── 무대 D-day (js/live.js) ── */
+  ok('무대: 공연마다 남은 날 배지', d.querySelectorAll('.gig-dday').length === d.querySelectorAll('.gig').length);
+
+  /* ── 숨은 문장 (js/egg.js) ── */
+  const egg = d.querySelector('.egg');
+  ok('숨은 문장: 평소엔 숨어 있음', egg.hidden);
+  '1112'.split('').forEach(k => key(d, k));
+  ok('숨은 문장: 틀린 숫자로는 안 열림', egg.hidden);
+  '1111'.split('').forEach(k => key(d, k));
+  ok('숨은 문장: 1111 타이핑으로 열림', !egg.hidden);
+  egg.click();
+  ok('숨은 문장: 누르면 닫힘', egg.hidden);
+  const formula = d.querySelector('.formula');
+  for (let i = 0; i < 3; i++) formula.click();
+  ok('숨은 문장: 세 번으로는 안 열림', egg.hidden);
+  formula.click();
+  ok('숨은 문장: 네 번째에 열림', !egg.hidden);
+  key(d, 'Escape');
+  ok('숨은 문장: Esc로 닫힘', egg.hidden);
+  const ta = d.createElement('textarea'); d.body.append(ta); ta.focus();
+  '1111'.split('').forEach(k => ta.dispatchEvent(
+    new d.defaultView.KeyboardEvent('keydown', { key: k, bubbles: true })));
+  ok('숨은 문장: 입력창 타이핑은 무시', egg.hidden);
+  ta.remove();
+
+  const bad = results.filter(r => !r.cond);
+  const line = bad.length
+    ? `FAIL ${bad.length}/${results.length} — ` + bad.map(r => r.name).join(' / ')
+    : `PASS ${results.length}/${results.length}`;
+  document.getElementById('sum').textContent = line;
+  document.getElementById('sum').className = bad.length ? 'no' : 'ok';
+  document.title = line;
+}, 2000);
+</script>
+</body>
+</html>

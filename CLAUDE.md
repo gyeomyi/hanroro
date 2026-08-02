@@ -6,7 +6,8 @@
 ## 파일 구조
 ```
 hanroro/
-├── index.html          메인 (히어로, 프로필, 자몽살구클럽, 음반, 행보, 링크, CTA, 푸터)
+├── index.html          메인 (히어로, 프로필, 자몽살구클럽, 음반, 듣기, 문장, 무대,
+│                       행보, 표지, 링크, CTA, 푸터, 숨은 문장 판)
 ├── album-ep1.html      1st EP 이상비행 (2023.08.29, 6곡)
 ├── album-ep2.html      2nd EP 집 (2024.05.28, 7곡)
 ├── album-ep3.html      3rd EP 자몽살구클럽 (2025.08.04, 7곡)
@@ -21,6 +22,15 @@ hanroro/
 ├── js/theme.js         테마 전환 (밤/낮, localStorage) — <head>에서 동기 로드
 ├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정)
 ├── js/likes.js         앨범 좋아요 — 앨범 페이지 전용. supabase-js 없이 fetch로 REST 직접 호출
+├── js/disco.js         음반 거르기 (종류 × 연도). DOM에 hidden만 토글 — index 전용
+├── js/player.js        듣기 — 유튜브 파사드. 누를 때만 iframe 생성 — index 전용
+├── js/live.js          공연까지 남은 날(D-4) 배지 — index 전용
+├── js/egg.js           숨은 문장(1111) — index 전용
+├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (29항목)
+├── shot.sh             헤드리스 크롬 렌더 헬퍼 (테마 고정 포함)
+├── PROGRESS.md         spec.md 실행 진행표 — 새 세션은 이 파일부터
+├── DECISIONS.md        그때그때의 판단과 이유
+├── spec.md             원본 요구사항
 ├── favicon.svg         탭 아이콘 — 0+0=∞ 를 겹친 두 고리로 줄인 것. 7개 페이지 전부 링크됨
 ├── img/                모든 이미지는 여기에만 둔다
 │   ├── background.jpg  히어로 배경
@@ -65,8 +75,18 @@ hanroro/
   `guestbook_password_feature` → `harden_guestbook_password_hash` →
   `guestbook_column_level_select_only` → `album_like_counter` → `guestbook_input_validation_and_throttle`
 
+### 자체검사
+```bash
+python -m http.server 8000 --directory <프로젝트 경로> &
+chrome --headless=new --disable-gpu --no-sandbox --virtual-time-budget=12000   --dump-dom "http://localhost:8000/selfcheck.html" | grep -o '<title>[^<]*</title>'
+# → PASS 29/29
+```
+`selfcheck.html`이 `index.html`을 iframe으로 띄워 거르기·재생·숨은 문장을 실제로 눌러본다.
+**손으로 만지는 JS를 고쳤으면 여기부터 돌릴 것.** `file://`로는 안 된다(같은 출처가 아니라 iframe 안을 못 읽는다).
+
 ### 화면 확인 방법
 빌드가 없으므로 **헤드리스 크롬으로 렌더해서 눈으로 확인**하는 게 가장 빠르다.
+`bash shot.sh <페이지> <dark|light> <가로> <세로>`가 테마 고정(theme.js 제거)까지 해준다.
 ```bash
 python -m http.server 8000 --directory <프로젝트 경로> &
 chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 --virtual-time-budget=6000   --screenshot=out.png "http://localhost:8000/album-ep3.html"
@@ -292,17 +312,68 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
 
 ## 주요 기능
 1. **히어로**: 배경사진 + 먹밤 베일 + 원고지 그리드. 이름 '로로'만 여명 그라디언트(길 로 路 의미)
-2. **프로필**: 사진 + 약력 3단락 + `<dl>` 메타 4칸 + GQ 인터뷰 풀쿼트
+2. **프로필**: 사진 + 약력 3단락 + `<dl>` 메타 4칸 + 하퍼스 바자 인터뷰 풀쿼트
+   (GQ '다정' 인용은 '문장' 섹션으로 옮겼다. 같은 말을 한 페이지에 두 번 싣지 않는다)
 3. **자몽살구클럽**: `0 + 0 = ∞` 타이포 모티프. 소설 서사 소개. 사이트의 중심 섹션
 4. **음반**: 두 층이다.
    - 위: `.record` 카드 5장(EP 3 + 싱글 2) — 전용 페이지가 있는 것만. 트랙칩(`.is-title`로 타이틀곡 강조)
    - 아래: `.disc-list` 두 벌 — '그 밖의 싱글' 13장, 'OST · 참여' 4편.
      페이지 없이 목록만 두고 벅스 앨범 페이지(`music.bugs.co.kr/album/<id>`)로 내보낸다.
      새 발매작은 여기에 한 줄 추가하는 게 기본이다. 전용 페이지는 서사가 있을 때만 만든다
-5. **행보**: 그라디언트 타임라인. `.is-next`로 미래 일정 구분 + `.tl-flag` 예정 배지
-6. **더 보기**: 링크 그리드 5칸 + 사진 1칸
-7. **방명록**: 작성/수정/삭제 (비밀번호 필수), 상대시간 표시
-8. **로고 클릭**: `index.html`로 (앨범 페이지는 헤더 왼쪽의 '← 음반'이 `#records`로 돌려보냄)
+5. **듣기**: 유튜브 파사드 6곡 + 스포티파이 임베드 (아래 '듣기' 절)
+6. **문장**: 인터뷰 인용 4개. **가사는 절대 싣지 않는다** (아래 '문장' 절)
+7. **무대**: 다가오는 공연 + D-day. 셋리스트는 `<details>` 구조만 (TODO)
+8. **행보**: 그라디언트 타임라인. `.is-next`로 미래 일정 구분 + `.tl-flag` 예정 배지
+9. **표지**: 보유 아트워크 22장 아트월. 첫 칸(최신작)만 2×2
+10. **더 보기**: 링크 그리드 5칸 + 사진 1칸
+11. **방명록**: 작성/수정/삭제 (비밀번호 필수), 상대시간 표시
+12. **숨은 문장**: `1111` 타이핑 또는 `0+0=∞` 네 번 두드리기
+13. **로고 클릭**: `index.html`로 (앨범 페이지는 헤더 왼쪽의 '← 음반'이 `#records`로 돌려보냄)
+
+## 듣기 · 문장 · 무대 · 표지 · 숨은 문장 (2026.08.02 추가, spec.md)
+
+### 듣기 (`.listen` / `js/player.js`)
+- **유튜브 임베드를 처음부터 박지 말 것.** 하나에 ~800KB에 추적 쿠키까지 딸려온다.
+  파사드(표지 + 재생 버튼)를 깔고 누를 때만 `youtube-nocookie` iframe을 만든다
+- 썸네일은 `i.ytimg.com/vi/<id>/maxresdefault.jpg`, `onerror`로 `hqdefault` 대체
+- 재생 중에 다른 곡을 고르면 바로 이어 재생한다(파사드로 되돌리지 않는다)
+- **영상 id는 레포에 이미 있던 것만 쓴다.** 추측한 id는 죽어도 확인할 방법이 없다
+- 스포티파이는 파사드 없이 `loading="lazy"` iframe 하나. 아티스트 id `5wVJpXzuKV6Xj7Yhsf2uYx`
+  (`theme=0`이라 낮 테마에서도 어둡다 — 플레이어 패널로 읽히므로 그대로 둔다)
+
+### 문장 (`.words`)
+- **가사는 한 줄도 싣지 않는다.** 인터뷰 발언만, 매체·연도와 원문 링크를 반드시 붙인다
+- **인용을 지어내지 말 것.** 실존 인물의 말이다. 넷 전부 기사를 열어 확인했다
+  (GQ 코리아 2026.04 / 위버스 매거진 ×2 / 빌보드 코리아 2026.04)
+
+### 무대 (`.live` / `js/live.js`)
+- `data-date`(D-day 계산용)와 **화면에 보이는 날짜는 손으로 맞춰야 한다.** 어긋나면 D-day만 틀린다
+- 셋리스트는 `<details>` 구조만 있고 내용은 비어 있다. **확인 안 된 곡 목록을 채우지 말 것**
+- 여닫기는 `<details>`가 다 한다 — JS도 aria 속성도 붙이지 않았다
+
+### 표지 (`.gallery`)
+- `img/`에 있는 22장만 쓴다. **사진을 새로 긁어오지 않는다**
+- `.art:first-child`만 2×2. 마지막 줄에 한 장만 남아 깨져 보이던 것을 이걸로 풀었다
+- 설명은 DOM에 늘 있고 눈으로만 가린다. `@media (hover:none)`에선 처음부터 띄운다
+
+### 숨은 문장 (`.egg` / `js/egg.js`)
+- 여는 길이 **둘**이다: `1111` 타이핑 / `0+0=∞` 네 번 두드리기.
+  휴대폰엔 키보드가 없어서 하나만 두면 절반은 못 찾는다. **한쪽만 남기지 말 것**
+- `keydown`에서 `e.target`이 늘 Element인 건 아니다(document·window로 온다).
+  `closest`를 그냥 부르면 그 자리에서 죽어 이스터에그가 통째로 먹통이 된다 → 옵셔널 체이닝 유지
+
+### 거르기 (`.disc-filter` / `js/disco.js`)
+- 목록은 HTML에 그대로 두고 `hidden`만 토글한다. **데이터를 JS 배열로 옮기지 말 것**
+  (검색엔진이 목록을 못 읽고 코드만 는다)
+- `[hidden]{display:none!important}`가 전역에 있다. `.record`가 `display:grid`라
+  `hidden` 속성이 조용히 무시되던 걸 막는 규칙 — **지우면 거르기가 통째로 안 먹는다**
+- 발매작을 추가하면 `data-kind`·`data-year`를 붙이고 **칩의 개수(`<b>`)도 같이 고칠 것**
+
+## 질감 · 패럴랙스
+- `body::after`에 SVG `feTurbulence` 그레인 한 겹. 세기는 `--grain-op`
+  (밤 0.055 필름 결 / 낮 0.03 종이 결). `mix-blend-mode`는 쓰지 않는다(사파리 스크롤 성능)
+- 히어로 패럴랙스는 스크롤 리스너가 `--sy`(px)만 갱신하고 레이어들이 각자 배율로 쓴다.
+  리스너는 진행 막대와 **하나를 공유한다**. `prefers-reduced-motion`이면 갱신 자체를 안 한다
 
 ## 링크 미리보기 (Open Graph)
 7개 페이지 전부 `<head>`의 `description` 바로 아래에 og 블록이 있다.
@@ -343,8 +414,11 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
 - **iOS 홈화면 아이콘 없음** — `favicon.svg`만 있다. 필요하면 180×180 PNG 추가
 
 ## 남은 후보 작업
-- 메인 히어로·CTA의 '입춘' 링크가 아직 옛 영상(`niazCi1AqqA`)이다.
-  앨범 페이지는 뮤직비디오(`kIiW3XRP7bU`)로 교체됨 — 통일할지 정할 것
+- ~~메인 히어로의 '입춘' 링크가 옛 영상(`niazCi1AqqA`)~~ → 앨범 페이지와 같은
+  뮤직비디오(`kIiW3XRP7bU`)로 통일했다
+- **셋리스트가 비어 있다** (`.setlist`). 공연 뒤 공식 채널에서 확인해 채울 것
+- **공연·화보 사진이 없다** (`.gallery`). 사용 허락을 받으면 표지 아래에 사진 줄 추가
+- 멜론 아티스트 링크는 id를 확인하지 못해 넣지 않았다 (푸터엔 벅스·스포티파이·애플뮤직만)
 - ~~〈너와 나〉 작사·작곡 크레딧 미확인~~ → 벅스 트랙 페이지(`music.bugs.co.kr/track/33992621`)에서
   확인해 `album-youandi.html` 라이너 아래에 넣었다. 다른 곡 크레딧도 같은 방법으로 얻을 수 있다
 - 방명록 목록이 50건에서 잘린다 (`limit(50)`). 더 쌓이면 페이지네이션 필요
