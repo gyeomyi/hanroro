@@ -55,6 +55,14 @@ hanroro/
   - `dayjs@1.11.21` + relativeTime + ko 로케일 — 시간 포맷팅
   - `aos@2.3.1` — 스크롤 애니메이션 (reduced-motion 시 `disable` 콜백으로 끔)
 
+- **폰트는 `rel="preload" as="style"` + `onload`로 싣는다. 평범한 `rel="stylesheet"`로
+  되돌리지 말 것.** 한글 웹폰트는 서브셋이 수십 개로 쪼개져 스타일시트만 78KB이고,
+  이게 렌더를 막는 자리에 있으면 첫 페인트가 **2.1s → 12.7s**로 밀린다(실측).
+  받는 동안 글자는 CSS 폰트 스택의 대체 글꼴로 보이며, `display=swap`이라 어차피
+  한 번은 바뀌던 것이다. `<noscript>` 대비도 함께 둔다. 7개 페이지 전부 같은 방식
+- **CSS에서 안 쓰는 굵기를 요청하지 말 것.** 한글 폰트는 굵기 하나가 곧 파일 수십 개다
+  (`font-weight:600`을 아무도 안 쓰는데 받고 있었다)
+
   버전을 올리면 `integrity` 해시를 반드시 다시 계산할 것:
   `curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A`
 
