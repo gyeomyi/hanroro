@@ -412,8 +412,10 @@ header nav a.is-current { color:var(--apricot); }
   gap:clamp(32px, 5vw, 68px); align-items:start;
 }
 .about-photo { position:relative; }
+/* height:auto가 없으면 <img height="976"> 속성이 그대로 살아 aspect-ratio가 무시된다.
+   그러면 사진이 976px로 서고, 글 칼럼은 618px에서 끝나 옆에 350px 넘는 빈 칸이 남는다 */
 .about-photo img {
-  width:100%; aspect-ratio:3/4; object-fit:cover;
+  width:100%; height:auto; aspect-ratio:3/4; object-fit:cover;
   border-radius:2px;
   filter:saturate(0.92);
 }
@@ -724,16 +726,6 @@ header nav a.is-current { color:var(--apricot); }
 .plat-alt { font-size:0.84rem; color:var(--text-far); }
 .plat-alt a { color:var(--apricot); text-underline-offset:3px; }
 
-.spot { margin-top:clamp(38px, 5vw, 60px); }
-.spot-head {
-  font-family:var(--mono); font-size:0.7rem; font-weight:500;
-  letter-spacing:0.24em; text-transform:uppercase;
-  color:var(--text-far); margin-bottom:14px;
-}
-.spot-frame { border:0; border-radius:12px; display:block; width:100%; }
-.spot-note { font-size:0.84rem; color:var(--text-far); margin-top:12px; }
-.spot-note a { color:var(--apricot); text-underline-offset:3px; }
-
 /* ── 문장 — 인터뷰에서 실제로 한 말만. 한 장의 원고지 위에 얹는다 ──── */
 .words { position:relative; background:var(--bg); border-top:1px solid var(--line); overflow:hidden; }
 .words-grid { position:absolute; inset:0; opacity:0.5; }
@@ -828,31 +820,12 @@ header nav a.is-current { color:var(--apricot); }
 }
 
 /* 셋리스트 — <details>가 여닫기를 다 해준다. JS도, aria 속성도 필요 없다 */
-.setlist {
-  margin-top:clamp(30px, 4vw, 44px);
-  border:1px solid var(--line); border-radius:4px;
-  background:var(--surface);
+/* 셋리스트는 아직 채울 데이터가 없다. 빈 <details>는 눌러야 '없음'을 알게 되므로 한 줄로 적어둔다 */
+.live-note {
+  margin-top:clamp(24px, 3.4vw, 34px);
+  max-width:74ch; font-size:0.88rem; color:var(--text-far);
 }
-.setlist summary {
-  cursor:pointer; list-style:none;
-  padding:16px clamp(18px, 2.4vw, 26px);
-  font-family:var(--mono); font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase;
-  color:var(--text-dim);
-  display:flex; align-items:center; gap:10px;
-}
-.setlist summary::-webkit-details-marker { display:none; }
-.setlist summary::before {
-  content:'+'; font-size:1rem; line-height:1; color:var(--grapefruit);
-  transition:rotate .24s ease;
-}
-.setlist[open] summary::before { content:'+'; rotate:45deg; }
-.setlist summary:hover { color:var(--apricot); }
-.setlist-body {
-  padding:0 clamp(18px, 2.4vw, 26px) 22px;
-  color:var(--text-dim); font-size:0.92rem; max-width:74ch;
-}
-.setlist-hint { margin-top:10px; color:var(--text-far); font-size:0.86rem; }
-.setlist-hint a { color:var(--apricot); text-underline-offset:3px; }
+.live-note a { color:var(--apricot); text-underline-offset:3px; }
 
 /* ── 행보 (타임라인) ───────────────────────────────────────── */
 .activity { background:var(--surface); border-top:1px solid var(--line); }

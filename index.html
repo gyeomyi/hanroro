@@ -182,9 +182,9 @@
     <span class="eyebrow" data-aos="fade-up">Discography</span>
     <h2 class="band-title" data-aos="fade-up">음반</h2>
     <p class="band-sub" data-aos="fade-up">
-      2022년 3월부터 지금까지 EP 세 장, 싱글 열다섯 장, OST 네 편.
-      아래 다섯 장은 표지를 누르면 앨범 소개와 수록곡이 전부 나옵니다 —
-      <strong>EP 세 장은 곡마다 한로로가 먼저 써 둔 산문이 붙어 있습니다.</strong>
+      2022년 3월부터 EP 세 장, 싱글 열다섯 장, OST 네 편.
+      아래 다섯 장은 표지를 누르면 소개와 수록곡이 이어집니다 —
+      <strong>EP 세 장에는 곡마다 한로로가 먼저 써 둔 산문이 붙어 있습니다.</strong>
     </p>
 
     <!-- 거르기 — 스물두 장을 종류와 연도로 좁혀 본다.
@@ -213,7 +213,7 @@
       <p class="dfil-count" role="status" aria-live="polite"></p>
     </div>
 
-    <p class="disc-empty" hidden>그해에는 그런 발매가 없습니다.</p>
+    <p class="disc-empty" hidden>고른 조건에 맞는 발매가 없습니다.</p>
 
     <div class="disc-group" data-group>
     <a class="record" href="album-youandi.html" data-kind="single" data-year="2026" data-aos="fade-up">
@@ -507,8 +507,7 @@
     <span class="eyebrow" data-aos="fade-up">Listen</span>
     <h2 class="band-title" data-aos="fade-up">듣기</h2>
     <p class="band-sub" data-aos="fade-up">
-      한로로 공식 유튜브 채널의 영상만 불러옵니다.
-      곡을 고르면 그 자리에서 바로 재생되고, 그 전까지는 표지 그림뿐이라 유튜브로 아무 요청도 가지 않습니다.
+      공식 유튜브 채널의 영상만 모았습니다. 곡을 고르면 그 자리에서 바로 재생됩니다.
     </p>
 
     <div class="player" data-aos="fade-up">
@@ -575,16 +574,6 @@
       </span>
     </p>
 
-    <!-- 미리듣기는 스포티파이 공식 임베드. 전곡 재생 링크는 위 .plat에 있다.
-         loading=lazy라 이 자리까지 내려와야 불러온다 -->
-    <div class="spot" data-aos="fade-up">
-      <h3 class="spot-head">먼저 30초만</h3>
-      <iframe class="spot-frame" title="한로로 Spotify 아티스트 플레이어"
-              src="https://open.spotify.com/embed/artist/5wVJpXzuKV6Xj7Yhsf2uYx?utm_source=generator&amp;theme=0"
-              width="100%" height="352" frameborder="0" loading="lazy"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-      <p class="spot-note">스포티파이 공식 임베드라 여기서 들리는 건 30초까지입니다.</p>
-    </div>
   </div>
 </section>
 
@@ -631,10 +620,9 @@
     </div>
 
     <p class="words-note" data-aos="fade-up">
-      가사는 한 줄도 옮겨 적지 않았습니다. 노랫말은 그 자체로 저작물이고, 팬이 만든 페이지가
-      대신 실어 나를 것은 아니라고 봤습니다. 노래는 위
-      <a href="#listen">듣기</a>에서, 노랫말은
-      <a href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener">공식 음원 서비스</a>에서 확인하세요.
+      가사는 한 줄도 옮겨 적지 않았습니다. 노랫말은 그 자체로 저작물이라, 팬 페이지가 대신
+      실어 나를 자리는 아니라고 봤습니다. 노래는 <a href="#listen">듣기</a>에,
+      노랫말은 <a href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener">공식 음원 서비스</a>에 있습니다.
     </p>
   </div>
 </section>
@@ -677,19 +665,13 @@
     </ol>
 
     <!-- TODO(에셋): 셋리스트는 공연이 끝난 뒤 공식 채널에서 확인해 채운다.
-         확인 안 된 곡 목록을 미리 적어두지 않는다 — 팬 페이지가 틀린 정보를 퍼뜨리게 된다. -->
-    <details class="setlist">
-      <summary>셋리스트</summary>
-      <div class="setlist-body">
-        <p>
-          아직 비어 있습니다. 공연이 끝나고 공식 채널에 곡 목록이 올라오면 이 자리에 옮겨 적습니다.
-          확인되지 않은 목록을 미리 적어두면 팬 페이지가 틀린 정보를 퍼뜨리는 쪽이 되어서요.
-        </p>
-        <p class="setlist-hint">
-          지난 무대의 분위기는 <a href="#listen">듣기</a>의 앨범 라이브 영상으로 대신 볼 수 있습니다.
-        </p>
-      </div>
-    </details>
+         확인 안 된 곡 목록을 미리 적어두지 않는다 — 팬 페이지가 틀린 정보를 퍼뜨리게 된다.
+         빈 <details>를 두면 눌러서 "아직 없습니다"를 확인하게 되므로 한 줄로 적어만 둔다. -->
+    <p class="live-note" data-aos="fade-up">
+      셋리스트는 공연이 끝나고 공식 채널에 올라오면 이 자리에 옮겨 적습니다.
+      아직 확인 안 된 목록을 미리 적어두진 않으려고요.
+      지난 무대의 분위기는 <a href="#listen">듣기</a>에 라이브 영상으로 있습니다.
+    </p>
   </div>
 </section>
 
@@ -788,7 +770,7 @@
     <span class="eyebrow" data-aos="fade-up">Gallery</span>
     <h2 class="band-title" data-aos="fade-up">표지</h2>
     <p class="band-sub" data-aos="fade-up">
-      2022년 3월부터 스물두 장. 발매 역순이고, 누르면 전용 페이지나 음원 페이지로 넘어갑니다.
+      2022년 3월부터 스물두 장. 최근 순으로, 누르면 그 앨범으로 갑니다.
     </p>
 
     <div class="art-wall" data-aos="fade-up">
@@ -885,7 +867,7 @@
     <!-- TODO(에셋): 공연·프로필 사진은 저작권자가 따로라 넣지 않았다.
          공식 계정에서 사용 허락을 받으면 이 아래에 사진 줄을 추가할 것. -->
     <p class="gallery-note" data-aos="fade-up">
-      공연 사진과 화보는 싣지 않았습니다. 저작권자가 각각 달라 팬 페이지가 임의로 옮겨 올 자리가 아니라고 봤습니다.
+      공연 사진과 화보는 싣지 않았습니다. 저작권자가 저마다 달라 팬 페이지가 함부로 옮겨 올 자리는 아니라서요.
       최신 사진은 <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">공식 인스타그램</a>에 있습니다.
     </p>
   </div>

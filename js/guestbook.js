@@ -105,8 +105,8 @@ async function insertEntry(name, message, password) {
   const { data, error } = await supabaseClient.rpc('sign_guestbook', {
     p_name: name.trim(), p_message: message.trim(), p_password: password
   });
-  if (error) { console.error('방명록 저장 실패:', error); alertError('저장 실패', '다시 시도해주세요.'); return false; }
-  if (data && !data.success) { alertError('저장 실패', data.error || '다시 시도해주세요.'); return false; }
+  if (error) { console.error('방명록 저장 실패:', error); alertError('저장하지 못했습니다', '잠시 뒤에 다시 해주세요.'); return false; }
+  if (data && !data.success) { alertError('저장하지 못했습니다', data.error || '잠시 뒤에 다시 해주세요.'); return false; }
   return true;
 }
 
@@ -114,8 +114,8 @@ async function updateEntry(id, password, message) {
   const { data, error } = await supabaseClient.rpc('edit_guestbook', {
     p_id: id, p_password: password, p_message: message.trim()
   });
-  if (error) { console.error('방명록 수정 실패:', error); alertError('수정 실패', '다시 시도해주세요.'); return false; }
-  if (data && !data.success) { alertError('수정 실패', data.error || '비밀번호를 확인해주세요.'); return false; }
+  if (error) { console.error('방명록 수정 실패:', error); alertError('고치지 못했습니다', '잠시 뒤에 다시 해주세요.'); return false; }
+  if (data && !data.success) { alertError('고치지 못했습니다', data.error || '비밀번호를 다시 확인해주세요.'); return false; }
   return true;
 }
 
@@ -123,8 +123,8 @@ async function deleteEntry(id, password) {
   const { data, error } = await supabaseClient.rpc('remove_guestbook', {
     p_id: id, p_password: password
   });
-  if (error) { console.error('방명록 삭제 실패:', error); alertError('삭제 실패', '다시 시도해주세요.'); return false; }
-  if (data && !data.success) { alertError('삭제 실패', data.error || '비밀번호를 확인해주세요.'); return false; }
+  if (error) { console.error('방명록 삭제 실패:', error); alertError('지우지 못했습니다', '잠시 뒤에 다시 해주세요.'); return false; }
+  if (data && !data.success) { alertError('지우지 못했습니다', data.error || '비밀번호를 다시 확인해주세요.'); return false; }
   return true;
 }
 

@@ -25,8 +25,8 @@
 
     empty.hidden = shown > 0;
     count.textContent = shown === items.length
-      ? `${items.length}장 전부 보이는 중`
-      : `${items.length}장 가운데 ${shown}장`;
+      ? `${items.length}장 전부`
+      : `${items.length}장 중 ${shown}장`;
 
     // 걸러내면 아래에 있던 카드가 화면 위로 올라온다 — AOS가 위치를 다시 재야 뜬다
     if (window.AOS) AOS.refresh();

@@ -19,7 +19,7 @@
         const by = Object.fromEntries(rows.map(r => [r.album, r.likes]));
         chips.forEach(el => {
           const n = by[el.dataset.album];
-          if (n === undefined) return;
+          if (!n) return; // 0은 붙이지 않는다 — '♥ 0'은 알려주는 게 없다
           el.querySelector('b').textContent = n.toLocaleString('ko-KR');
           el.setAttribute('aria-label', `좋아요 ${n} — 앨범 페이지에서 누를 수 있습니다`);
           el.hidden = false;
