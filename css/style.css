@@ -13,6 +13,18 @@
   --brand-2: #f0a45c;   /* 살구 */
   --btn-ink: #16121a;   /* 브랜드색으로 채운 면 위에 얹는 글자색 */
 
+  /* 눌리는 것(버튼·켜진 칩)의 채움. 자몽→살구 그라디언트로 채우면 페이지에서
+     그것만 튀어나온다 — 사탕색 덩어리가 글 위에 얹힌 꼴이었다.
+     본문 먹/종이를 그대로 뒤집어 쓰면 대비는 가장 세면서 색은 페이지 안에 남는다.
+     여명색은 작은 자리(eyebrow·링크·지평선·0+0=∞)에만 남겨 강조로 쓴다.
+     ⚠️ 앨범 페이지는 album.css가 이 둘을 그 앨범 브랜드색으로 덮는다 — 거기선 색이 곧 세계다 */
+  --btn-bg: var(--text);
+  --btn-fg: var(--bg);
+
+  /* 사진 위에 얹는 조작부(재생 버튼). 두 테마 모두 어두운 사진 위라 값이 하나뿐이다 */
+  --glass:     rgba(243, 237, 227, 0.9);
+  --glass-ink: #17141c;
+
   --serif: 'Gowun Batang', 'Nanum Myeongjo', serif;
   --sans:  'IBM Plex Sans KR', 'Malgun Gothic', sans-serif;
   --mono:  'IBM Plex Mono', 'Nanum Gothic Coding', monospace;
@@ -266,8 +278,10 @@ header nav a.is-current { color:var(--apricot); }
   animation:badge-float 3.6s ease-in-out infinite;
 }
 .badge-solid {
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
-  color:var(--btn-ink); box-shadow:0 10px 26px rgba(224,90,122,0.34);
+  /* 사진 위에 붙인 스티커. 색(자몽)은 모티프라 남기고, 그라디언트와
+     분홍 후광만 걷었다 — 그 둘이 '사탕'처럼 보이게 하던 부분이다 */
+  background:var(--brand-1);
+  color:var(--btn-ink); box-shadow:0 6px 18px var(--scrim);
 }
 .badge-ghost {
   background:var(--surface); color:var(--text);
@@ -380,10 +394,10 @@ header nav a.is-current { color:var(--apricot); }
   display:inline-flex; align-items:center; gap:10px;
   padding:14px 30px;
   font-family:var(--sans); font-size:0.92rem; font-weight:500;
-  text-decoration:none; border:none; border-radius:2px; cursor:pointer;
-  background:linear-gradient(100deg, var(--brand-1) 0%, var(--brand-2) 100%);
-  color:var(--btn-ink);
-  transition:transform .22s ease, box-shadow .22s ease;
+  text-decoration:none; border:1px solid transparent; border-radius:2px; cursor:pointer;
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
 }
 .btn:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
 .btn-ghost {
@@ -539,10 +553,10 @@ header nav a.is-current { color:var(--apricot); }
 }
 .chip:hover { color:var(--apricot); border-color:var(--apricot); }
 .chip b { font-weight:500; opacity:0.55; margin-left:4px; }
-/* 켜진 칩만 브랜드색으로 채운다. 채운 면 위 글자는 늘 --btn-ink */
+/* 켜진 칩은 버튼과 같은 채움을 쓴다(--btn-bg/--btn-fg).
+   자몽→살구로 채우면 열 개 중 두 개가 사탕처럼 튀어 목록보다 먼저 읽혔다 */
 .chip.is-on {
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
-  border-color:transparent; color:var(--btn-ink);
+  background:var(--btn-bg); border-color:transparent; color:var(--btn-fg);
 }
 .chip.is-on b { opacity:0.7; }
 .dfil-count {
@@ -685,17 +699,28 @@ header nav a.is-current { color:var(--apricot); }
   filter:saturate(0.92) brightness(0.86);
 }
 .pl-facade:hover .pl-thumb { transform:scale(1.035); filter:none; }
+/* 재생 버튼 — 자몽→살구로 채운 동그라미에 분홍 후광까지 얹혀 있었다.
+   이 페이지에서 둥근 건 배지 몇 개뿐이고 나머지는 전부 2px 각진 면이라
+   그 원 하나만 다른 사이트에서 옮겨 붙인 것처럼 떠 있었다.
+   → 사진 위에 놓인 종이 한 조각으로 바꾼다. 각은 .btn과 같은 2px,
+   채움은 반투명 종이(--glass), 삼각형은 먹(--glass-ink). */
 .pl-play {
   position:absolute; inset:50% auto auto 50%; translate:-50% -50%;
-  width:clamp(56px, 7vw, 74px); aspect-ratio:1; border-radius:50%;
+  width:clamp(54px, 6vw, 66px); aspect-ratio:7/5; border-radius:2px;
   display:grid; place-items:center;
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
-  color:var(--btn-ink);
-  box-shadow:0 12px 34px rgba(224,90,122,0.42);
-  transition:transform .24s ease;
+  /* 평소엔 사진 위에 낀 성에처럼 흐릿하게만 있다가, 마우스를 올리면 종이로 굳는다 */
+  background:color-mix(in srgb, var(--glass-ink) 62%, transparent);
+  border:1px solid color-mix(in srgb, var(--glass) 72%, transparent);
+  color:var(--glass);
+  backdrop-filter:blur(6px) saturate(1.2);
+  box-shadow:0 6px 20px var(--scrim);
+  transition:transform .24s ease, background .24s ease, color .24s ease, border-color .24s ease;
 }
-.pl-facade:hover .pl-play { transform:scale(1.08); }
-.pl-play svg { width:46%; margin-left:8%; }   /* 삼각형 무게중심 보정 */
+.pl-facade:hover .pl-play {
+  transform:scale(1.06);
+  background:var(--glass); border-color:var(--glass); color:var(--glass-ink);
+}
+.pl-play svg { width:30%; margin-left:6%; }   /* 삼각형 무게중심 보정 */
 .pl-caption { margin-top:14px; display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px; }
 .pl-caption b { font-family:var(--serif); font-size:1.15rem; font-weight:700; }
 .pl-caption span { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em; color:var(--text-far); }
@@ -807,8 +832,7 @@ header nav a.is-current { color:var(--apricot); }
   border:1px solid var(--line);
 }
 .gig-dday.is-today {
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
-  color:var(--btn-ink); border-color:transparent;
+  background:var(--btn-bg); color:var(--btn-fg); border-color:transparent;
 }
 .gig-title { font-size:clamp(1.15rem, 2.4vw, 1.5rem); margin-bottom:5px; }
 .gig-place { font-family:var(--mono); font-size:0.74rem; letter-spacing:0.06em; color:var(--apricot); }
@@ -1048,10 +1072,9 @@ footer {
   padding:14px 32px;
   font-family:var(--sans); font-size:0.92rem; font-weight:500;
   border:none; border-radius:2px; cursor:pointer;
-  /* 채움은 --brand-*, 글자는 --btn-ink. --grapefruit/--apricot은 '글자용'이라
-     낮 모드에서 #c33a60→#94540b(짙은 루비→고동)이 되어 버튼이 시커멓게 나왔다 */
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
-  color:var(--btn-ink);
+  /* .btn과 같은 채움 (--btn-bg/--btn-fg) */
+  background:var(--btn-bg);
+  color:var(--btn-fg);
   transition:transform .22s ease, box-shadow .22s ease;
 }
 .gb-form button:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
@@ -1180,8 +1203,8 @@ footer {
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease;
 }
 .hr-swal-confirm {
-  border:none; color:var(--btn-ink);
-  background:linear-gradient(100deg, var(--brand-1), var(--brand-2));
+  border:none; color:var(--btn-fg);
+  background:var(--btn-bg);
 }
 .hr-swal-confirm:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
 .hr-swal-cancel {
