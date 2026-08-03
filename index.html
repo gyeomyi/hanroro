@@ -86,7 +86,6 @@
     </div>
   </div>
 
-  <span class="badge badge-ghost hero-badge" aria-hidden="true">2026 한국대중음악상 · 올해의 음악인</span>
   <span class="hero-scroll" aria-hidden="true">Scroll</span>
 </section>
 
@@ -103,8 +102,6 @@
     <div class="about-grid">
       <figure class="about-photo" data-aos="fade-up">
         <img src="img/profile.jpg" alt="한로로 프로필 사진" loading="lazy" decoding="async" width="736" height="976">
-        <span class="badge badge-ghost badge-tl" aria-hidden="true">SINCE 2022</span>
-        <span class="badge badge-solid badge-br badge-float-2" aria-hidden="true">0 + 0 = ∞</span>
         <figcaption>HANRORO — 자몽살구클럽</figcaption>
       </figure>
 
@@ -519,7 +516,10 @@
                alt="" width="1280" height="720" loading="lazy"
                onerror="this.src=this.src.replace('maxresdefault','hqdefault')">
           <span class="pl-play" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <!-- 삼각형의 x 경계를 7.4~18.4로 잡아 뷰박스 가운데(12)에 맞추고, +0.9만 오른쪽으로
+                 밀어 시각 중심을 보정한다. 오른쪽을 가리키는 삼각형은 무게가 왼쪽에 쏠려
+                 기하학적으로 정중앙에 두면 왼쪽으로 치우쳐 보인다. CSS 여백으로 밀지 말 것 -->
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.4 5.5v13L18.4 12z"/></svg>
           </span>
         </button>
         <p class="pl-caption">
@@ -919,7 +919,6 @@
       </a>
       <figure class="link-photo">
         <img src="img/card.jpg" alt="한로로" loading="lazy" decoding="async" width="736" height="981">
-        <span class="badge badge-solid badge-tr badge-float-3" aria-hidden="true">3rd EP</span>
         <figcaption>HANRORO</figcaption>
       </figure>
     </div>

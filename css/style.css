@@ -269,40 +269,6 @@ header nav a.is-current { color:var(--apricot); }
 :root[data-theme="light"] .theme-toggle .i-sun  { opacity:1; transform:rotate(0) scale(1); }
 :root[data-theme="light"] .theme-toggle .i-moon { opacity:0; transform:rotate(70deg) scale(0.5); }
 
-/* ── 둥둥 뜨는 배지 ────────────────────────────────────────── */
-.badge {
-  position:absolute; z-index:3;
-  font-family:var(--mono); font-size:0.64rem; font-weight:500;
-  letter-spacing:0.13em; white-space:nowrap;
-  padding:7px 15px; border-radius:999px;
-  animation:badge-float 3.6s ease-in-out infinite;
-}
-.badge-solid {
-  /* 사진 위에 붙인 스티커. 색(자몽)은 모티프라 남기고, 그라디언트와
-     분홍 후광만 걷었다 — 그 둘이 '사탕'처럼 보이게 하던 부분이다 */
-  background:var(--brand-1);
-  color:var(--btn-ink); box-shadow:0 6px 18px var(--scrim);
-}
-.badge-ghost {
-  background:var(--surface); color:var(--text);
-  border:1px solid var(--line);
-  box-shadow:0 8px 22px var(--scrim);
-}
-/* 위치 — 사진 모서리에 살짝 걸치게 */
-.badge-tl { top:16px;    left:-14px;  transform:rotate(-5deg); }
-.badge-br { bottom:18px; right:-14px; transform:rotate(3deg); }
-.badge-tr { top:18px;    right:16px; }
-/* 히어로 오른쪽 빈 공간 — 가장 최근 성과를 띄운다 */
-.hero-badge { top:clamp(88px, 15vh, 160px); right:var(--gutter); }
-.badge-float-2 { animation-delay:-1.2s; }
-.badge-float-3 { animation-delay:-2.4s; }
-
-/* 회전이 걸린 배지는 회전을 유지한 채 떠야 한다 */
-@keyframes badge-float {
-  0%,100% { translate:0 0; }
-  50%     { translate:0 -8px; }
-}
-
 /* ── 히어로 ───────────────────────────────────────────────── */
 .hero {
   position:relative;
@@ -720,7 +686,7 @@ header nav a.is-current { color:var(--apricot); }
   transform:scale(1.06);
   background:var(--glass); border-color:var(--glass); color:var(--glass-ink);
 }
-.pl-play svg { width:30%; margin-left:6%; }   /* 삼각형 무게중심 보정 */
+.pl-play svg { width:31%; }   /* 무게중심 보정은 SVG path 안에 들어 있다 — 여백으로 밀지 말 것 */
 .pl-caption { margin-top:14px; display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px; }
 .pl-caption b { font-family:var(--serif); font-size:1.15rem; font-weight:700; }
 .pl-caption span { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em; color:var(--text-far); }
@@ -1255,7 +1221,6 @@ footer {
 
 @media (max-width:900px) {
   /* 히어로가 좁아지면 본문과 겹친다 */
-  .hero-badge { display:none; }
 
 
   .about-grid { grid-template-columns:1fr; gap:32px; }
@@ -1319,9 +1284,6 @@ footer {
   .record-tracks li { font-size:0.68rem; padding:3px 8px; }
   .gb-entry-head { flex-direction:column; gap:3px; }
   .formula { gap:8px; }
-  .badge { font-size:0.6rem; padding:6px 12px; }
-  .badge-tl { left:-8px; }
-  .badge-br { right:-8px; }
   .btn, .btn-ghost { width:100%; justify-content:center; }
 }
 
