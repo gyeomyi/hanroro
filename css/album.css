@@ -347,7 +347,9 @@
 .sibs-head p { color:var(--text-dim); font-size:0.96rem; margin-top:8px; }
 .sib-grid {
   max-width:1040px; margin:0 auto;
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:14px;
+  /* 190px면 390px 화면에서 한 칸으로 떨어져 '다른 음반'만 1900px가 된다.
+     158px이면 휴대폰에서도 두 칸이 서고, 넓은 화면에서는 어차피 넉 장이 4열로 늘어난다 */
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(158px, 100%), 1fr)); gap:14px;
 }
 .sib {
   display:block; text-decoration:none; padding:14px;

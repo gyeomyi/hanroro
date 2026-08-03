@@ -36,6 +36,18 @@ const gbForm = document.getElementById('gbForm');
 const gbNameInput = document.getElementById('gbName');
 const gbMessageInput = document.getElementById('gbMessage');
 const gbPasswordInput = document.getElementById('gbPassword');
+const gbCount = document.getElementById('gbCount');
+
+/* maxlength는 한도에 닿으면 조용히 잘라낸다. 그러면 "글이 더 안 써진다"로 읽히므로
+   남은 자리를 눈에 보이게 둔다. 길이 검증 자체는 여전히 서버(RPC)가 한다 */
+const LIMIT = Number(gbMessageInput.getAttribute('maxlength'));
+const drawCount = () => {
+  const n = gbMessageInput.value.length; // maxlength와 같은 단위(UTF-16)로 센다
+  gbCount.textContent = `${n} / ${LIMIT}`;
+  gbCount.classList.toggle('is-full', n >= LIMIT);
+};
+gbMessageInput.addEventListener('input', drawCount);
+drawCount();
 
 function formatTime(iso) {
   const d = dayjs(iso);
@@ -141,6 +153,7 @@ gbForm.addEventListener('submit', async (e) => {
     gbNameInput.value = '';
     gbMessageInput.value = '';
     gbPasswordInput.value = '';
+    drawCount();
     toastSuccess('남겼습니다');
     await loadGuestbook();
   }

@@ -75,6 +75,8 @@
     <form class="gb-form" id="gbForm" autocomplete="off" data-aos="fade-up">
       <input type="text" id="gbName" placeholder="이름" maxlength="30" required spellcheck="false">
       <textarea id="gbMessage" placeholder="한로로에게 남기고 싶은 말" maxlength="500" required spellcheck="false"></textarea>
+      <!-- maxlength는 조용히 잘라내서, 500자에서 멈춘 걸 모르면 '입력이 안 된다'로 읽힌다 -->
+      <p class="gb-count" id="gbCount" aria-live="polite">0 / 500</p>
       <input type="password" id="gbPassword" placeholder="비밀번호 — 나중에 고치거나 지울 때 씁니다" maxlength="30" required spellcheck="false">
       <button type="submit">남기기</button>
     </form>
