@@ -28,11 +28,11 @@ hanroro/
 ├── js/egg.js           숨은 문장(1111) — index 전용
 ├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (27항목)
 ├── shot.sh             헤드리스 크롬 렌더 헬퍼 (테마 고정 포함)
-├── DECISIONS.md        그때그때의 판단과 이유 — **레포에 남는 유일한 판단 기록.**
-│                       새 세션은 CLAUDE.md → 이 파일 순으로 읽고 이어받는다
-├── (PROGRESS.md·spec.md·FIX.md·SIMPLIFY*.md)
-│                       일회성 지시서·진행표. **`.gitignore`됨** — 작업 중인 사람의
-│                       로컬에만 있고 클론에는 없다. 남길 판단은 CLAUDE.md/DECISIONS.md로 옮긴다
+├── (DECISIONS.md·PROGRESS.md·spec.md·FIX.md·SIMPLIFY*.md·TONE-DYNAMIC.md·DYNAMIC-DECISIONS.md)
+│                       일회성 지시서·진행표·판단 로그. **전부 `.gitignore`됨** — 작업 중인
+│                       사람의 로컬에만 있고 클론에는 없다.
+│                       **레포에 남는 판단 기록은 이 CLAUDE.md 하나뿐이다.**
+│                       남길 판단이 생기면 여기 해당 절에 합쳐 적을 것
 ├── favicon.svg         탭 아이콘 — 0+0=∞ 를 겹친 두 고리로 줄인 것. 7개 페이지 전부 링크됨
 ├── img/                모든 이미지는 여기에만 둔다
 │   ├── background.jpg  히어로 배경
@@ -46,8 +46,11 @@ hanroro/
 ├── .mcp.json           Supabase MCP 설정 — **`.gitignore`됨**. 새 환경에선 다시 만들어야 한다
 └── .claude/skills/frontend-design/
 ```
-`.gitignore`: `.agents/` `.claude/` `skills-lock.json` `.mcp.json` `.shot-*` `lh-*.json`
+`.gitignore`: `.agents/` `.claude/` `skills-lock.json` `.mcp.json` `.shot-*` `/*.png` `lh-*.json`
+`*.log` `.vscode/` `.idea/` `.DS_Store` `Thumbs.db` `desktop.ini` `.env` `.env.*`
 일회성 문서: `spec.md` `FIX.md` `SIMPLIFY.md` `SIMPLIFY-DECISIONS.md` `PROGRESS.md`
+`TONE-DYNAMIC.md` `DECISIONS.md` `DYNAMIC-DECISIONS.md`
+판단 기준은 **"이게 없으면 클론한 사람이 사이트를 똑같이 재현하지 못하는가"**다. 지장이 없으면 개인 작업 흔적이다.
 
 ## 기술 스택
 - **프론트**: 순수 HTML/CSS/JS (빌드 도구 없음)
@@ -180,6 +183,20 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
 
 팔레트 근거는 데뷔곡 **'입춘'** — 겨울 끝, 아직 어두운데 봄이라 부르는 절기.
 먹밤 바탕 위로 자몽(루비)·살구(앰버)의 여명이 트는 구조.
+
+### 카피 톤 — 사람이 쓴 글 (2026-08-03 정리)
+문학적 존댓말은 유지하되, **기계가 쓴 티가 나는 네 가지를 만들지 말 것.**
+1. **대칭·회문 문장** — "쓴 것이 노래가 되고, 노래가 다시 책이 됩니다" / "가사가 소설로
+   확장되고, 소설이 음악으로 압축되는 구조" 같은 것. 예쁘지만 사람이 즉흥으로 쓰는 문장이 아니다
+2. **"~해 보세요" 안내체** — `곡을 눌러 펼쳐 보세요` `누르면 그 앨범으로 갑니다`
+   `첫 줄을 남겨주세요`. UI가 이미 말하는 걸 글이 한 번 더 시킨다. **지우고 여백으로 둔다**
+3. **바로 위에서 한 말의 되풀이** — 앨범 페이지의 `stage-lede`와 `note` 첫 문단이
+   같은 말을 두 번 하고 있었다. 뒤엣것을 줄인다
+4. **문장 길이가 다 비슷한 단락** — 짧은 문장 하나를 섞어 리듬을 끊는다
+- 세 앨범 페이지에서 `표지도 같은 말을 합니다`가 거의 같은 문장으로 반복됐다.
+  **같은 구조를 페이지마다 복사하지 말 것** (`표지를 먼저 보면 빠릅니다` / `사진도 그 말을 합니다`로 갈랐다)
+- 예외: **인용문(인터뷰·라이너노트·먼저 쓴 글)은 한 글자도 고치지 않는다.** 남의 말이다
+- 방명록 검증·오류 문구는 의미가 바뀌지 않는 선에서만 (기능이 우선)
 
 ## 디자인 시스템 — 2테마 (밤 / 낮)
 `<html data-theme="dark|light">`로 전환. **모든 색은 CSS 변수**이고 두 테마가
@@ -407,7 +424,7 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
 - 벅스 **앨범** 링크(`/album/<id>`)는 그대로 둔다 — 듣는 곳이 아니라 디스코그래피 출처다
 - 아티스트 페이지 id: 유튜브 뮤직 `music.youtube.com/channel/UCrDa_5OU-rhvXqWlPx5hgKQ` ·
   스포티파이 `5wVJpXzuKV6Xj7Yhsf2uYx` · **멜론 `3080810`** · 애플뮤직 `1613668993` · 벅스 `20155724`
-- 순위가 바뀌면 근거(출처·시점)를 DECISIONS.md에 적고 나서 바꿀 것. 느낌으로 정하지 말 것
+- 순위가 바뀌면 근거(출처·시점)를 이 파일에 적고 나서 바꿀 것. 느낌으로 정하지 말 것
 
 ### 듣기 (`.listen` / `js/player.js`)
 - **유튜브 임베드를 처음부터 박지 말 것.** 하나에 ~800KB에 추적 쿠키까지 딸려온다.

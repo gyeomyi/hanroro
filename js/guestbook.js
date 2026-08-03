@@ -96,7 +96,7 @@ async function loadGuestbook() {
     .limit(50);
   if (error) { console.error('방명록 불러오기 실패:', error); return; }
   if (!data || data.length === 0) {
-    gbList.innerHTML = '<div class="gb-empty">아직 아무도 쓰지 않았습니다.<br>첫 줄을 남겨주세요.</div>';
+    gbList.innerHTML = '<div class="gb-empty">아직 아무도 쓰지 않았습니다.<br>첫 줄이 비어 있습니다.</div>';
     return;
   }
   gbList.innerHTML = data.map(e => `
