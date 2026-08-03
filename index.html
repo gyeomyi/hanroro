@@ -183,27 +183,28 @@
       <strong>EP 세 장에는 곡마다 한로로가 먼저 써 둔 산문이 그대로 실려 있습니다.</strong>
     </p>
 
-    <!-- 거르기 — 스물두 장을 종류와 연도로 좁혀 본다.
-         목록은 HTML에 그대로 있고 js/disco.js가 hidden만 토글한다 (JS가 죽어도 전부 보인다) -->
+    <!-- 거르기 — 종류와 연도로 좁혀 본다. js/disco.js가 hidden만 토글한다.
+         개수(<b>)는 비워 둔다 — 아래 목록 절반이 DB에서 오므로 손으로 적으면 곧 어긋난다.
+         js/disco.js가 실제로 그려진 항목을 세어 채운다 -->
     <div class="disc-filter" data-aos="fade-up">
       <div class="dfil-row">
         <span class="dfil-label" id="dfil-kind">종류</span>
         <div class="dfil-chips" role="group" aria-labelledby="dfil-kind">
-          <button type="button" class="chip is-on" data-axis="kind" data-value="all" aria-pressed="true">전체 <b>22</b></button>
-          <button type="button" class="chip" data-axis="kind" data-value="ep" aria-pressed="false">EP <b>3</b></button>
-          <button type="button" class="chip" data-axis="kind" data-value="single" aria-pressed="false">싱글 <b>15</b></button>
-          <button type="button" class="chip" data-axis="kind" data-value="ost" aria-pressed="false">OST · 참여 <b>4</b></button>
+          <button type="button" class="chip is-on" data-axis="kind" data-value="all" aria-pressed="true">전체 <b></b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="ep" aria-pressed="false">EP <b></b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="single" aria-pressed="false">싱글 <b></b></button>
+          <button type="button" class="chip" data-axis="kind" data-value="ost" aria-pressed="false">OST · 참여 <b></b></button>
         </div>
       </div>
       <div class="dfil-row">
         <span class="dfil-label" id="dfil-year">연도</span>
         <div class="dfil-chips" role="group" aria-labelledby="dfil-year">
           <button type="button" class="chip is-on" data-axis="year" data-value="all" aria-pressed="true">전체</button>
-          <button type="button" class="chip" data-axis="year" data-value="2026" aria-pressed="false">2026 <b>4</b></button>
-          <button type="button" class="chip" data-axis="year" data-value="2025" aria-pressed="false">2025 <b>3</b></button>
-          <button type="button" class="chip" data-axis="year" data-value="2024" aria-pressed="false">2024 <b>5</b></button>
-          <button type="button" class="chip" data-axis="year" data-value="2023" aria-pressed="false">2023 <b>4</b></button>
-          <button type="button" class="chip" data-axis="year" data-value="2022" aria-pressed="false">2022 <b>6</b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2026" aria-pressed="false">2026 <b></b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2025" aria-pressed="false">2025 <b></b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2024" aria-pressed="false">2024 <b></b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2023" aria-pressed="false">2023 <b></b></button>
+          <button type="button" class="chip" data-axis="year" data-value="2022" aria-pressed="false">2022 <b></b></button>
         </div>
       </div>
       <p class="dfil-count" role="status" aria-live="polite"></p>
@@ -310,138 +311,11 @@
       EP에 실리기 전 먼저 내놓은 곡들과, 어느 앨범에도 묶이지 않은 곡들.
     </p>
 
-    <ul class="disc-list" data-aos="fade-up">
-      <li data-kind="single" data-year="2026">
-        <a class="disc" href="https://music.bugs.co.kr/album/20799969" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-lovehate.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">애증</span>
-            <span class="disc-sub">두 곡짜리 싱글. 「게임 오버 ?」와, 생일을 그대로 제목으로 삼은 「1111」.</span>
-          </span>
-          <span class="disc-date">2026.04.02</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2025">
-        <a class="disc" href="https://music.bugs.co.kr/album/20738207" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-escape.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">도망 <span class="disc-tag">3rd EP 선공개</span></span>
-            <span class="disc-sub">한 달 뒤 〈자몽살구클럽〉의 마지막 트랙으로 다시 실렸습니다.</span>
-          </span>
-          <span class="disc-date">2025.07.06</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2024">
-        <a class="disc" href="https://music.bugs.co.kr/album/20679516" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-compass.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">나침반</span>
-            <span class="disc-sub">어느 앨범에도 묶이지 않은 단독 싱글.</span>
-          </span>
-          <span class="disc-date">2024.10.29</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2024">
-        <a class="disc" href="https://music.bugs.co.kr/album/20678562" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-sonice.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">So Nice</span>
-            <span class="disc-sub">그랜드민트페스티벌 2024 주제가로 쓰인 곡.</span>
-          </span>
-          <span class="disc-date">2024.10.22</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2024">
-        <a class="disc" href="https://music.bugs.co.kr/album/20642713" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-survival.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">생존법 <span class="disc-tag">2nd EP 선공개</span></span>
-            <span class="disc-sub">〈집〉 발매 열이틀 전에 먼저 나온 곡.</span>
-          </span>
-          <span class="disc-date">2024.05.16</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2024">
-        <a class="disc" href="https://music.bugs.co.kr/album/20639287" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-foodchain.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">먹이사슬 <span class="disc-tag">2nd EP 선공개</span></span>
-            <span class="disc-sub">〈집〉의 세 번째 트랙을 한 달 앞서 꺼내 보인 곡.</span>
-          </span>
-          <span class="disc-date">2024.04.30</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2023">
-        <a class="disc" href="https://music.bugs.co.kr/album/20613044" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-mayfly.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">하루살이</span>
-            <span class="disc-sub">1집과 2집 사이, 한 해의 끝에 놓아둔 싱글.</span>
-          </span>
-          <span class="disc-date">2023.12.26</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2023">
-        <a class="disc" href="https://music.bugs.co.kr/album/20560620" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jacheo.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">자처 <span class="disc-tag">1st EP 선공개</span></span>
-            <span class="disc-sub">넉 달 뒤 〈이상비행〉의 다섯 번째 트랙이 됩니다.</span>
-          </span>
-          <span class="disc-date">2023.04.21</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2023">
-        <a class="disc" href="https://music.bugs.co.kr/album/20538423" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-stop.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">정류장</span>
-            <span class="disc-sub">2023년의 첫 곡. 앨범에는 실리지 않았습니다.</span>
-          </span>
-          <span class="disc-date">2023.01.04</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2022">
-        <a class="disc" href="https://music.bugs.co.kr/album/20501510" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-yournight.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">당신의 밤은 나의 밤과 같습니까</span>
-            <span class="disc-sub">숨비(feat.)와 함께 부른, 제목이 그대로 질문인 곡.</span>
-          </span>
-          <span class="disc-date">2022.10.25</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2022">
-        <a class="disc" href="https://music.bugs.co.kr/album/20490847" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jjakkung.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">비틀비틀 짝짜꿍</span>
-            <span class="disc-sub">넘어지는 걸 두려워하지 않겠다는 데뷔 해의 세 번째 싱글.</span>
-          </span>
-          <span class="disc-date">2022.09.04</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2022">
-        <a class="disc" href="https://music.bugs.co.kr/album/20485543" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-likemygroove.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">Like my groove</span>
-            <span class="disc-sub">어센틱이 아닌 외부 기획으로 낸 곡. 유일한 댄스·팝 트랙입니다.</span>
-          </span>
-          <span class="disc-date">2022.08.13</span>
-        </a>
-      </li>
-      <li data-kind="single" data-year="2022">
-        <a class="disc" href="https://music.bugs.co.kr/album/20474053" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-mirror.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">거울</span>
-            <span class="disc-sub">데뷔 석 달 만에 낸 두 번째 곡.</span>
-          </span>
-          <span class="disc-date">2022.06.18</span>
-        </a>
-      </li>
-    </ul>
+    <ul class="disc-list" data-list="single" data-aos="fade-up"></ul>
+    <p class="disc-lead" data-fallback>
+      목록을 불러오지 못했습니다. 열세 장 전부
+      <a href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener">벅스 아티스트 페이지</a>에 있습니다.
+    </p>
 
     </div>
 
@@ -451,48 +325,11 @@
       자기 이름으로 낸 앨범은 아니지만, 한 곡씩 남겨둔 자리들.
     </p>
 
-    <ul class="disc-list" data-aos="fade-up">
-      <li data-kind="ost" data-year="2026">
-        <a class="disc" href="https://music.bugs.co.kr/album/4152581" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-jpop.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">잔혹한 천사의 테제</span>
-            <span class="disc-sub">〈J-POP REMAKE Vol.2〉 수록. 에반게리온 주제가를 다시 부른 곡.</span>
-          </span>
-          <span class="disc-date">2026.07.30</span>
-        </a>
-      </li>
-      <li data-kind="ost" data-year="2026">
-        <a class="disc" href="https://music.bugs.co.kr/album/4146141" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-daegun.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">안녕</span>
-            <span class="disc-sub">드라마 〈21세기 대군부인〉 OST Part.5.</span>
-          </span>
-          <span class="disc-date">2026.04.24</span>
-        </a>
-      </li>
-      <li data-kind="ost" data-year="2025">
-        <a class="disc" href="https://music.bugs.co.kr/album/20764008" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-maru.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">뛰어!</span>
-            <span class="disc-sub">애니메이션 〈마루는 강쥐〉 OST. 츄(CHUU)와 한 장에 나란히 실렸습니다.</span>
-          </span>
-          <span class="disc-date">2025.11.01</span>
-        </a>
-      </li>
-      <li data-kind="ost" data-year="2022">
-        <a class="disc" href="https://music.bugs.co.kr/album/20479597" target="_blank" rel="noopener">
-          <span class="cover cover-sm" aria-hidden="true"><img src="img/disc-dearx.jpg" alt="" loading="lazy"></span>
-          <span class="disc-body">
-            <span class="disc-title">Do What You Like</span>
-            <span class="disc-sub">드라마 〈나를 사랑하지 않는 X에게〉 OST Part 2. 데뷔 해에 받은 첫 OST.</span>
-          </span>
-          <span class="disc-date">2022.07.18</span>
-        </a>
-      </li>
-    </ul>
+    <ul class="disc-list" data-list="ost" data-aos="fade-up"></ul>
+    <p class="disc-lead" data-fallback>
+      목록을 불러오지 못했습니다. 네 편 전부
+      <a href="https://music.bugs.co.kr/artist/20155724/albums" target="_blank" rel="noopener">벅스 아티스트 페이지</a>에 있습니다.
+    </p>
     </div>
   </div>
 </section>
@@ -636,32 +473,11 @@
       <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">공식 인스타그램</a> 쪽이 정확합니다.
     </p>
 
-    <ol class="gig-list">
-      <li class="gig" data-aos="fade-up">
-        <!-- data-date: 남은 날 계산용. 화면에 보이는 날짜와 반드시 같은 날로 맞출 것 -->
-        <time class="gig-when" datetime="2026-08-06" data-date="2026-08-06">
-          <span class="gig-mm">08</span><span class="gig-dd">06</span><span class="gig-yy">2026</span>
-        </time>
-        <div class="gig-body">
-          <h3 class="gig-title">단독 공연 ‘시리즈L’</h3>
-          <p class="gig-place">롯데콘서트홀 · 서울</p>
-          <p class="gig-note">그동안 낸 노래를 처음부터 차례로 짚어가는 이틀간의 공연. 8월 6–7일.</p>
-        </div>
-        <span class="gig-tag">단독</span>
-      </li>
-
-      <li class="gig" data-aos="fade-up">
-        <time class="gig-when" datetime="2026-08-14" data-date="2026-08-14">
-          <span class="gig-mm">08</span><span class="gig-dd">14</span><span class="gig-yy">2026</span>
-        </time>
-        <div class="gig-body">
-          <h3 class="gig-title">SUMMER SONIC 2026</h3>
-          <p class="gig-place">도쿄 · 오사카</p>
-          <p class="gig-note">일본 최대 음악 페스티벌에 처음 오릅니다. 8월 14–16일.</p>
-        </div>
-        <span class="gig-tag">페스티벌</span>
-      </li>
-    </ol>
+    <ol class="gig-list"></ol>
+    <p class="live-note" data-fallback>
+      일정을 불러오지 못했습니다.
+      <a href="https://www.instagram.com/hanr0r0/" target="_blank" rel="noopener">공식 인스타그램</a>에 그때그때 올라옵니다.
+    </p>
 
     <!-- TODO(에셋): 셋리스트는 공연이 끝난 뒤 공식 채널에서 확인해 채운다.
          확인 안 된 곡 목록을 미리 적어두지 않는다 — 팬 페이지가 틀린 정보를 퍼뜨리게 된다.
@@ -991,11 +807,11 @@
 
 <!-- 음반 목록의 좋아요 숫자만 채운다 (읽기 전용). 버튼은 앨범 페이지에만 있다 -->
 <script src="js/likes.js" defer></script>
-<!-- 음반 거르기. AOS보다 먼저 실행돼도 되게 window.AOS를 확인하고 refresh한다 -->
+<!-- 음반 목록을 DB에서 그리고 거른다. AOS보다 먼저 실행돼도 되게 window.AOS를 확인하고 refresh한다 -->
 <script src="js/disco.js" defer></script>
 <!-- 유튜브 파사드 — 누르기 전에는 iframe을 만들지 않는다 -->
 <script src="js/player.js" defer></script>
-<!-- 공연까지 남은 날 배지 -->
+<!-- 공연 일정을 DB에서 그리고 남은 날 배지를 붙인다 -->
 <script src="js/live.js" defer></script>
 <!-- 숨은 문장 -->
 <script src="js/egg.js" defer></script>
