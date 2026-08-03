@@ -8,3 +8,11 @@ skills-lock.json
 
 # Lighthouse 측정 산출물
 lh-*.json
+
+# 일회성 지시서·상태 파일 (레포의 영구 문서가 아니다).
+# 영구히 남길 판단은 CLAUDE.md와 DECISIONS.md로 옮긴다.
+spec.md
+FIX.md
+SIMPLIFY.md
+SIMPLIFY-DECISIONS.md
+PROGRESS.md

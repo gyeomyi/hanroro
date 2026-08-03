@@ -28,9 +28,11 @@ hanroro/
 ├── js/egg.js           숨은 문장(1111) — index 전용
 ├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (27항목)
 ├── shot.sh             헤드리스 크롬 렌더 헬퍼 (테마 고정 포함)
-├── PROGRESS.md         spec.md 실행 진행표 — 새 세션은 이 파일부터
-├── DECISIONS.md        그때그때의 판단과 이유
-├── spec.md             원본 요구사항
+├── DECISIONS.md        그때그때의 판단과 이유 — **레포에 남는 유일한 판단 기록.**
+│                       새 세션은 CLAUDE.md → 이 파일 순으로 읽고 이어받는다
+├── (PROGRESS.md·spec.md·FIX.md·SIMPLIFY*.md)
+│                       일회성 지시서·진행표. **`.gitignore`됨** — 작업 중인 사람의
+│                       로컬에만 있고 클론에는 없다. 남길 판단은 CLAUDE.md/DECISIONS.md로 옮긴다
 ├── favicon.svg         탭 아이콘 — 0+0=∞ 를 겹친 두 고리로 줄인 것. 7개 페이지 전부 링크됨
 ├── img/                모든 이미지는 여기에만 둔다
 │   ├── background.jpg  히어로 배경
@@ -44,7 +46,8 @@ hanroro/
 ├── .mcp.json           Supabase MCP 설정 — **`.gitignore`됨**. 새 환경에선 다시 만들어야 한다
 └── .claude/skills/frontend-design/
 ```
-`.gitignore`: `.agents/` `.claude/` `skills-lock.json` `.mcp.json`
+`.gitignore`: `.agents/` `.claude/` `skills-lock.json` `.mcp.json` `.shot-*` `lh-*.json`
+일회성 문서: `spec.md` `FIX.md` `SIMPLIFY.md` `SIMPLIFY-DECISIONS.md` `PROGRESS.md`
 
 ## 기술 스택
 - **프론트**: 순수 HTML/CSS/JS (빌드 도구 없음)
