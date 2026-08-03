@@ -66,6 +66,14 @@ hanroro/
 - **CSS에서 안 쓰는 굵기를 요청하지 말 것.** 한글 폰트는 굵기 하나가 곧 파일 수십 개다
   (`font-weight:600`을 아무도 안 쓰는데 받고 있었다)
 
+- **`guestbook.html`의 CDN 스크립트는 전부 `defer`다. 지우지 말 것.** supabase-js ·
+  sweetalert2 · dayjs ×3이 `<head>`에 동기 스크립트로 있어 HTML 파싱을 막고 있었다
+  (Lighthouse 성능 86 → **97**, FCP 2.58 → 1.39s). `defer`는 문서 순서대로 실행하므로
+  의존 관계(supabase → dayjs 플러그인 → AOS → `guestbook.js`)는 지켜진다.
+  **`js/theme.js`만 동기로 남긴다** — 늦게 실행되면 테마가 한 번 번쩍인다.
+  ⚠️ `guestbook.js`의 `defer`를 떼면 그것만 파싱 중에 먼저 돌아 `window.supabase`가
+  `undefined`가 된다 (전부 defer이거나 전부 아니거나, 중간은 없다)
+
   버전을 올리면 `integrity` 해시를 반드시 다시 계산할 것:
   `curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A`
 
