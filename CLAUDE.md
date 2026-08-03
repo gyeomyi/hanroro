@@ -22,9 +22,10 @@ hanroro/
 ├── js/theme.js         테마 전환 (밤/낮, localStorage) — <head>에서 동기 로드
 ├── js/guestbook.js     방명록 로직 (Supabase CRUD, 비밀번호 검증, 모달 설정, 빈칸 안내)
 ├── js/likes.js         앨범 좋아요 — 앨범 페이지 전용. supabase-js 없이 fetch로 REST 직접 호출
-├── js/disco.js         음반 거르기 (종류 × 연도). DOM에 hidden만 토글 — index 전용
+├── js/disco.js         음반 — `public.discography` 17장을 DB에서 그리고 거른다 (종류 × 연도).
+│                       거르기는 DOM에 hidden만 토글 — index 전용
 ├── js/player.js        듣기 — 유튜브 파사드. 곡을 고르거나 누를 때 iframe 생성 — index 전용
-├── js/live.js          공연까지 남은 날(D-4) 배지 — index 전용
+├── js/live.js          무대 — `public.gig`을 DB에서 그리고 남은 날(D-4) 배지를 붙인다 — index 전용
 ├── js/egg.js           숨은 문장(1111) — index 전용
 ├── selfcheck.html      자체검사. index를 iframe으로 띄워 실제로 눌러본다 (27항목)
 ├── shot.sh             헤드리스 크롬 렌더 헬퍼 (테마 고정 포함)
@@ -95,7 +96,11 @@ hanroro/
 - 적용된 마이그레이션 (`supabase_migrations.schema_migrations`):
   `create_guestbook_table` → `grant_guestbook_privileges` → `guestbook_update_delete_policies` →
   `guestbook_password_feature` → `harden_guestbook_password_hash` →
-  `guestbook_column_level_select_only` → `album_like_counter` → `guestbook_input_validation_and_throttle`
+  `guestbook_column_level_select_only` → `album_like_counter` → `guestbook_input_validation_and_throttle` →
+  `content_tables_discography_and_gig` → `seed_discography_and_gig` →
+  `realtime_album_like_and_guestbook_public_columns` → `realtime_drop_album_like_publication`
+- **콘텐츠 추가는 대시보드에서 한다.** 관리자 페이지는 없다(만들 계획도 없다).
+  `discography`·`gig`에 행을 넣으면 **배포 없이** 사이트에 반영된다
 
 ### 자체검사
 ```bash
@@ -119,6 +124,23 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
 - 테마·앨범을 강제로 보려면 `<html>`에 `data-theme="light"` / `data-album="ep2"`를 박은
   임시 복사본을 만들어 열면 된다 (앨범 페이지는 `theme.js`를 안 싣는다)
 - 넘침 검사는 `document.title`에 결과를 쓰고 `--dump-dom | grep '<title>'`로 받는 게 편하다
+- ⚠️ **`--virtual-time-budget`은 `setTimeout`을 순간이동시킨다.** 진행 중인 네트워크 요청이
+  있으면 멈추지만 **웹소켓 푸시는 대기 요청으로 치지 않는다** — Realtime을 이걸로 기다리면
+  멀쩡한 코드도 '안 온다'로 보인다. 진짜 요청을 하나씩 이어 던져 시간을 흘려보낼 것
+- ⚠️ iframe으로 검사할 때 `contentDocument`를 **미리 잡아두지 말 것.** `load` 전에는
+  `about:blank`라서 늘 0건이 나온다. 매번 다시 잡거나 `load`를 기다린 뒤 잡는다
+
+### ⚠️ index의 Lighthouse 성능 점수는 두 값 사이를 오간다 (55 / 85~91)
+사이트 코드와 무관하다. **판별자는 구글 폰트 스타일시트가 도착한 시각 하나뿐이다.**
+- CSS가 ~320–350ms에 끝나면 → 한글 서브셋 폰트 69개가 관측 FCP(1.28s) **앞**에 들어오고,
+  Lighthouse(Lantern)가 그 69개를 직렬로 시뮬레이션해 **시뮬레이션 FCP 12s · 점수 55**
+- CSS가 ~420–460ms에 끝나면 → 폰트가 FCP **뒤**로 밀려 **시뮬레이션 FCP 2.1s · 점수 85~91**
+- **관측 FCP는 두 경우 모두 1.28s로 같다.** 사람이 보는 화면은 안 변한다
+- 2026-08-03 실측: 동적화 **전** 8회 중 6회가 55, **후** 8회 중 7회가 55 — 같은 분포다.
+  **점수 하나만 보고 회귀라고 판단하지 말 것.** `cssEnd`를 함께 찍어 모드를 먼저 가릴 것
+  ```bash
+  node -e "const r=require('./lh.json');const c=r.audits['network-requests'].details.items.find(i=>/css2/.test(i.url));console.log(Math.round(r.categories.performance.score*100), Math.round(c.networkEndTime));"
+  ```
 
 ## DB 스키마 (`public.album_like`)
 | 컬럼 | 타입 | 제약 |
@@ -128,6 +150,46 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
 
 행은 앨범당 하나씩 미리 넣어두고 늘 존재한다(ep1·ep2·ep3·single·youandi).
 **앨범 페이지를 새로 만들면 이 표에 행을 먼저 넣을 것** — 없는 키로 RPC를 부르면 22023으로 거부된다.
+
+## DB 스키마 (`public.discography`) — 2026-08-03 신설
+전용 페이지가 없는 발매작 17장. index.html '그 밖의 싱글'·'OST · 참여'가 여기서 그려진다.
+
+| 컬럼 | 타입 | 제약 |
+|------|------|------|
+| slug | text | PK. 표지 파일명 조각과 맞춰 둔다(`lovehate` → `img/disc-lovehate.jpg`) |
+| title | text | NOT NULL, 1~120자 |
+| subtitle | text | ≤300자. 목록의 한 줄 설명 |
+| tag | text | ≤40자. `3rd EP 선공개` 같은 칩. 없으면 NULL |
+| kind | text | NOT NULL, `check (kind in ('single','ost'))` — 이 값이 두 목록을 가른다 |
+| released | date | NOT NULL. 화면의 날짜와 거르기의 연도(`data-year`)가 **둘 다** 여기서 나온다 |
+| bugs_id | text | NOT NULL, 숫자만. 링크는 `music.bugs.co.kr/album/<bugs_id>` |
+| cover | text | `^img/[a-z0-9_-]+\.jpg$`. NULL이면 표지 없이 그린다 |
+
+- **새 발매작은 여기 행 하나만 넣으면 끝난다.** 표지가 있으면 `img/`에 먼저 올릴 것
+  (이미지는 여전히 레포에 있다 — 그것만 푸시가 필요하다)
+- 거르기 칩의 개수(`<b>`)는 **HTML에 비워 두고 `disco.js`가 실제 항목을 세어 채운다.**
+  손으로 적어두면 행이 하나 늘 때마다 어긋난다. 되돌리지 말 것
+- **전용 페이지가 있는 다섯 장(EP1~3·입춘·너와 나)은 여기 없다.** 그건 서사가 있어서
+  `index.html`에 `.record` 카드로 그대로 있다. 표지 아트월(22장)도 HTML에 그대로다
+
+## DB 스키마 (`public.gig`) — 2026-08-03 신설
+다가오는 공연. index.html '무대' 섹션.
+
+| 컬럼 | 타입 | 제약 |
+|------|------|------|
+| id | bigint | PK, generated always as identity |
+| title | text | NOT NULL, 1~120자 |
+| venue | text | NOT NULL, 1~120자 |
+| note | text | ≤300자 |
+| starts_on | date | NOT NULL |
+| ends_on | date | NULL이면 하루짜리. `check (ends_on >= starts_on)` |
+| tag | text | ≤20자. `단독` / `페스티벌` |
+| until | date | **생성 열** `coalesce(ends_on, starts_on)`. 지난 공연을 거르는 기준 |
+
+- 클라이언트는 `until=gte.<오늘>`만 읽어간다 → **끝난 공연은 손대지 않아도 사라진다**
+- 기간이 이틀 이상이면 `live.js`가 `8월 6–7일.`을 note 뒤에 붙인다. **note에 날짜를 직접 적지 말 것**
+- ~~`data-date`와 화면에 보이는 날짜를 손으로 맞춰야 한다~~ → 이제 둘 다 `starts_on` 하나에서
+  나오므로 어긋날 수가 없다
 
 ## DB 스키마 (`public.guestbook`)
 | 컬럼 | 타입 | 제약 |
@@ -175,6 +237,27 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
   `curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A`
 - **XSS 방지**: `escapeHtml()`로 모든 사용자 입력 이스케이프.
   `innerHTML`에 값을 넣는 자리는 전부 이 함수를 통과해야 한다 (`gb-entry`, 인라인 편집 textarea, 삭제 확인 모달)
+  - **DB에서 온 콘텐츠(`discography`·`gig`)는 `innerHTML`을 아예 쓰지 않는다.**
+    `document.createElement` + `textContent`로만 그린다(`js/disco.js`·`js/live.js`).
+    지금은 관리자만 쓸 수 있는 표지지만, 그 전제가 깨지는 날 `innerHTML`이면 그대로 XSS가 된다
+- **콘텐츠 테이블(`discography`·`gig`)도 같은 방식**: RLS 켜고 SELECT 정책만 두고,
+  테이블 권한을 회수한 뒤 컬럼 SELECT만 준다. INSERT/UPDATE/DELETE 정책도 권한도 없다
+  (anon으로 curl을 날려 셋 다 42501로 막히는 것 확인함). 콘텐츠 추가는 대시보드에서
+  ```sql
+  revoke all on public.discography from anon, authenticated;
+  grant select (slug, title, subtitle, tag, kind, released, bugs_id, cover)
+    on public.discography to anon, authenticated;
+  ```
+- **Realtime publication에는 열 목록을 박는다** (PG15+ 기능, 이 프로젝트는 17.6):
+  ```sql
+  alter publication supabase_realtime add table public.guestbook (id, name, message, created_at);
+  ```
+  ⚠️ **열 목록 없이 테이블만 추가하면 `password_hash`가 구독자 전원에게 그대로 흘러간다.**
+  WAL에 실리는 열 자체를 줄이는 것이라 RLS·컬럼 권한과는 다른 층의 방어다. 되돌리지 말 것.
+  열 목록에는 replica identity(=기본키 `id`)가 반드시 포함돼야 한다.
+  검증: anon 키로 웹소켓을 직접 물어 INSERT/UPDATE/DELETE 페이로드를 확인했다 —
+  `cols = id,name,message,created_at`, DELETE의 `old_record`는 `{id}`뿐이다
+  ⚠️ `replica identity full`로 바꾸면 이 방어가 무력화된다. 바꾸지 말 것
 
 ## 디자인 컨셉 — "쓰는 사람"
 한로로는 **가사보다 산문을 먼저 쓰는 국문학도**다. 3집 〈자몽살구클럽〉은 동명 소설과
@@ -320,6 +403,11 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
 - 중복 방지는 `localStorage`(`hanroro-like-<album>`)뿐이다. **서버는 호출자를 구분하지 않는다** —
   작정하면 올릴 수 있고, 알고 둔 한계다. 어뷰징이 보이면 IP 기준 rate limit을 붙일 것
 - 메인 음반 목록에는 붙이지 않았다. `.record` 카드 전체가 `<a>`라 안에 버튼을 넣으면 중첩된다
+- **남이 누른 것은 15초 폴링으로 따라온다** (Realtime 채널이 아니다).
+  앨범 페이지는 supabase-js를 싣지 않으니 채널을 물릴 클라이언트가 없고, 좋아요 수는
+  초 단위 정확도가 필요한 값이 아니다. **탭이 숨으면 멈추고**(`visibilitychange`),
+  돌아오면 한 번 맞춘 뒤 다시 돈다. 누르는 중(`busy`)에는 건너뛴다 —
+  안 그러면 낙관적으로 올려둔 값을 서버 응답 전에 덮어쓴다
 
 ### 메인 CSS와 부딪히는 지점 (중요)
 `album.css`는 `style.css` **다음에** 로드되고, `index.html`은 두 파일을 다 읽는다.
@@ -343,6 +431,22 @@ chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1280,2000 
   작성 폼의 내용 칸 아래에 `.gb-count`(`0 / 500`)를 두고 다 차면 `--grapefruit`으로 바꾼다.
   `maxlength`와 **같은 단위(UTF-16, `value.length`)로 셀 것** — 코드포인트로 세면 이모지에서
   보이는 숫자와 실제 한도가 어긋난다. 여기도 안내일 뿐이고 진짜 검증은 서버(RPC)가 한다
+
+## 실시간 반영 (2026-08-03)
+두 가지 방식을 **일부러 다르게** 골랐다. 근거가 있으니 통일하지 말 것.
+
+| 자리 | 방식 | 왜 |
+|------|------|-----|
+| 방명록 목록 | **Supabase Realtime** (`postgres_changes`, 채널 하나) | supabase-js가 이미 실려 있어 추가 바이트가 0이다 |
+| 좋아요 수 (앨범 페이지·메인 목록) | **15초 폴링**, 탭 숨으면 정지 | 앨범 페이지는 supabase-js를 안 싣는다. 버튼 하나에 40KB는 과하다 |
+
+- 방명록 채널은 `guestbook-live` 하나뿐이고 `pagehide`에서 `removeChannel`로 정리한다.
+  안 하면 bfcache로 돌아올 때마다 채널이 하나씩 쌓인다
+- ⚠️ **수정창이 열려 있으면 다시 그리지 않는다** (`liveRedraw`). 남의 글이 올라온다고
+  목록을 통째로 새로 그리면 쓰던 글이 그 자리에서 날아간다. 저장·취소가 어차피 다시 그린다
+- `password_hash`는 페이로드에 실리지 않는다 — publication 열 목록. 위 '보안 구조' 참고
+- 검증(재현): 헤드리스 크롬 두 문서로 방명록을 띄운 채 바깥에서 RPC로 글을 넣고 지웠다.
+  채널 `joined` · 목록 9 → 10 → 9가 새로고침 없이 따라왔다. 좋아요는 2 → 3
 
 ## 모달 (SweetAlert2)
 `js/guestbook.js`의 **`SWAL` 상수**를 스프레드해서 쓴다 — `Swal.fire({ ...SWAL, ... })`.
@@ -403,11 +507,13 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
 4. **음반**: 두 층이다.
    - 위: `.record` 카드 5장(EP 3 + 싱글 2) — 전용 페이지가 있는 것만. 트랙칩(`.is-title`로 타이틀곡 강조)
    - 아래: `.disc-list` 두 벌 — '그 밖의 싱글' 13장, 'OST · 참여' 4편.
-     페이지 없이 목록만 두고 벅스 앨범 페이지(`music.bugs.co.kr/album/<id>`)로 내보낸다.
-     새 발매작은 여기에 한 줄 추가하는 게 기본이다. 전용 페이지는 서사가 있을 때만 만든다
+     **`public.discography`에서 그린다.** 페이지 없이 목록만 두고 벅스 앨범 페이지로 내보낸다.
+     새 발매작은 **대시보드에서 행 하나** 넣는 게 기본이다(배포 불필요).
+     전용 페이지는 서사가 있을 때만 만든다
 5. **듣기**: 유튜브 파사드 6곡 + `.plat`(주력 유튜브 뮤직 + 보조 링크)
 6. **문장**: 인터뷰 인용 4개. **가사는 절대 싣지 않는다** (아래 '문장' 절)
-7. **무대**: 다가오는 공연 + D-day. 셋리스트는 아직 데이터가 없어 `.live-note` 한 줄뿐 (TODO)
+7. **무대**: 다가오는 공연 + D-day. **`public.gig`에서 그리고 끝난 공연은 서버가 뺀다.**
+   셋리스트는 아직 데이터가 없어 `.live-note` 한 줄뿐 (TODO)
 8. **행보**: 그라디언트 타임라인. `.is-next`로 미래 일정 구분 + `.tl-flag` 예정 배지
 9. **표지**: 보유 아트워크 22장 아트월. 첫 칸(최신작)만 2×2
 10. **더 보기**: 링크 그리드 5칸 + 사진 1칸
@@ -446,7 +552,10 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
   (GQ 코리아 2026.04 / 위버스 매거진 ×2 / 빌보드 코리아 2026.04)
 
 ### 무대 (`.live` / `js/live.js`)
-- `data-date`(D-day 계산용)와 **화면에 보이는 날짜는 손으로 맞춰야 한다.** 어긋나면 D-day만 틀린다
+- 일정은 **`public.gig`에서 온다.** 날짜와 D-day가 같은 값에서 나오므로 어긋날 수 없고,
+  끝난 공연은 서버 필터(`until >= 오늘`)가 알아서 뺀다. 위 'DB 스키마' 절 참고
+- 목록을 못 불러오면 `[data-fallback]` 한 줄이 그대로 남아 인스타그램으로 보낸다.
+  **성공했을 때만 그 줄을 걷는다** — JS가 죽어도 길이 남게
 - 셋리스트는 **아직 없다.** 예전엔 빈 `<details>`였는데, 열어봐야 "아직 비어 있습니다"가
   나오는 서랍이라 `.live-note` 한 줄로 폈다. **확인 안 된 곡 목록을 채우지 말 것.**
   데이터가 생기면 그때 목록을 넣는다(그때는 `<details>`로 되돌려도 된다)
@@ -463,11 +572,17 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
   `closest`를 그냥 부르면 그 자리에서 죽어 이스터에그가 통째로 먹통이 된다 → 옵셔널 체이닝 유지
 
 ### 거르기 (`.disc-filter` / `js/disco.js`)
-- 목록은 HTML에 그대로 두고 `hidden`만 토글한다. **데이터를 JS 배열로 옮기지 말 것**
-  (검색엔진이 목록을 못 읽고 코드만 는다)
+- 그려진 뒤에는 `hidden`만 토글한다. **데이터를 JS 배열로 옮기지 말 것** —
+  데이터의 자리는 DB(`discography`)나 HTML(`.record` 다섯 장)이지 코드가 아니다
 - `[hidden]{display:none!important}`가 전역에 있다. `.record`가 `display:grid`라
   `hidden` 속성이 조용히 무시되던 걸 막는 규칙 — **지우면 거르기가 통째로 안 먹는다**
-- 발매작을 추가하면 `data-kind`·`data-year`를 붙이고 **칩의 개수(`<b>`)도 같이 고칠 것**
+- ~~발매작을 추가하면 칩의 개수(`<b>`)도 같이 고칠 것~~ → **DB에 행만 넣으면 된다.**
+  개수는 `disco.js`가 실제 항목을 세어 채운다
+- 첫 `apply()`는 DB 목록이 붙은 뒤에만 돈다. 미리 한 번 돌리면 아직 비어 있는 두 목록이
+  통째로 숨었다가 다시 나타나 화면이 튄다
+- **SEO**: 목록 17장이 HTML에서 빠졌지만 표지 아트월(`.gallery`)에 22장의 제목·날짜가
+  그대로 정적으로 남아 있다. 그래서 크롤러가 앨범 이름을 못 읽는 일은 없다.
+  아트월까지 동적으로 바꾸지 말 것 — 그러면 정적 HTML에 남는 앨범 정보가 사라진다
 
 ## 질감 · 패럴랙스
 - `body::after`에 SVG `feTurbulence` 그레인 한 겹. 세기는 `--grain-op`
@@ -491,6 +606,14 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
   **둘 중 하나만 고치면 미리보기와 탭 제목이 어긋난다. 같이 고칠 것**
 
 ## 작업 시 주의사항
+- **DB를 읽는 코드를 새 JS 파일로 떼어내지 말 것.** 섹션을 맡은 파일이 그 섹션의 데이터도
+  가져온다(`disco.js` → 음반, `live.js` → 무대). 한때 `js/content.js`로 분리했다가 되돌렸다 —
+  파일이 하나 늘면 스크립트 요청도 하나 늘고, 그게 폰트 스타일시트 도착 시각을 흔들어
+  Lighthouse 점수를 위 '두 값 사이를 오간다' 절의 나쁜 쪽으로 밀어붙인다
+- **첫 프레임을 그리기 전에 fetch를 던지거나 DOM을 건드리지 말 것.**
+  `requestAnimationFrame` → `setTimeout(…, 0)` 순서를 지킨다.
+  `load`만으로는 부족하다(표지가 전부 lazy라 `load`가 340ms에 먼저 떨어진다).
+  `document.fonts.ready`는 **쓰면 안 된다** — 건드리는 것 자체가 폰트 로딩을 앞당긴다
 - **색은 CSS 변수로만.** 하드코딩 hex를 새로 추가하지 말 것. 새 색이 필요하면 **두 테마 블록 모두**에 추가한다
 - 색을 바꾸면 **대비를 다시 계산할 것** (본문·서브·캡션·강조 ≥4.5:1). 특히 낮 모드는 여유가 좁다
 - **팔레트를 바꾸려면 근거가 있어야 한다.** 사이트 기본색은 '입춘'(밤)과 자몽살구클럽 과육(낮),
@@ -524,6 +647,12 @@ So Nice)이 번호에서 빠지기 때문**이다(15 − 6 = 9). `album-youandi.
   `<a>`라 안에 버튼을 넣으면 링크가 중첩된다. 누르는 건 앨범 페이지에서.
   **0이면 아예 붙이지 않는다** — '♥ 0'은 알려주는 게 없다
 - **iOS 홈화면 아이콘 없음** — `favicon.svg`만 있다. 필요하면 180×180 PNG 추가
+- **관리자 페이지 없음** — 콘텐츠 추가는 Supabase 대시보드에서 한다. anon에게 쓰기 권한을
+  줄 수는 없고, 인증을 붙이는 건 이 사이트 규모에 과하다. 이번 범위 밖으로 두기로 한 결정
+- **DB 목록은 JS가 죽으면 안 보인다** — 대신 `[data-fallback]` 한 줄이 남아 벅스·인스타그램으로
+  보낸다. 정적 HTML에는 표지 아트월 22장의 제목·날짜가 그대로 있어 크롤러는 앨범을 다 읽는다
+- **표지 이미지는 여전히 레포에 있다** — `discography`에 행만 넣으면 표지 없이 그려진다
+  (`cover`가 NULL이면 그림 자리를 비운다). 표지를 붙이려면 `img/`에 파일을 올려 푸시해야 한다
 
 ## 남은 후보 작업
 - ~~메인 히어로의 '입춘' 링크가 옛 영상(`niazCi1AqqA`)~~ → 앨범 페이지와 같은
