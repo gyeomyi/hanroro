@@ -3,16 +3,30 @@
 skills-lock.json
 .mcp.json
 
-# 화면 확인용 임시 산출물 (shot.sh)
+# 화면 확인용 임시 산출물 (shot.sh) · 헤드리스 스크린샷
 .shot-*
+/*.png
 
 # Lighthouse 측정 산출물
 lh-*.json
+*.log
 
-# 일회성 지시서·상태 파일 (레포의 영구 문서가 아니다).
-# 영구히 남길 판단은 CLAUDE.md와 DECISIONS.md로 옮긴다.
+# 에디터·OS·로컬 전용 파일 (혼자 쓰는 레포다. 팀 공유용 설정이 아니다)
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.*
+
+# 일회성 지시서·상태 파일·판단 로그 (레포의 영구 문서가 아니다).
+# 영구히 남길 판단은 CLAUDE.md로 옮긴다.
 spec.md
 FIX.md
 SIMPLIFY.md
 SIMPLIFY-DECISIONS.md
+TONE-DYNAMIC.md
+DECISIONS.md
+DYNAMIC-DECISIONS.md
 PROGRESS.md
