@@ -1273,7 +1273,11 @@ footer {
 
   .link-grid { grid-template-columns:1fr; }
 
-  .foot-grid { flex-direction:column; gap:26px; }
+  /* 한 줄씩 세우면 링크 스무 개가 화면 한 장을 통째로 먹는다 → 두 칸으로 접는다.
+     grid로 접으면 목록 길이가 제각각이라 짧은 칸 옆이 통째로 빈다 → 다단(columns)으로 흘린다 */
+  .foot-grid { display:block; columns:2; column-gap:26px; padding-bottom:26px; }
+  .foot-brand { column-span:all; margin-bottom:26px; }
+  .foot-col { break-inside:avoid; margin-bottom:26px; }
   .gb-form button { align-self:stretch; text-align:center; justify-content:center; }
 }
 
