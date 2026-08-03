@@ -224,3 +224,25 @@ gbList.addEventListener('keydown', (e) => {
 });
 
 loadGuestbook();
+
+/* 실시간 — 남이 쓰거나 고치거나 지우면 새로고침 없이 목록이 따라온다.
+   supabase-js가 이미 실려 있어서 추가로 받는 바이트가 없다. 채널은 하나만 연다.
+
+   ⚠️ password_hash는 페이로드에 실리지 않는다. publication에 열 목록을 박아뒀다:
+      alter publication supabase_realtime add table public.guestbook (id, name, message, created_at);
+   열 목록 없이 테이블만 추가하면 해시가 구독자 전원에게 그대로 흘러간다. 되돌리지 말 것.
+
+   ⚠️ 수정창을 열어둔 채로 남의 글이 올라오면 다시 그리는 순간 쓰던 글이 날아간다.
+      편집 중에는 건너뛴다 — 저장·취소가 어차피 목록을 새로 그린다. */
+const liveRedraw = () => {
+  if (gbList.querySelector('.gb-edit-textarea')) return;
+  loadGuestbook();
+};
+
+const gbChannel = supabaseClient
+  .channel('guestbook-live')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'guestbook' }, liveRedraw)
+  .subscribe();
+
+// 페이지를 떠나면 소켓을 정리한다. 놔두면 bfcache에서 돌아올 때마다 채널이 하나씩 쌓인다
+addEventListener('pagehide', () => supabaseClient.removeChannel(gbChannel));
